@@ -11,109 +11,140 @@
 // 색 선택만 담당하는 컴포넌트이다.
 // ======================================================
 
-import type { ColorInfo } from "../../types/Pattern";
+import { useRef } from "react";
+import type { PaletteColor } from "../../types/Pattern";
 
+/**
+ * ==========================================
+ * Props
+ * ==========================================
+ */
 interface Props {
 
-    palette: ColorInfo[];
+    /** 팔레트 목록 */
+    palette: PaletteColor[];
 
+    /** 현재 선택된 색상 */
     selectedColor: number;
 
-    onSelectColor: (id: number) => void;
+    /** 색 선택 */
+    onSelect: (id: number) => void;
 
+    /** 새로운 색 추가 */
+    onAddColor: (hex: string) => void;
 }
 
+/**
+ * ==========================================
+ * ColorPalette
+ * ==========================================
+ */
 export default function ColorPalette({
 
     palette,
 
     selectedColor,
 
-    onSelectColor
+    onSelect,
+
+    onAddColor
 
 }: Props) {
 
+    /**
+     * 숨겨진 color input
+     */
+    const colorInputRef =
+        useRef<HTMLInputElement>(null);
+
     return (
 
-        <div
-            style={{
-                width: 220,
-                borderRight: "1px solid #ddd",
-                padding: 20
-            }}
-        >
+        <div>
 
-            <h3>색상 팔레트</h3>
+            {/* -------------------------- */}
+            {/* 색상 목록 */}
+            {/* -------------------------- */}
 
-            {
+            <div
+                style={{
+                    display: "flex",
+                    gap: 10,
+                    flexWrap: "wrap",
+                    marginBottom: 15
+                }}
+            >
 
-                palette.map(color => (
+                {palette.map((color) => (
 
                     <div
 
                         key={color.id}
 
-                        onClick={() =>
-
-                            onSelectColor(color.id)
-
-                        }
+                        onClick={() => onSelect(color.id)}
 
                         style={{
 
-                            display: "flex",
+                            width: 35,
 
-                            alignItems: "center",
+                            height: 35,
 
-                            gap: 10,
-
-                            marginBottom: 10,
+                            background: color.hex,
 
                             cursor: "pointer",
-
-                            padding: 8,
 
                             border:
 
                                 selectedColor === color.id
 
-                                    ? "2px solid #0078ff"
+                                    ? "3px solid black"
 
-                                    : "2px solid transparent",
-
-                            borderRadius: 8
+                                    : "1px solid gray"
 
                         }}
 
-                    >
+                    />
 
-                        <div
+                ))}
 
-                            style={{
+            </div>
 
-                                width: 25,
+            {/* -------------------------- */}
+            {/* + 색 추가 버튼 */}
+            {/* -------------------------- */}
 
-                                height: 25,
+            <button
 
-                                backgroundColor: color.hex,
+                onClick={() =>
 
-                                border: "1px solid black"
+                    colorInputRef.current?.click()
 
-                            }}
+                }
 
-                        />
+            >
 
-                        <span>
+                + 색 추가
 
-                            {color.name}
+            </button>
 
-                        </span>
+            {/* -------------------------- */}
+            {/* 숨겨진 Color Picker */}
+            {/* -------------------------- */}
 
-                    </div>
+            <input
 
-                ))
+                ref={colorInputRef}
 
-            }
+                type="color"
+
+                style={{ display: "none" }}
+
+                onChange={(e) => {
+
+                    onAddColor(e.target.value);
+
+                }}
+
+            />
 
         </div>
 

@@ -1,14 +1,95 @@
-export interface ColorInfo {
+/**
+ * ============================================
+ * 하나의 색상을 나타내는 타입
+ * ============================================
+ *
+ * palette 배열 안에 들어가는 데이터이다.
+ *
+ * 앞으로 DMC 실번호, Anchor 실번호,
+ * 심볼(Symbol) 등을 모두 저장할 예정이다.
+ */
+
+export interface PaletteColor {
+
+    /** 색상의 고유 번호 */
     id: number;
+
+    /** HEX 색상 */
     hex: string;
+
+    /** 화면에 표시될 이름 */
     name: string;
+
+    /**
+     * DMC 색상 번호
+     *
+     * 아직 사용하지 않지만
+     * 나중에 사진을 분석하여
+     * 자동으로 DMC 번호를 연결할 예정이다.
+     */
+    code?: string;
+
+    /**
+     * 실 브랜드
+     *
+     * 예)
+     * DMC
+     * COSMO
+     * Anchor
+     */
+    brand?: string;
+
+    /**
+     * 도안에서 사용할 기호
+     *
+     * 예)
+     * □
+     * ○
+     * △
+     * ☆
+     */
+    symbol?: string;
+
+    /**
+     * 해당 색상이 사용된 칸 개수
+     *
+     * 저장하지 않아도 되지만
+     * 도안을 저장할 때 계산해서 넣을 수 있다.
+     */
+    count?: number;
 }
 
+
+/**
+ * ============================================
+ * 도안 전체 데이터
+ * ============================================
+ */
+
 export interface PatternData {
+
+    /** 가로 칸 수 */
     width: number;
+
+    /** 세로 칸 수 */
     height: number;
 
-    palette: ColorInfo[];
+    /**
+     * 사용되는 색상 목록
+     */
+    palette: PaletteColor[];
 
+    /**
+     * 실제 도안 데이터
+     *
+     * pixels[y][x]
+     *
+     * 값은 palette의 id를 의미한다.
+     *
+     * 예)
+     * 0 = 흰색
+     * 1 = 검정
+     * 2 = 빨강
+     */
     pixels: number[][];
 }

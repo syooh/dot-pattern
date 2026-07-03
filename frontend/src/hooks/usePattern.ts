@@ -1,20 +1,23 @@
 // ======================================================
 // usePattern
-// ------------------------------------------------------
-// 역할
-// 1. React State를 관리한다.
-// 2. PatternEngine을 호출한다.
-// 3. 화면과 엔진을 연결하는 역할만 한다.
+// Version : v0.5
+// Last Update : 2026-07-03
 //
-// 주의!
-// 실제 도안 계산은 PatternEngine에서 수행한다.
+// 역할
+// 1. React State 관리
+// 2. PatternEngine 호출
+// 3. Canvas와 Engine 연결
+//
+// 앞으로 추가될 기능
+// - Undo / Redo
+// - Tool 선택
+// - 확대 / 축소
 // ======================================================
 
 import { useState } from "react";
 
 import type { PatternData } from "../types/Pattern";
 
-// PatternEngine에서 paintPixel 함수를 가져온다.
 import { paintPixel as paintPixelEngine } from "../engine/PatternEngine";
 
 export default function usePattern() {
@@ -69,12 +72,12 @@ export default function usePattern() {
     // State
     // ==================================================
 
+    // 현재 도안
     const [pattern, setPattern] =
-
         useState<PatternData | null>(null);
 
+    // 현재 선택된 색상
     const [selectedColor, setSelectedColor] =
-
         useState(1);
 
     // ==================================================
@@ -90,27 +93,21 @@ export default function usePattern() {
     ) => {
 
         setPattern(
-
             createEmptyPattern(
-
                 width,
-
                 height
-
             )
-
         );
 
     };
 
     // ==================================================
-    // 픽셀 색칠
+    // 한 칸 색칠
     // ==================================================
 
     /**
-     * 클릭된 위치를 선택한 색으로 변경한다.
-     *
-     * 실제 계산은 PatternEngine에서 수행한다.
+     * Canvas가 전달한 좌표를
+     * PatternEngine에게 넘긴다.
      */
     const paintPixel = (
 
@@ -121,11 +118,9 @@ export default function usePattern() {
     ) => {
 
         if (!pattern)
-
             return;
 
-        const newPattern =
-
+        const nextPattern =
             paintPixelEngine(
 
                 pattern,
@@ -138,25 +133,79 @@ export default function usePattern() {
 
             );
 
-        setPattern(
-
-            newPattern
-
-        );
+        setPattern(nextPattern);
 
     };
 
+    // ==================================================
+    // Palette에 색 추가
+    // ==================================================
+
+    const addColor = (
+
+        hex: string
+
+    ) => {
+
+        if (!pattern)
+            return;
+
+        const nextId =
+
+            Math.max(
+
+                ...pattern.palette.map(
+
+                    color => color.id
+
+                )
+
+            ) + 1;
+
+        setPattern({
+
+            ...pattern,
+
+            palette: [
+
+                ...pattern.palette,
+
+                {
+
+                    id: nextId,
+
+                    name: hex,
+
+                    hex
+
+                }
+
+            ]
+
+        });
+
+    };
+
+    // ==================================================
+    // 외부에서 사용하는 함수
+    // ==================================================
+
     return {
 
+        // 상태
         pattern,
 
         selectedColor,
 
+        // Setter
         setSelectedColor,
 
+        // 기능
         createPattern,
 
-        paintPixel
+        paintPixel,
+
+        addColor
 
     };
 

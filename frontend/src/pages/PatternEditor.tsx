@@ -12,74 +12,105 @@ import NewPatternDialog from "../components/dialog/NewPatternDialog";
 
 import usePattern from "../hooks/usePattern";
 
+/**
+ * ==========================================
+ * Pattern Editor
+ * ==========================================
+ *
+ * 도안을 수정하는 메인 화면이다.
+ *
+ * 앞으로
+ * - Toolbar
+ * - Undo / Redo
+ * - 확대 / 축소
+ * - 저장
+ * 등이 모두 여기에 추가된다.
+ */
 export default function PatternEditor() {
 
     const {
 
         pattern,
 
-        createPattern,
+        setPattern,
 
         selectedColor,
 
         setSelectedColor,
 
-        paintPixel
+        addColor
 
     } = usePattern();
 
-    // 아직 도안이 없으면
-    // 새 도안 생성 화면을 보여준다.
-    if (!pattern) {
-
-        return (
-
-            <NewPatternDialog
-
-                onCreate={createPattern}
-
-            />
-
-        );
-
-    }
-
     return (
 
-        <div>
+        <div
+            style={{
+                padding: 20
+            }}
+        >
 
-            <h1>뜨개질 도안 에디터</h1>
+            <h1>🧶 Dot Pattern Editor</h1>
 
-            <div
+            {/* -------------------------------- */}
+            {/* 새 도안 생성 */}
+            {/* -------------------------------- */}
 
-                style={{
+            {
+                !pattern && (
 
-                    display: "flex",
+                    <NewPatternDialog
+                        onCreate={setPattern}
+                    />
 
-                    alignItems: "flex-start"
+                )
+            }
 
-                }}
+            {/* -------------------------------- */}
+            {/* 도안이 만들어졌을 때 */}
+            {/* -------------------------------- */}
 
-            >
+            {
+                pattern && (
 
-                <ColorPalette
+                    <>
 
-                    palette={pattern.palette}
+                        {/* ========================= */}
+                        {/* 색상 팔레트 */}
+                        {/* ========================= */}
 
-                    selectedColor={selectedColor}
+                        <ColorPalette
 
-                    onSelectColor={setSelectedColor}
+                            palette={pattern.palette}
 
-                />
+                            selectedColor={selectedColor}
 
-                <PatternCanvas
+                            onSelect={setSelectedColor}
 
-                    pattern={pattern}
-                    onPixelClick={paintPixel}
+                            onAddColor={addColor}
 
-                />
+                        />
 
-            </div>
+                        <div style={{ height: 20 }} />
+
+                        {/* ========================= */}
+                        {/* 도안 */}
+                        {/* ========================= */}
+
+                        <PatternCanvas
+
+                            pattern={pattern}
+
+                            selectedColor={selectedColor}
+
+                            onChange={setPattern}
+
+                        />
+
+                    </>
+
+                )
+            }
 
         </div>
 
