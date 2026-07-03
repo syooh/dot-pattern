@@ -1,9 +1,18 @@
 // ======================================================
 // PatternEditor
-// ------------------------------------------------------
+// Version : v0.5
+// Last Update : 2026-07-03
+//
 // 역할
-// 1. 새 도안 생성 화면 출력
-// 2. 도안 생성 후 Palette와 Canvas 출력
+// 1. 새 도안 생성
+// 2. 색상 팔레트 출력
+// 3. 도안(Canvas) 출력
+//
+// 앞으로 추가될 기능
+// - Toolbar
+// - Undo / Redo
+// - 확대 / 축소
+// - 저장
 // ======================================================
 
 import PatternCanvas from "../components/canvas/PatternCanvas";
@@ -12,32 +21,26 @@ import NewPatternDialog from "../components/dialog/NewPatternDialog";
 
 import usePattern from "../hooks/usePattern";
 
-/**
- * ==========================================
- * Pattern Editor
- * ==========================================
- *
- * 도안을 수정하는 메인 화면이다.
- *
- * 앞으로
- * - Toolbar
- * - Undo / Redo
- * - 확대 / 축소
- * - 저장
- * 등이 모두 여기에 추가된다.
- */
 export default function PatternEditor() {
 
     const {
 
+        // 현재 도안
         pattern,
 
-        setPattern,
-
+        // 현재 선택된 색상
         selectedColor,
 
+        // 색상 선택
         setSelectedColor,
 
+        // 새 도안 생성
+        createPattern,
+
+        // 한 칸 색칠
+        paintPixel,
+
+        // 색상 추가
         addColor
 
     } = usePattern();
@@ -52,25 +55,30 @@ export default function PatternEditor() {
 
             <h1>🧶 Dot Pattern Editor</h1>
 
-            {/* -------------------------------- */}
+            {/* ========================= */}
             {/* 새 도안 생성 */}
-            {/* -------------------------------- */}
+            {/* ========================= */}
 
             {
+
                 !pattern && (
 
                     <NewPatternDialog
-                        onCreate={setPattern}
+
+                        onCreate={createPattern}
+
                     />
 
                 )
+
             }
 
-            {/* -------------------------------- */}
-            {/* 도안이 만들어졌을 때 */}
-            {/* -------------------------------- */}
+            {/* ========================= */}
+            {/* 도안 생성 후 */}
+            {/* ========================= */}
 
             {
+
                 pattern && (
 
                     <>
@@ -94,22 +102,21 @@ export default function PatternEditor() {
                         <div style={{ height: 20 }} />
 
                         {/* ========================= */}
-                        {/* 도안 */}
+                        {/* 도안(Canvas) */}
                         {/* ========================= */}
 
                         <PatternCanvas
 
                             pattern={pattern}
 
-                            selectedColor={selectedColor}
-
-                            onChange={setPattern}
+                            onPixelClick={paintPixel}
 
                         />
 
                     </>
 
                 )
+
             }
 
         </div>
