@@ -1,44 +1,31 @@
 // ======================================================
 // ColorPalette
-// ------------------------------------------------------
-// 역할
-// 1. 사용할 수 있는 색상을 보여준다.
-// 2. 사용자가 색을 선택할 수 있다.
-// 3. 선택된 색은 파란 테두리로 표시한다.
+// Version : v0.5
+// Last Update : 2026-07-03
 //
-// 주의!
-// 실제 색칠은 하지 않는다.
-// 색 선택만 담당하는 컴포넌트이다.
+// 역할
+// 1. 팔레트 출력
+// 2. 색 선택
+// 3. 색 추가
+// 4. 색 삭제
 // ======================================================
 
-import { useRef } from "react";
 import type { PaletteColor } from "../../types/Pattern";
 
-/**
- * ==========================================
- * Props
- * ==========================================
- */
 interface Props {
 
-    /** 팔레트 목록 */
     palette: PaletteColor[];
 
-    /** 현재 선택된 색상 */
     selectedColor: number;
 
-    /** 색 선택 */
     onSelect: (id: number) => void;
 
-    /** 새로운 색 추가 */
     onAddColor: (hex: string) => void;
+
+    onRemoveColor?: (id: number) => void;
+
 }
 
-/**
- * ==========================================
- * ColorPalette
- * ==========================================
- */
 export default function ColorPalette({
 
     palette,
@@ -47,23 +34,17 @@ export default function ColorPalette({
 
     onSelect,
 
-    onAddColor
+    onAddColor,
+
+    onRemoveColor
 
 }: Props) {
-
-    /**
-     * 숨겨진 color input
-     */
-    const colorInputRef =
-        useRef<HTMLInputElement>(null);
 
     return (
 
         <div>
 
-            {/* -------------------------- */}
-            {/* 색상 목록 */}
-            {/* -------------------------- */}
+            <h3>🎨 Palette</h3>
 
             <div
                 style={{
@@ -74,75 +55,92 @@ export default function ColorPalette({
                 }}
             >
 
-                {palette.map((color) => (
+                {
+                    palette.map(color => (
 
-                    <div
+                        <div
+                            key={color.id}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center"
+                            }}
+                        >
 
-                        key={color.id}
+                            <button
 
-                        onClick={() => onSelect(color.id)}
+                                onClick={() => onSelect(color.id)}
 
-                        style={{
+                                style={{
 
-                            width: 35,
+                                    width: 40,
 
-                            height: 35,
+                                    height: 40,
 
-                            background: color.hex,
+                                    background: color.hex,
 
-                            cursor: "pointer",
+                                    border:
 
-                            border:
+                                        selectedColor === color.id
 
-                                selectedColor === color.id
+                                            ? "3px solid #ff6600"
 
-                                    ? "3px solid black"
+                                            : "1px solid #999",
 
-                                    : "1px solid gray"
+                                    cursor: "pointer"
 
-                        }}
+                                }}
 
-                    />
+                            />
 
-                ))}
+                            {/* 기본색은 삭제 불가 */}
+                            {
 
-            </div>
+                                color.id > 1 && onRemoveColor && (
 
-            {/* -------------------------- */}
-            {/* + 색 추가 버튼 */}
-            {/* -------------------------- */}
+                                    <button
 
-            <button
+                                        style={{
+                                            marginTop: 5
+                                        }}
 
-                onClick={() =>
+                                        onClick={() =>
 
-                    colorInputRef.current?.click()
+                                            onRemoveColor(color.id)
+
+                                        }
+
+                                    >
+
+                                        ❌
+
+                                    </button>
+
+                                )
+
+                            }
+
+                        </div>
+
+                    ))
 
                 }
 
-            >
-
-                + 색 추가
-
-            </button>
-
-            {/* -------------------------- */}
-            {/* 숨겨진 Color Picker */}
-            {/* -------------------------- */}
+            </div>
 
             <input
 
-                ref={colorInputRef}
-
                 type="color"
 
-                style={{ display: "none" }}
+                onChange={(event) =>
 
-                onChange={(e) => {
+                    onAddColor(
 
-                    onAddColor(e.target.value);
+                        event.target.value
 
-                }}
+                    )
+
+                }
 
             />
 
