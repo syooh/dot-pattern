@@ -112,3 +112,45 @@ export function erasePixel(
     );
 
 }
+
+/**
+ * =====================================================
+ * Palette에서 색상 삭제
+ * -----------------------------------------------------
+ * 역할
+ * 1. Palette에서 해당 색상을 제거한다.
+ * 2. White(id=0)는 삭제할 수 없다.
+ * 3. Black(id=1)도 삭제하지 못하도록 한다.
+ *
+ * ※ 아직 pixels[][]는 수정하지 않는다.
+ * 다음 단계에서 구현한다.
+ * =====================================================
+ */
+export function removeColor(
+
+    pattern: PatternData,
+
+    colorId: number
+
+): PatternData {
+
+    // 흰색과 검정은 삭제 금지
+    if (colorId === 0 || colorId === 1) {
+
+        return pattern;
+
+    }
+
+    // 기존 Pattern 복사
+    const next = clonePattern(pattern);
+
+    // Palette에서 해당 색상 제거
+    next.palette = next.palette.filter(
+
+        color => color.id !== colorId
+
+    );
+
+    return next;
+
+}
