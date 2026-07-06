@@ -37,7 +37,11 @@ export default function PatternEditor() {
 
         undo,
 
-        redo
+        redo,
+
+        canUndo,
+
+        canRedo
 
     } = usePattern();
 
@@ -92,6 +96,10 @@ export default function PatternEditor() {
                             onUndo={undo}
 
                             onRedo={redo}
+
+                            canUndo={canUndo}
+
+                            canRedo={canRedo}
 
                         />
 

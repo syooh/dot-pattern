@@ -423,7 +423,11 @@ export default function usePattern() {
 
         undo,
 
-        redo
+        redo,
+
+        canUndo: history.length > 0,
+
+        canRedo: future.length > 0
 
     };
 

@@ -24,13 +24,21 @@ interface Props {
 
     onRedo?: () => void;
 
+    canUndo?: boolean;
+
+    canRedo?: boolean;
+
 }
 
 export default function Toolbar({
 
     onUndo,
 
-    onRedo
+    onRedo,
+
+    canUndo,
+
+    canRedo
 
 }: Props) {
 
@@ -84,6 +92,13 @@ export default function Toolbar({
 
                 onClick={onUndo}
 
+                disabled={!canUndo}
+
+                style={{
+                    opacity: canUndo ? 1 : 0.5,
+                    
+                }}
+
             >
 
                 ↶ Undo
@@ -93,6 +108,13 @@ export default function Toolbar({
             <button
 
                 onClick={onRedo}
+
+                disabled={!canRedo}
+
+                style={{
+                    opacity: canRedo ? 1 : 0.5,
+
+                }}
 
             >
 
