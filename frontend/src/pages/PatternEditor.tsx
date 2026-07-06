@@ -18,6 +18,7 @@
 import PatternCanvas from "../components/canvas/PatternCanvas";
 import ColorPalette from "../components/palette/ColorPalette";
 import NewPatternDialog from "../components/dialog/NewPatternDialog";
+import Toolbar from "../components/toolbar/Toolbar";
 
 import usePattern from "../hooks/usePattern";
 
@@ -89,6 +90,8 @@ export default function PatternEditor() {
                         {/* ========================= */}
                         {/* 색상 팔레트 */}
                         {/* ========================= */}
+
+                        <Toolbar />
 
                         <ColorPalette
 
