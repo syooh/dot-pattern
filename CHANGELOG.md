@@ -97,3 +97,37 @@ setPattern()
 - Redo
 - Toolbar
 - Ctrl + Z
+
+
+
+# Changelog
+
+## v0.7 (2026-07-06)
+
+### 추가
+
+- ToolType 타입 추가
+- selectedTool 상태 추가
+- canUndo / canRedo 상태 추가
+- Brush / Eraser Tool 시스템 연결
+
+### 변경
+
+- Undo / Redo 버튼 비활성화 기능 추가
+- Tool 선택 구조 적용
+- PatternEngine와 Tool 시스템 연결
+
+### 리팩토링
+
+- usePattern 구조 표준화
+- import 순서 통일
+- State → Computed → Function → Return 구조 적용
+- 주석 스타일 통일
+- Return 구조 통일
+
+### 다음 버전(v0.8)
+
+- Fill Tool 구현
+- Tool 단축키 추가
+- Tool UI 개선
+- 브러시 크기 기능
