@@ -93,3 +93,15 @@ export interface PatternData {
      */
     pixels: number[][];
 }
+
+// ======================================================
+// Tool 종류
+// ======================================================
+
+export type ToolType =
+
+    | "brush"
+
+    | "eraser"
+
+    | "fill";

@@ -29,6 +29,10 @@ export default function PatternEditor() {
 
         setSelectedColor,
 
+        selectedTool,
+
+        setSelectedTool,
+
         addColor,
 
         removeColor,
@@ -100,6 +104,10 @@ export default function PatternEditor() {
                             canUndo={canUndo}
 
                             canRedo={canRedo}
+
+                            selectedTool={selectedTool}
+
+                            onToolChange={setSelectedTool}
 
                         />
 

@@ -18,11 +18,25 @@
 // - Open
 // ======================================================
 
+import type {
+
+    ToolType
+
+} from "../../types/Pattern";
+
 interface Props {
 
     onUndo?: () => void;
 
     onRedo?: () => void;
+
+    selectedTool: ToolType;
+
+    onToolChange: (
+
+        tool: ToolType
+
+    ) => void;
 
     canUndo?: boolean;
 
@@ -38,7 +52,11 @@ export default function Toolbar({
 
     canUndo,
 
-    canRedo
+    canRedo,
+
+    selectedTool,
+
+    onToolChange
 
 }: Props) {
 
@@ -124,19 +142,79 @@ export default function Toolbar({
 
             <div style={{ width: 20 }} />
 
-            <button>
+            <button
+
+                onClick={() =>
+
+                    onToolChange("brush")
+
+                }
+
+                style={{
+
+                    background:
+
+                        selectedTool === "brush"
+
+                            ? "#4CAF50"
+
+                            : "#ffffff"
+
+                }}
+
+            >
 
                 🖌 Brush
 
             </button>
 
-            <button>
+            <button
+
+                onClick={() =>
+
+                    onToolChange("eraser")
+
+                }
+
+                style={{
+
+                    background:
+
+                        selectedTool === "eraser"
+
+                            ? "#4CAF50"
+
+                            : "#ffffff"
+
+                }}
+
+            >
 
                 🩹 Eraser
 
             </button>
 
-            <button>
+            <button
+
+                onClick={() =>
+
+                    onToolChange("fill")
+
+                }
+
+                style={{
+
+                    background:
+
+                        selectedTool === "fill"
+
+                            ? "#4CAF50"
+
+                            : "#ffffff"
+
+                }}
+
+            >
 
                 🪣 Fill
 

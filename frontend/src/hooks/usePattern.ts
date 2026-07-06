@@ -14,12 +14,28 @@
 // - 확대 / 축소
 // ======================================================
 
+// ======================================================
+// React
+// ======================================================
+
 import { useState } from "react";
 
-import type { PatternData } from "../types/Pattern";
+// ======================================================
+// Types
+// ======================================================
+
+import type {
+    PatternData,
+    ToolType
+} from "../types/Pattern";
+
+// ======================================================
+// Engine
+// ======================================================
 
 import {
     paintPixel as paintPixelEngine,
+    erasePixel as erasePixelEngine,
     removeColor as removeColorEngine
 } from "../engine/PatternEngine";
 
@@ -95,6 +111,11 @@ export default function usePattern() {
      */
     const [selectedColor, setSelectedColor] =
         useState(1);
+
+    // 현재 선택된 Tool
+
+    const [selectedTool, setSelectedTool] =
+        useState<ToolType>("brush");
 
     // ==================================================
     // 새 도안 생성
@@ -183,22 +204,45 @@ export default function usePattern() {
         if (!pattern)
             return;
 
-        // 현재 상태 저장
         saveHistory(pattern);
 
-        const nextPattern =
+        let nextPattern: PatternData;
 
-            paintPixelEngine(
+        switch (selectedTool) {
 
-                pattern,
+            case "brush":
 
-                x,
+                nextPattern = paintPixelEngine(
+                    pattern,
+                    x,
+                    y,
+                    selectedColor
+                );
 
-                y,
+                break;
 
-                selectedColor
+            case "eraser":
 
-            );
+                nextPattern = erasePixelEngine(
+                    pattern,
+                    x,
+                    y
+                );
+
+                break;
+
+            case "fill":
+
+                // 다음 버전에서 구현
+                nextPattern = pattern;
+
+                break;
+
+            default:
+
+                nextPattern = pattern;
+
+        }
 
         setPattern(nextPattern);
 
@@ -427,7 +471,11 @@ export default function usePattern() {
 
         canUndo: history.length > 0,
 
-        canRedo: future.length > 0
+        canRedo: future.length > 0,
+
+        selectedTool,
+
+        setSelectedTool,
 
     };
 
