@@ -33,7 +33,9 @@ export default function PatternEditor() {
 
         removeColor,
 
-        paintPixel
+        paintPixel,
+
+        undo
 
     } = usePattern();
 
@@ -85,17 +87,9 @@ export default function PatternEditor() {
 
                         <Toolbar
 
-                            onUndo={() => {
+                            onUndo={undo}
 
-                                console.log("Undo");
-
-                            }}
-
-                            onRedo={() => {
-
-                                console.log("Redo");
-
-                            }}
+                            onRedo={() => { }}
 
                         />
 

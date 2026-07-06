@@ -309,6 +309,46 @@ export default function usePattern() {
     };
 
     // ==================================================
+    // Undo
+    // ==================================================
+
+    /**
+     * 마지막 작업을 취소한다.
+     */
+    const undo = () => {
+
+        if (!pattern)
+            return;
+
+        if (history.length === 0)
+            return;
+
+        // 가장 최근 Pattern
+        const previousPattern =
+            history[history.length - 1];
+
+        // 현재 Pattern은 Redo를 위해 저장
+        setFuture(prev => [
+
+            pattern,
+
+            ...prev
+
+        ]);
+
+        // History에서 제거
+        setHistory(prev =>
+
+            prev.slice(0, -1)
+
+        );
+
+        // 이전 Pattern으로 변경
+        setPattern(previousPattern);
+
+    };
+
+    // ==================================================
     // 외부에서 사용하는 값
     // ==================================================
 
@@ -340,7 +380,9 @@ export default function usePattern() {
 
         addColor,
 
-        removeColor
+        removeColor,
+
+        undo
 
     };
 
