@@ -56,3 +56,38 @@
 
 - Canvas 드래그 시 동일한 칸을 반복해서 색칠하지 않도록 수정하였습니다.
 - 컴포넌트의 역할을 분리하여 유지보수가 쉬운 구조로 개선하였습니다.
+
+
+# 변경 내역
+
+## v0.6 (2026-07-04)
+
+### 추가
+
+- Palette 색상 삭제 기능
+- Undo History 구조
+- Future 구조
+- saveHistory() 함수
+
+### 변경
+
+- usePattern 구조 개선
+- PatternEngine removeColor() 구현
+- 새 도안 생성 시 History 초기화
+
+### 리팩토링
+
+- 모든 편집 기능이 동일한 흐름을 사용하도록 수정
+
+Canvas
+↓
+
+saveHistory()
+
+↓
+
+PatternEngine
+
+↓
+
+setPattern()
