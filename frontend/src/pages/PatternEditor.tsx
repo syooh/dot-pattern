@@ -35,7 +35,9 @@ export default function PatternEditor() {
 
         paintPixel,
 
-        undo
+        undo,
+
+        redo
 
     } = usePattern();
 
@@ -89,7 +91,7 @@ export default function PatternEditor() {
 
                             onUndo={undo}
 
-                            onRedo={() => { }}
+                            onRedo={redo}
 
                         />
 
