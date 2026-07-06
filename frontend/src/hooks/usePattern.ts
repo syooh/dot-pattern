@@ -18,7 +18,13 @@ import { useState } from "react";
 
 import type { PatternData } from "../types/Pattern";
 
-import { paintPixel as paintPixelEngine } from "../engine/PatternEngine";
+import {
+
+    paintPixel as paintPixelEngine,
+
+    removeColor as removeColorEngine
+
+} from "../engine/PatternEngine";
 
 export default function usePattern() {
 
@@ -186,6 +192,58 @@ export default function usePattern() {
 
     };
 
+    /**
+ * ==========================================
+ * Palette에서 색상 삭제
+ * ==========================================
+ *
+ * 선택한 색상을 Palette에서 삭제한다.
+ *
+ * 실제 삭제는 PatternEngine에서 수행한다.
+ */
+    const removeColor = (
+
+        colorId: number
+
+    ) => {
+
+        // 아직 도안이 없으면 종료
+        if (!pattern) return;
+
+        // Engine에게 삭제 요청
+        const nextPattern =
+
+            removeColorEngine(
+
+                pattern,
+
+                colorId
+
+            );
+
+        // React 상태 변경
+        setPattern(
+
+            nextPattern
+
+        );
+
+        /**
+         * 만약 삭제한 색상이 현재 선택되어 있다면
+         * 기본색(검정)으로 변경한다.
+         */
+        if (
+
+            selectedColor === colorId
+
+        ) {
+
+            setSelectedColor(1);
+
+        }
+
+    };
+
     // ==================================================
     // 외부에서 사용하는 함수
     // ==================================================
@@ -205,7 +263,9 @@ export default function usePattern() {
 
         paintPixel,
 
-        addColor
+        addColor,
+
+        removeColor
 
     };
 
