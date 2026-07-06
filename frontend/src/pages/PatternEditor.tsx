@@ -41,7 +41,10 @@ export default function PatternEditor() {
         paintPixel,
 
         // 색상 추가
-        addColor
+        addColor,
+
+        // 색상 삭제
+        removeColor
 
     } = usePattern();
 
@@ -96,6 +99,8 @@ export default function PatternEditor() {
                             onSelect={setSelectedColor}
 
                             onAddColor={addColor}
+
+                            onRemoveColor={removeColor}
 
                         />
 

@@ -118,12 +118,10 @@ export function erasePixel(
  * Palette에서 색상 삭제
  * -----------------------------------------------------
  * 역할
- * 1. Palette에서 해당 색상을 제거한다.
- * 2. White(id=0)는 삭제할 수 없다.
- * 3. Black(id=1)도 삭제하지 못하도록 한다.
- *
- * ※ 아직 pixels[][]는 수정하지 않는다.
- * 다음 단계에서 구현한다.
+ * 1. Palette에서 색상을 제거한다.
+ * 2. 해당 색을 사용하는 픽셀은 White(0)로 변경한다.
+ * 3. 삭제된 색보다 큰 id를 가진 픽셀은 1 감소시킨다.
+ * 4. Palette의 id도 다시 정렬한다.
  * =====================================================
  */
 export function removeColor(
@@ -134,22 +132,64 @@ export function removeColor(
 
 ): PatternData {
 
-    // 흰색과 검정은 삭제 금지
+    // ------------------------------------------
+    // White와 Black은 삭제할 수 없다.
+    // ------------------------------------------
+
     if (colorId === 0 || colorId === 1) {
 
         return pattern;
 
     }
 
-    // 기존 Pattern 복사
+    // ------------------------------------------
+    // Pattern 복사
+    // ------------------------------------------
+
     const next = clonePattern(pattern);
 
-    // Palette에서 해당 색상 제거
-    next.palette = next.palette.filter(
+    // ------------------------------------------
+    // Palette 삭제
+    // ------------------------------------------
 
-        color => color.id !== colorId
+    next.palette = next.palette
+        .filter(color => color.id !== colorId)
+        .map((color, index) => ({
 
-    );
+            ...color,
+
+            // id를 다시 0부터 순서대로 부여
+            id: index
+
+        }));
+
+    // ------------------------------------------
+    // Pixels 수정
+    // ------------------------------------------
+
+    for (let y = 0; y < next.height; y++) {
+
+        for (let x = 0; x < next.width; x++) {
+
+            const current = next.pixels[y][x];
+
+            // 삭제한 색은 White로 변경
+            if (current === colorId) {
+
+                next.pixels[y][x] = 0;
+
+            }
+
+            // 삭제한 색보다 큰 번호는 하나 감소
+            else if (current > colorId) {
+
+                next.pixels[y][x] = current - 1;
+
+            }
+
+        }
+
+    }
 
     return next;
 
