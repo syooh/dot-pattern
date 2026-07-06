@@ -15,9 +15,9 @@ export default function NewPatternDialog({
 
 }: Props) {
 
-    const [width, setWidth] = useState(40);
+    const [width, setWidth] = useState(0);
 
-    const [height, setHeight] = useState(60);
+    const [height, setHeight] = useState(0);
 
     return (
 

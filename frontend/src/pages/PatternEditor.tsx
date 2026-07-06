@@ -1,18 +1,13 @@
 // ======================================================
 // PatternEditor
-// Version : v0.5
-// Last Update : 2026-07-03
+// Version : v0.7
+// Last Update : 2026-07-06
 //
 // 역할
 // 1. 새 도안 생성
-// 2. 색상 팔레트 출력
-// 3. 도안(Canvas) 출력
-//
-// 앞으로 추가될 기능
-// - Toolbar
-// - Undo / Redo
-// - 확대 / 축소
-// - 저장
+// 2. Toolbar 출력
+// 3. Palette 출력
+// 4. Canvas 출력
 // ======================================================
 
 import PatternCanvas from "../components/canvas/PatternCanvas";
@@ -26,26 +21,19 @@ export default function PatternEditor() {
 
     const {
 
-        // 현재 도안
         pattern,
 
-        // 현재 선택된 색상
-        selectedColor,
-
-        // 색상 선택
-        setSelectedColor,
-
-        // 새 도안 생성
         createPattern,
 
-        // 한 칸 색칠
-        paintPixel,
+        selectedColor,
 
-        // 색상 추가
+        setSelectedColor,
+
         addColor,
 
-        // 색상 삭제
-        removeColor
+        removeColor,
+
+        paintPixel
 
     } = usePattern();
 
@@ -57,11 +45,15 @@ export default function PatternEditor() {
             }}
         >
 
-            <h1>🧶 Dot Pattern Editor</h1>
+            <h1>
 
-            {/* ========================= */}
+                🧶 Dot Pattern Editor
+
+            </h1>
+
+            {/* -------------------------------- */}
             {/* 새 도안 생성 */}
-            {/* ========================= */}
+            {/* -------------------------------- */}
 
             {
 
@@ -77,9 +69,9 @@ export default function PatternEditor() {
 
             }
 
-            {/* ========================= */}
-            {/* 도안 생성 후 */}
-            {/* ========================= */}
+            {/* -------------------------------- */}
+            {/* 도안이 생성된 이후 */}
+            {/* -------------------------------- */}
 
             {
 
@@ -88,10 +80,28 @@ export default function PatternEditor() {
                     <>
 
                         {/* ========================= */}
-                        {/* 색상 팔레트 */}
+                        {/* Toolbar */}
                         {/* ========================= */}
 
-                        <Toolbar />
+                        <Toolbar
+
+                            onUndo={() => {
+
+                                console.log("Undo");
+
+                            }}
+
+                            onRedo={() => {
+
+                                console.log("Redo");
+
+                            }}
+
+                        />
+
+                        {/* ========================= */}
+                        {/* Palette */}
+                        {/* ========================= */}
 
                         <ColorPalette
 
@@ -107,10 +117,14 @@ export default function PatternEditor() {
 
                         />
 
-                        <div style={{ height: 20 }} />
+                        <div
+                            style={{
+                                height: 20
+                            }}
+                        />
 
                         {/* ========================= */}
-                        {/* 도안(Canvas) */}
+                        {/* Canvas */}
                         {/* ========================= */}
 
                         <PatternCanvas
