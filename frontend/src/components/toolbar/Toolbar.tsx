@@ -164,7 +164,7 @@ export default function Toolbar({
 
             >
 
-                🖌 Brush
+                🖌 Brush (B)
 
             </button>
 
@@ -190,7 +190,7 @@ export default function Toolbar({
 
             >
 
-                🩹 Eraser
+                🩹 Eraser (E)
 
             </button>
 
@@ -216,7 +216,7 @@ export default function Toolbar({
 
             >
 
-                🪣 Fill
+                🪣 Fill (F)
 
             </button>
 

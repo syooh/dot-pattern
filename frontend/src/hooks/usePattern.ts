@@ -34,9 +34,15 @@ import type {
 // ======================================================
 
 import {
+
     paintPixel as paintPixelEngine,
+
     erasePixel as erasePixelEngine,
+
+    floodFill,
+
     removeColor as removeColorEngine
+
 } from "../engine/PatternEngine";
 
 export default function usePattern() {
@@ -193,6 +199,14 @@ export default function usePattern() {
      * Canvas가 전달한 좌표를
      * PatternEngine에게 전달한다.
      */
+    /**
+ * ==================================================
+ * 한 칸 편집
+ * --------------------------------------------------
+ * 현재 선택된 Tool에 따라
+ * PatternEngine을 호출한다.
+ * ==================================================
+ */
     const paintPixel = (
 
         x: number,
@@ -210,37 +224,70 @@ export default function usePattern() {
 
         switch (selectedTool) {
 
+            // =====================
+            // Brush
+            // =====================
+
             case "brush":
 
-                nextPattern = paintPixelEngine(
-                    pattern,
-                    x,
-                    y,
-                    selectedColor
-                );
+                nextPattern =
+                    paintPixelEngine(
+
+                        pattern,
+
+                        x,
+
+                        y,
+
+                        selectedColor
+
+                    );
 
                 break;
+
+            // =====================
+            // Eraser
+            // =====================
 
             case "eraser":
 
-                nextPattern = erasePixelEngine(
-                    pattern,
-                    x,
-                    y
-                );
+                nextPattern =
+                    erasePixelEngine(
+
+                        pattern,
+
+                        x,
+
+                        y
+
+                    );
 
                 break;
 
+            // =====================
+            // Fill
+            // =====================
+
             case "fill":
 
-                // 다음 버전에서 구현
-                nextPattern = pattern;
+                nextPattern =
+                    floodFill(
+
+                        pattern,
+
+                        x,
+
+                        y,
+
+                        selectedColor
+
+                    );
 
                 break;
 
             default:
 
-                nextPattern = pattern;
+                return;
 
         }
 

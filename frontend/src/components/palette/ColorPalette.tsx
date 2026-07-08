@@ -55,6 +55,22 @@ export default function ColorPalette({
                 }}
             >
 
+                <input
+
+                    type="color"
+
+                    onChange={(event) =>
+
+                        onAddColor(
+
+                            event.target.value
+
+                        )
+
+                    }
+
+                />
+
                 {
                     palette.map(color => (
 
@@ -126,23 +142,11 @@ export default function ColorPalette({
 
                 }
 
+                
+
             </div>
 
-            <input
-
-                type="color"
-
-                onChange={(event) =>
-
-                    onAddColor(
-
-                        event.target.value
-
-                    )
-
-                }
-
-            />
+            
 
         </div>
 

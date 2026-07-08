@@ -17,6 +17,8 @@ import Toolbar from "../components/toolbar/Toolbar";
 
 import usePattern from "../hooks/usePattern";
 
+import { useEffect } from "react";
+
 export default function PatternEditor() {
 
     const {
@@ -48,6 +50,73 @@ export default function PatternEditor() {
         canRedo
 
     } = usePattern();
+
+    useEffect(() => {
+
+        const handleKeyDown = (
+
+            event: KeyboardEvent
+
+        ) => {
+
+            const target = event.target as HTMLElement;
+
+            if (
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA"
+            ) {
+                return;
+            }
+
+            switch (
+
+            event.key.toLowerCase()
+
+            ) {
+
+                case "b":
+
+                    setSelectedTool("brush");
+
+                    break;
+
+                case "e":
+
+                    setSelectedTool("eraser");
+
+                    break;
+
+                case "f":
+
+                    setSelectedTool("fill");
+
+                    break;
+
+            }
+
+        };
+
+        window.addEventListener(
+
+            "keydown",
+
+            handleKeyDown
+
+        );
+
+        return () => {
+
+            window.removeEventListener(
+
+                "keydown",
+
+                handleKeyDown
+
+            );
+
+        };
+
+    }, [setSelectedTool]);
 
     return (
 

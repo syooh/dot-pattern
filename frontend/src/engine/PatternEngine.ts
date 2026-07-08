@@ -115,6 +115,193 @@ export function erasePixel(
 
 /**
  * =====================================================
+ * Flood Fill
+ * -----------------------------------------------------
+ * 시작 좌표와 같은 색으로 연결된 영역을
+ * 새로운 색으로 모두 변경한다.
+ *
+ * BFS(Queue)를 이용하여 구현한다.
+ * =====================================================
+ */
+export function floodFill(
+
+    pattern: PatternData,
+
+    startX: number,
+
+    startY: number,
+
+    newColorId: number
+
+): PatternData {
+
+    // Pattern 복사
+    const next =
+        clonePattern(pattern);
+
+    // ==========================
+    // 범위 검사
+    // ==========================
+
+    if (
+
+        startX < 0 ||
+
+        startY < 0 ||
+
+        startX >= next.width ||
+
+        startY >= next.height
+
+    ) {
+
+        return next;
+
+    }
+
+    // ==========================
+    // 시작 색상
+    // ==========================
+
+    const targetColor =
+        next.pixels[startY][startX];
+
+    // 이미 같은 색이면 종료
+    if (
+
+        targetColor === newColorId
+
+    ) {
+
+        return next;
+
+    }
+
+    // ==========================
+    // BFS Queue
+    // ==========================
+
+    const queue = [
+
+        {
+
+            x: startX,
+
+            y: startY
+
+        }
+
+    ];
+
+    // 상하좌우 방향
+    const directions = [
+
+        { x: 0, y: -1 },
+
+        { x: 0, y: 1 },
+
+        { x: -1, y: 0 },
+
+        { x: 1, y: 0 }
+
+    ];
+
+    // ==========================
+    // BFS 시작
+    // ==========================
+
+    while (
+
+        queue.length > 0
+
+    ) {
+
+        const current =
+            queue.shift();
+
+        if (!current)
+            continue;
+
+        // 다른 색이면 건너뛴다.
+        if (
+
+            next.pixels[current.y][current.x]
+
+            !==
+
+            targetColor
+
+        ) {
+
+            continue;
+
+        }
+
+        // 현재 칸 색 변경
+        next.pixels[current.y][current.x] =
+            newColorId;
+
+        // 사방 탐색
+        for (
+
+            const dir of directions
+
+        ) {
+
+            const nx =
+                current.x + dir.x;
+
+            const ny =
+                current.y + dir.y;
+
+            // 범위 검사
+            if (
+
+                nx < 0 ||
+
+                ny < 0 ||
+
+                nx >= next.width ||
+
+                ny >= next.height
+
+            ) {
+
+                continue;
+
+            }
+
+            // 같은 색이면 Queue에 추가
+            if (
+
+                next.pixels[ny][nx]
+
+                ===
+
+                targetColor
+
+            ) {
+
+                queue.push({
+
+                    x: nx,
+
+                    y: ny
+
+                });
+
+            }
+
+        }
+
+    }
+
+    return next;
+
+}
+
+/**
+ * =====================================================
  * Palette에서 색상 삭제
  * -----------------------------------------------------
  * 역할
