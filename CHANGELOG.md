@@ -131,3 +131,35 @@ setPattern()
 - Tool 단축키 추가
 - Tool UI 개선
 - 브러시 크기 기능
+
+
+
+# 📄 CHANGELOG
+
+## v0.8.0 (2026-07-09)
+
+### 추가
+
+- react-colorful Color Picker
+- AddColorPanel
+- Color Preview
+- HEX 입력
+- RGB 입력
+- ColorUtils
+- 중복 색상 검사
+- 자동 Color 선택
+
+---
+
+### 변경
+
+- Palette UI 개선
+- Color 추가 방식 변경
+- Color Panel 구조 변경
+
+---
+
+### 수정
+
+- Color Panel 자동 닫힘
+- onClose Props 오류 수정

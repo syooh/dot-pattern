@@ -1,16 +1,26 @@
 // ======================================================
 // ColorPalette
-// Version : v0.5
-// Last Update : 2026-07-03
+// Version : v2.0
+// Last Update : 2026-07-09
 //
 // 역할
 // 1. 팔레트 출력
 // 2. 색 선택
-// 3. 색 추가
+// 3. 색 추가 패널
 // 4. 색 삭제
 // ======================================================
 
-import type { PaletteColor } from "../../types/Pattern";
+import { useState } from "react";
+
+import type {
+
+    PaletteColor
+
+} from "../../types/Pattern";
+
+import AddColorPanel from "./AddColorPanel";
+
+import "./Palette.css";
 
 interface Props {
 
@@ -40,89 +50,111 @@ export default function ColorPalette({
 
 }: Props) {
 
+    //--------------------------------------------------
+
+    const [showPanel, setShowPanel] =
+
+        useState(false);
+
+    //--------------------------------------------------
+
     return (
 
-        <div>
+        <div className="palette">
 
-            <h3>🎨 Palette</h3>
+            <h3 className="palette-title">
 
-            <div
-                style={{
-                    display: "flex",
-                    gap: 10,
-                    flexWrap: "wrap",
-                    marginBottom: 15
-                }}
-            >
+                🎨 Palette
 
-                <input
+            </h3>
 
-                    type="color"
+            <div className="palette-list">
 
-                    onChange={(event) =>
+                {/* Add Button */}
 
-                        onAddColor(
+                <button
 
-                            event.target.value
+                    className="add-color-button"
+
+                    onClick={() =>
+
+                        setShowPanel(
+
+                            prev => !prev
 
                         )
 
                     }
 
-                />
+                >
+
+                    +
+
+                </button>
+
+                {/* Palette */}
 
                 {
+
                     palette.map(color => (
 
                         <div
+
                             key={color.id}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center"
-                            }}
+
+                            className="palette-color"
+
                         >
 
                             <button
 
-                                onClick={() => onSelect(color.id)}
+                                className={
+
+                                    selectedColor === color.id
+
+                                        ? "color-button selected"
+
+                                        : "color-button"
+
+                                }
 
                                 style={{
 
-                                    width: 40,
+                                    background:
 
-                                    height: 40,
-
-                                    background: color.hex,
-
-                                    border:
-
-                                        selectedColor === color.id
-
-                                            ? "3px solid #ff6600"
-
-                                            : "1px solid #999",
-
-                                    cursor: "pointer"
+                                        color.hex
 
                                 }}
 
+                                onClick={() =>
+
+                                    onSelect(
+
+                                        color.id
+
+                                    )
+
+                                }
+
                             />
 
-                            {/* 기본색은 삭제 불가 */}
                             {
 
-                                color.id > 1 && onRemoveColor && (
+                                color.id > 1 &&
+
+                                onRemoveColor && (
 
                                     <button
 
-                                        style={{
-                                            marginTop: 5
-                                        }}
+                                        className="delete-color-button"
 
                                         onClick={() =>
 
-                                            onRemoveColor(color.id)
+                                            onRemoveColor(
+
+                                                color.id
+
+                                            )
 
                                         }
 
@@ -142,11 +174,45 @@ export default function ColorPalette({
 
                 }
 
-                
-
             </div>
 
-            
+            {/* Add Color Panel */}
+
+            {
+
+                showPanel && (
+
+                    <AddColorPanel
+
+                        palette={
+
+                            palette.map(
+
+                                color =>
+
+                                    color.hex
+
+                            )
+
+                        }
+
+                        onAddColor={
+
+                            onAddColor
+
+                        }
+
+                        onClose={() =>
+
+                            setShowPanel(false)
+
+                        }
+
+                    />
+
+                )
+
+            }
 
         </div>
 

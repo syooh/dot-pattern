@@ -306,7 +306,7 @@ export default function usePattern() {
 
         hex: string
 
-    ) => {
+    ): number | undefined => {
 
         if (!pattern)
             return;
@@ -347,6 +347,8 @@ export default function usePattern() {
             ]
 
         });
+
+        return nextId;
 
     };
 

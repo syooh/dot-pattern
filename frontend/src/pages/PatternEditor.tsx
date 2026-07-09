@@ -192,16 +192,20 @@ export default function PatternEditor() {
 
                             onSelect={setSelectedColor}
 
-                            onAddColor={addColor}
+                            onAddColor={(hex) => {
+
+                                const newId = addColor(hex);
+
+                                if (newId !== undefined) {
+
+                                    setSelectedColor(newId);
+
+                                }
+
+                            }}
 
                             onRemoveColor={removeColor}
 
-                        />
-
-                        <div
-                            style={{
-                                height: 20
-                            }}
                         />
 
                         {/* ========================= */}
