@@ -19,6 +19,14 @@ interface Props {
 
     pattern: PatternData;
 
+    hoverCell?: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
     onPixelClick: (
 
         x: number,
@@ -93,6 +101,8 @@ export default function CanvasContainer({
 
                     width={pattern.width}
 
+                    hoverCell={hoverCell}
+
                 />
 
             </div>
@@ -116,6 +126,8 @@ export default function CanvasContainer({
                 <CanvasHeaderLeft
 
                     height={pattern.height}
+
+                    hoverCell={hoverCell}
 
                 />
 

@@ -1,6 +1,6 @@
 # 🏗 Architecture
 
-프로젝트의 전체 구조와 데이터 흐름을 정리한 문서입니다.
+프로젝트의 전체 구조와 컴포넌트 역할, 데이터 흐름을 정리한 문서입니다.
 
 ---
 
@@ -11,76 +11,104 @@ PatternEditor
 │
 ├── Toolbar
 │
-├── PatternCanvas
-│
-├── ColorPalette
-│   │
-│   └── AddColorPanel
-│       │
-│       └── ColorUtils
-│
-└── usePattern
-    │
-    └── PatternEngine
-```
-
-# Architecture
-
-PatternEditor
-│
-├── Toolbar
-│
 └── EditorLayout
     │
     ├── PalettePanel
-    │   └── ColorPalette
+    │   │
+    │   ├── ColorPalette
+    │   │
+    │   └── AddColorPanel
+    │       │
+    │       └── ColorUtils
     │
     └── Workspace
         │
         └── CanvasViewport
             │
             └── CanvasContainer
-                │
                 ├── CanvasHeaderTop
                 ├── CanvasHeaderLeft
                 └── PatternCanvas
+                    │
+                    ├── CanvasRenderer
+                    │
+                    └── CanvasEvents
+```
+
+---
+
+# 🎨 Canvas Renderer 구조
+
+Canvas는 Layer 기반으로 렌더링됩니다.
+
+```text
+CanvasRenderer
+│
+├── BackgroundLayer
+├── PixelLayer
+├── GridLayer
+└── HoverLayer
+```
+
+향후 추가 예정
+
+```text
+CanvasRenderer
+│
+├── BackgroundLayer
+├── PixelLayer
+├── GridLayer
+├── HoverLayer
+├── SelectionLayer
+├── GuideLayer
+└── OverlayLayer
+```
 
 ---
 
 # 🔄 데이터 흐름
 
-사용자의 입력은 아래와 같은 순서로 처리됩니다.
+사용자의 입력은 다음 순서로 처리됩니다.
 
 ```text
-사용자
-    │
-    ▼
-PatternEditor
-    │
-    ▼
-PatternCanvas
-    │
-    ▼
+사용자 입력
+      │
+      ▼
+CanvasEvents
+      │
+      ▼
+onPixelClick()
+      │
+      ▼
 usePattern
-    │
-    ▼
+      │
+      ▼
+saveHistory()
+      │
+      ▼
 PatternEngine
-    │
-    ▼
-PatternData
-    │
-    ▼
-React State
-    │
-    ▼
-PatternCanvas 렌더링
+      │
+      ▼
+새 PatternData 생성
+      │
+      ▼
+setPattern()
+      │
+      ▼
+React State 업데이트
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+Canvas 출력
 ```
 
 ---
 
 # 🛠 Tool 동작 구조
 
-Toolbar에서 선택한 기능은 `usePattern`을 통해 `PatternEngine`으로 전달되고, 변경된 상태가 React State에 반영되어 Canvas가 다시 렌더링됩니다.
+Toolbar에서 선택한 기능은 `usePattern`을 통해 `PatternEngine`으로 전달됩니다.
 
 ```text
 Toolbar
@@ -88,49 +116,48 @@ Toolbar
     ├── Brush
     ├── Eraser
     ├── Fill
-    ├── Color Picker
     ├── Undo
     └── Redo
-            │
-            ▼
-      usePattern
-            │
-            ▼
-      PatternEngine
-            │
-            ▼
-       PatternData
-            │
-            ▼
-       React State
-            │
-            ▼
-      PatternCanvas
+          │
+          ▼
+     usePattern
+          │
+          ▼
+    PatternEngine
+          │
+          ▼
+     PatternData
+          │
+          ▼
+     React State
+          │
+          ▼
+    CanvasRenderer
 ```
 
 ---
 
 # 🎨 Color 시스템 구조
 
-Color 관련 기능은 각각의 역할에 맞게 독립적인 모듈로 분리되어 있습니다.
+Color 기능은 각각의 역할에 맞게 분리되어 있습니다.
 
 ```text
-ColorPalette
-    │
-    ├── Palette UI
-    │
-    ├── AddColorPanel
-    │      │
-    │      ├── Color Picker
-    │      ├── HEX Input
-    │      ├── RGB Input
-    │      └── Color Preview
-    │
-    └── ColorUtils
-           │
-           ├── HEX ↔ RGB 변환
-           ├── 중복 색상 검사
-           └── Color 생성
+PalettePanel
+│
+├── ColorPalette
+│
+├── AddColorPanel
+│      │
+│      ├── Color Picker
+│      ├── HEX Input
+│      ├── RGB Input
+│      └── Color Preview
+│
+└── ColorUtils
+       │
+       ├── HEX ↔ RGB 변환
+       ├── 중복 색상 검사
+       └── Color 생성
 ```
 
 ---
@@ -141,42 +168,95 @@ ColorPalette
 
 프로젝트의 최상위 페이지입니다.
 
-역할
+### 역할
 
 - Toolbar 관리
-- PatternCanvas 표시
-- ColorPalette 표시
+- EditorLayout 출력
 - usePattern 연결
 
 ---
 
-## Toolbar
+## EditorLayout
 
-도안 편집에 필요한 기능을 제공합니다.
+Editor의 전체 레이아웃을 담당합니다.
 
-기능
+### 역할
 
-- Brush
-- Eraser
-- Fill
-- Color Picker
-- Undo
-- Redo
+- PalettePanel 배치
+- Workspace 배치
 
-Toolbar에서 선택한 기능은 `usePattern`을 통해 처리됩니다.
+---
+
+## Workspace
+
+Canvas 작업 공간입니다.
+
+### 역할
+
+- CanvasViewport 관리
+- 추후 Camera(Viewport) 기능 확장
+
+---
+
+## CanvasViewport
+
+Canvas가 표시되는 Viewport입니다.
+
+### 역할
+
+- CanvasContainer 출력
+- 추후 Zoom / Pan 기능 관리
+
+---
+
+## CanvasContainer
+
+Canvas와 Header를 하나의 영역으로 관리합니다.
+
+### 역할
+
+- CanvasHeaderTop 출력
+- CanvasHeaderLeft 출력
+- PatternCanvas 출력
 
 ---
 
 ## PatternCanvas
 
-도안을 실제로 그리는 Canvas입니다.
+Canvas를 관리하는 핵심 컴포넌트입니다.
 
-역할
+### 역할
 
-- 마우스 입력 처리
-- 드래그 색칠
-- 클릭 이벤트 처리
-- PatternData 렌더링
+- Canvas 생성
+- CanvasRenderer 호출
+- CanvasEvents 연결
+- Canvas 다시 그리기
+
+---
+
+## CanvasRenderer
+
+Canvas의 모든 Layer를 순서대로 출력합니다.
+
+### 현재 Layer
+
+- Background
+- Pixels
+- Grid
+- Hover
+
+---
+
+## CanvasEvents
+
+Canvas의 사용자 입력을 처리합니다.
+
+### 역할
+
+- Mouse Down
+- Mouse Move
+- Drag
+- Hover Cell 계산
 
 ---
 
@@ -184,11 +264,11 @@ Toolbar에서 선택한 기능은 `usePattern`을 통해 처리됩니다.
 
 프로젝트의 핵심 상태 관리 Hook입니다.
 
-역할
+### 역할
 
 - Pattern 상태 관리
 - Tool 상태 관리
-- 선택된 Color 관리
+- 선택 Color 관리
 - Undo / Redo 관리
 - History 저장
 - PatternEngine 호출
@@ -197,9 +277,9 @@ Toolbar에서 선택한 기능은 `usePattern`을 통해 처리됩니다.
 
 ## PatternEngine
 
-실제 편집 로직을 담당합니다.
+실제 도안 수정 로직을 담당합니다.
 
-역할
+### 역할
 
 - Paint
 - Fill
@@ -212,15 +292,25 @@ React와 분리되어 있어 재사용이 가능합니다.
 
 ---
 
+## PalettePanel
+
+Palette UI를 관리합니다.
+
+### 역할
+
+- ColorPalette 출력
+- AddColorPanel 연결
+
+---
+
 ## ColorPalette
 
 현재 Palette를 표시합니다.
 
-역할
+### 역할
 
 - 색상 선택
-- 색상 목록 표시
-- AddColorPanel 열기
+- Palette 출력
 
 ---
 
@@ -228,7 +318,7 @@ React와 분리되어 있어 재사용이 가능합니다.
 
 새로운 색상을 추가하는 UI입니다.
 
-기능
+### 기능
 
 - Color Picker
 - HEX 입력
@@ -242,46 +332,82 @@ React와 분리되어 있어 재사용이 가능합니다.
 
 색상 관련 공통 함수입니다.
 
-기능
+### 기능
 
 - HEX ↔ RGB 변환
-- 색상 생성
+- RGB ↔ HEX 변환
 - 중복 색상 검사
+- Color 생성
 
 ---
 
-# ✨ 리팩토링
+# ✨ 최근 리팩토링
 
-## Color 시스템
+## Editor 구조 개선
 
-기존에는 `ColorPalette`가 모든 Color 기능을 담당했습니다.
-
-```text
-ColorPalette
-    ├── Color Picker
-    ├── HEX
-    ├── RGB
-    ├── Preview
-    └── Color 생성
-```
-
-현재는 기능별로 분리하여 유지보수성을 높였습니다.
+기존
 
 ```text
-ColorPalette
-        │
-        ├── Palette UI
-        ├── AddColorPanel
-        └── ColorUtils
+PatternEditor
+├── Toolbar
+├── Palette
+└── Canvas
 ```
 
-### 개선 효과
+↓
 
-- UI와 로직 분리
-- 컴포넌트 역할 명확화
-- 유지보수성 향상
-- 기능 확장 용이
-- 재사용성 증가
+현재
+
+```text
+PatternEditor
+├── Toolbar
+└── EditorLayout
+    ├── PalettePanel
+    └── Workspace
+```
+
+---
+
+## Canvas 구조 개선
+
+기존
+
+```text
+PatternCanvas
+└── CanvasDrawer
+```
+
+↓
+
+현재
+
+```text
+PatternCanvas
+├── CanvasRenderer
+└── CanvasEvents
+```
+
+---
+
+## Render 구조 개선
+
+기존
+
+```text
+CanvasDrawer
+```
+
+↓
+
+현재
+
+```text
+CanvasRenderer
+├── BackgroundLayer
+├── PixelLayer
+├── GridLayer
+└── HoverLayer
+```
 
 ---
 
@@ -301,29 +427,53 @@ ColorPalette
 ## Color
 
 - ✅ Color Picker
-- ✅ Color 추가
 - ✅ HEX 입력
 - ✅ RGB 입력
 - ✅ Color Preview
 - ✅ 중복 색상 검사
-- ✅ 자동 색상 선택
-- ✅ Palette 색상 삭제
+- ✅ Color 추가
+- ✅ Color 삭제
+- ✅ 자동 선택
 
 ## Canvas
 
 - ✅ 빈 도안 생성
+- ✅ 클릭 색칠
 - ✅ 드래그 색칠
-- ✅ History 관리
-- ✅ PatternData 렌더링
+- ✅ Hover 표시
+- ✅ Grid 출력
+- ✅ Header 출력
+- ✅ Layer 기반 Render
 
 ---
 
 # 📌 향후 개발 예정
 
-- 브러시 크기 조절
-- Zoom In / Zoom Out
+## Canvas
+
+- Header Highlight
+- StatusBar
+- Selection Tool
+- Selection Layer
+- Zoom
+- Pan
+- Camera 시스템
+
+## Drawing
+
+- Brush Size
+- Line Tool
+- Rectangle Tool
+
+## File
+
+- Import
+- Export
+- JSON 저장
+- 이미지 저장
+
+## View
+
 - Grid 표시 옵션
+- Grid 색상 변경
 - 단축키 확장
-- 선택 영역 기능
-- 도안 저장 및 불러오기
-- 이미지 Import / Export 기능

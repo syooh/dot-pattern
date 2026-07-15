@@ -11,6 +11,14 @@ interface Props {
 
     height: number;
 
+    hoverCell?: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
 }
 
 import {CELL_SIZE, HEADER_SIZE, GRID_INTERVAL} from "./CanvasConstants";
@@ -58,11 +66,23 @@ export default function CanvasHeaderLeft({
 
                             fontSize: 12,
 
-                            fontWeight: 500,
+                            fontWeight:
+
+                                hoverCell?.y === index
+
+                                    ? 700
+
+                                    : 500,
                             
                             color: CanvasTheme.headerText,
 
-                            background: CanvasTheme.headerBackground,
+                            background:
+
+                                hoverCell?.y === index
+
+                                    ? "#DCEEFF"
+
+                                    : CanvasTheme.headerBackground,
 
                             borderBottom:
 

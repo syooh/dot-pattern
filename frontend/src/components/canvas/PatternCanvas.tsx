@@ -15,11 +15,13 @@ import { useEffect, useRef } from "react";
 
 import type { PatternData } from "../../types/Pattern";
 
-import { drawCanvas } from "./CanvasDrawer";
+import { renderCanvas } from "./render/CanvasRenderer";
 
 import { useCanvasEvents } from "./CanvasEvents";
 
 import { getCanvasWidth, getCanvasHeight } from "./CanvasUtils";
+
+import useCamera from "../../hooks/useCamera";
 
 interface Props {
 
@@ -56,9 +58,13 @@ export default function PatternCanvas({
 
     const {
 
+        hoverCell,
+
         handleMouseDown,
 
         handleMouseMove,
+
+        handleMouseLeave,
 
         stopDrawing
 
@@ -67,6 +73,12 @@ export default function PatternCanvas({
         onPixelClick
 
     });
+
+    const {
+
+        camera
+
+    } = useCamera();
 
     // ==================================================
     // Canvas 다시 그리기
@@ -100,15 +112,25 @@ export default function PatternCanvas({
 
             );
 
-        drawCanvas(
+        renderCanvas(
 
             ctx,
 
-            pattern
+            {
+
+                pattern,
+
+                hoverCell,
+
+                camera,
+
+                showGrid: true
+
+            }
 
         );
 
-    }, [pattern]);
+    }, [pattern, hoverCell]);
 
     // ==================================================
     // Render
@@ -126,7 +148,7 @@ export default function PatternCanvas({
 
             onMouseUp={stopDrawing}
 
-            onMouseLeave={stopDrawing}
+            onMouseLeave={handleMouseLeave}
 
             style={{
                 display: "block"

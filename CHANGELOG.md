@@ -206,3 +206,29 @@ setPattern()
 
 - 컴포넌트 책임 분리
 - 레이아웃 구조 개선
+
+
+
+# Changelog
+
+## v0.8.0 (2026-07-15)
+
+### Added
+- Hover Layer 추가
+- CanvasRenderer Layer 구조 적용
+
+### Changed
+- Workspace 구조 리팩토링
+- CanvasContainer 구조 개선
+- RenderState 구조 개선
+
+### Fixed
+- 첫 클릭이 동작하지 않는 문제
+- Hover 좌표 계산 오류
+- 클릭/드래그 동작 수정
+
+### Planned
+- Header Highlight
+- StatusBar
+- Camera
+- Zoom

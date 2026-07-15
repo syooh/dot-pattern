@@ -34,6 +34,16 @@ export function useCanvasEvents({
 
         useState(false);
 
+    const [hoverCell, setHoverCell] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
+
     const lastCell =
 
         useRef<{
@@ -138,6 +148,14 @@ export function useCanvasEvents({
 
         } = getCellPosition(event);
 
+        setHoverCell({
+
+            x,
+
+            y
+
+        });
+
         paint(
 
             x,
@@ -158,10 +176,6 @@ export function useCanvasEvents({
 
     ) {
 
-        if (!isDrawing)
-
-            return;
-
         const {
 
             x,
@@ -170,6 +184,18 @@ export function useCanvasEvents({
 
         } = getCellPosition(event);
 
+        setHoverCell({
+
+            x,
+
+            y
+
+        });
+
+        if (!isDrawing)
+
+            return;
+
         paint(
 
             x,
@@ -177,6 +203,14 @@ export function useCanvasEvents({
             y
 
         );
+
+    }
+
+    function handleMouseLeave() {
+
+        stopDrawing();
+
+        setHoverCell(null);
 
     }
 
@@ -194,9 +228,13 @@ export function useCanvasEvents({
 
     return {
 
+        hoverCell,
+
         handleMouseDown,
 
         handleMouseMove,
+
+        handleMouseLeave,
 
         stopDrawing
 
