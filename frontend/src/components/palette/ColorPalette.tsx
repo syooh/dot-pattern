@@ -64,8 +64,6 @@ export default function ColorPalette({
 
             <h3 className="palette-title">
 
-                🎨 Palette
-
             </h3>
 
             <div className="palette-list">

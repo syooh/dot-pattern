@@ -4,7 +4,7 @@
 
 ---
 
-## v0.1 (2026-06-30)
+## v0.1.0 (2026-06-30)
 
 ### 🎉 프로젝트 시작
 
@@ -12,7 +12,7 @@
 - GitHub Repository 생성
 - 첫 Commit 완료
 
-### ✨ 추가 (Added)
+### ✨ Added
 
 #### Backend
 
@@ -33,7 +33,7 @@
 - Toolbar 컴포넌트 생성
 - NewPatternDialog 생성
 
-### 📌 다음 목표
+### 📌 Next
 
 - 색상 추가
 - 지우개
@@ -42,47 +42,55 @@
 
 ---
 
-## v0.5 (2026-07-03)
+## v0.5.0 (2026-07-03)
 
-### ✨ 추가 (Added)
+### ✨ Added
 
 - 사용자 색상 추가 기능
 - 선택한 색상 강조 표시
 - 색상 삭제 UI 준비
 
-### 🔨 변경 (Changed)
+### 🔨 Changed
 
 - usePattern 구조 리팩토링
 - PatternCanvas와 PatternEngine 연결 방식 개선
 - PatternEditor 구조 개선
 - ColorPalette 구조 개선
 
-### ⚡ 개선 (Improved)
+### ⚡ Improved
 
 - 드래그 시 동일한 칸 반복 색칠 방지
 - 컴포넌트 역할 분리
 
+### 📌 Next
+
+- Palette 색상 삭제
+- Undo History
+- Redo
+- Toolbar 개선
+
 ---
 
-## v0.6 (2026-07-06)
+## v0.6.0 (2026-07-06)
 
-### ✨ 추가 (Added)
+### ✨ Added
 
 - Palette 색상 삭제
 - Undo History State 추가
 - Future State 추가
 - saveHistory() 함수 추가
 
-### 🔨 변경 (Changed)
+### 🔨 Changed
 
 - PatternEngine에 removeColor() 구현
 - usePattern 구조 개선
 - createPattern() 실행 시 History 초기화
 
-### ♻ 리팩토링 (Refactored)
+### ♻ Refactored
 
 모든 편집 기능을 아래 구조로 통일
 
+```
 Canvas
 ↓
 saveHistory()
@@ -90,76 +98,111 @@ saveHistory()
 PatternEngine
 ↓
 setPattern()
+```
 
-### 📌 다음 목표
+### 📌 Next
 
 - Undo
 - Redo
 - Toolbar
 - Ctrl + Z
 
+---
 
+## v0.7.0 (2026-07-06)
 
-# Changelog
-
-## v0.7 (2026-07-06)
-
-### 추가
+### ✨ Added
 
 - ToolType 타입 추가
 - selectedTool 상태 추가
-- canUndo / canRedo 상태 추가
-- Brush / Eraser Tool 시스템 연결
+- canUndo 상태 추가
+- canRedo 상태 추가
+- Brush Tool 추가
+- Eraser Tool 추가
+- Tool 시스템 연결
 
-### 변경
+### 🔨 Changed
 
 - Undo / Redo 버튼 비활성화 기능 추가
 - Tool 선택 구조 적용
 - PatternEngine와 Tool 시스템 연결
 
-### 리팩토링
+### ♻ Refactored
 
 - usePattern 구조 표준화
-- import 순서 통일
+- Import 순서 통일
 - State → Computed → Function → Return 구조 적용
 - 주석 스타일 통일
 - Return 구조 통일
 
-### 다음 버전(v0.8)
+### 📌 Next
 
 - Fill Tool 구현
 - Tool 단축키 추가
 - Tool UI 개선
 - 브러시 크기 기능
 
-
-
-# 📄 CHANGELOG
+---
 
 ## v0.8.0 (2026-07-09)
 
-### 추가
+### ✨ Added
 
-- react-colorful Color Picker
-- AddColorPanel
-- Color Preview
-- HEX 입력
-- RGB 입력
-- ColorUtils
+- react-colorful Color Picker 추가
+- AddColorPanel 컴포넌트 추가
+- Color Preview 추가
+- HEX 입력 기능
+- RGB 입력 기능
+- ColorUtils 추가
 - 중복 색상 검사
-- 자동 Color 선택
+- 자동 Color 선택 기능
 
----
-
-### 변경
+### 🔨 Changed
 
 - Palette UI 개선
 - Color 추가 방식 변경
 - Color Panel 구조 변경
 
----
+### 🐛 Fixed
 
-### 수정
-
-- Color Panel 자동 닫힘
+- Color Panel 자동 닫힘 문제 수정
 - onClose Props 오류 수정
+
+### 📌 Next
+
+- Fill Tool 구현
+- Tool 단축키
+- Toolbar UI 개선
+- 브러시 크기 기능
+
+
+# Changelog
+
+## (2026-07-14)
+
+### Added
+
+- EditorLayout 컴포넌트 추가
+- PalettePanel 컴포넌트 추가
+- Workspace 컴포넌트 추가
+- CanvasViewport 컴포넌트 추가
+
+### Changed
+
+- Palette를 상단에서 좌측 Panel로 이동
+- CanvasContainer UI 개선
+- 프로젝트 레이아웃 구조 변경
+- PatternEditor 구조 단순화
+- 페이지 폭을 전체 화면 기반으로 변경
+
+### Refactored
+
+- Editor 역할 분리
+- Palette 역할 분리
+- Workspace 구조 개선
+- Canvas 구조 개선
+
+### Fixed
+
+- 컴포넌트 책임 분리
+- 레이아웃 구조 개선

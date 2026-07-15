@@ -10,10 +10,11 @@
 // 4. Canvas 출력
 // ======================================================
 
-import PatternCanvas from "../components/canvas/PatternCanvas";
-import ColorPalette from "../components/palette/ColorPalette";
 import NewPatternDialog from "../components/dialog/NewPatternDialog";
 import Toolbar from "../components/toolbar/Toolbar";
+import Workspace from "../components/workspace/Workspace";
+import EditorLayout from "../components/layout/EditorLayout";
+import PalettePanel from "../components/palette/PalettePanel";
 
 import usePattern from "../hooks/usePattern";
 
@@ -122,7 +123,17 @@ export default function PatternEditor() {
 
         <div
             style={{
-                padding: 20
+
+                width: "100%",
+
+                minHeight: "100vh",
+
+                padding: 20,
+
+                boxSizing: "border-box",
+
+                background: "#F5F5F5"
+
             }}
         >
 
@@ -184,39 +195,47 @@ export default function PatternEditor() {
                         {/* Palette */}
                         {/* ========================= */}
 
-                        <ColorPalette
+                        <EditorLayout
 
-                            palette={pattern.palette}
+                            palette={
 
-                            selectedColor={selectedColor}
+                                <PalettePanel
 
-                            onSelect={setSelectedColor}
+                                    pattern={pattern}
 
-                            onAddColor={(hex) => {
+                                    selectedColor={selectedColor}
 
-                                const newId = addColor(hex);
+                                    onSelectColor={setSelectedColor}
 
-                                if (newId !== undefined) {
+                                    onAddColor={(hex) => {
 
-                                    setSelectedColor(newId);
+                                        const newId = addColor(hex);
 
-                                }
+                                        if (newId !== undefined) {
 
-                            }}
+                                            setSelectedColor(newId);
 
-                            onRemoveColor={removeColor}
+                                        }
 
-                        />
+                                    }}
 
-                        {/* ========================= */}
-                        {/* Canvas */}
-                        {/* ========================= */}
+                                    onRemoveColor={removeColor}
 
-                        <PatternCanvas
+                                />
 
-                            pattern={pattern}
+                            }
 
-                            onPixelClick={paintPixel}
+                            workspace={
+
+                                <Workspace
+
+                                    pattern={pattern}
+
+                                    onPixelClick={paintPixel}
+
+                                />
+
+                            }
 
                         />
 
