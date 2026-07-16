@@ -26,7 +26,9 @@ import {CanvasTheme} from "./CanvasTheme";
 
 export default function CanvasHeaderTop({
 
-    width
+    width,
+
+    hoverCell
 
 }: Props) {
 
@@ -75,6 +77,7 @@ export default function CanvasHeaderTop({
                                     ? 700
 
                                     : 500,
+
                             color: CanvasTheme.headerText,
 
                             background:

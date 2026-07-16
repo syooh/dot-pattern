@@ -1,27 +1,18 @@
 // ======================================================
 // Toolbar
-// Version : v0.7
-// Last Update : 2026-07-06
+// Version : v1.0
+// Last Update : 2026-07-16
 //
 // 역할
 // 1. 편집 기능 버튼을 출력한다.
 // 2. 버튼 클릭 이벤트를 부모에게 전달한다.
 // 3. 실제 기능은 수행하지 않는다.
-//
-// 앞으로 추가될 기능
-// - Undo
-// - Redo
-// - Brush
-// - Eraser
-// - Fill
-// - Save
-// - Open
 // ======================================================
 
+import ToolbarButton from "./ToolbarButton";
+
 import type {
-
     ToolType
-
 } from "../../types/Pattern";
 
 interface Props {
@@ -33,9 +24,7 @@ interface Props {
     selectedTool: ToolType;
 
     onToolChange: (
-
         tool: ToolType
-
     ) => void;
 
     canUndo?: boolean;
@@ -68,17 +57,19 @@ export default function Toolbar({
 
                 display: "flex",
 
-                gap: 10,
+                alignItems: "center",
+
+                gap: 12,
 
                 padding: 12,
 
                 marginBottom: 20,
 
-                border: "1px solid #cccccc",
+                border: "1px solid #D9D9D9",
 
                 borderRadius: 8,
 
-                background: "#f5f5f5",
+                background: "#F7F7F7",
 
                 flexWrap: "wrap"
 
@@ -86,139 +77,129 @@ export default function Toolbar({
 
         >
 
-            <button>
+            {/* ========================= */}
+            {/* File */}
+            {/* ========================= */}
 
-                🆕 새 도안
+            <ToolbarButton
 
-            </button>
+                icon="🆕"
 
-            <button>
+                label="New"
 
-                💾 저장
+            />
 
-            </button>
+            <ToolbarButton
 
-            <button>
+                icon="💾"
 
-                📂 열기
+                label="Save"
 
-            </button>
+            />
 
-            <div style={{ width: 20 }} />
+            <ToolbarButton
 
-            <button
+                icon="📂"
+
+                label="Open"
+
+            />
+
+            <div
+
+                style={{
+
+                    width: 1,
+
+                    height: 40,
+
+                    background: "#DDDDDD"
+
+                }}
+
+            />
+
+            {/* ========================= */}
+            {/* History */}
+            {/* ========================= */}
+
+            <ToolbarButton
+
+                icon="↶"
+
+                label="Undo"
 
                 onClick={onUndo}
 
                 disabled={!canUndo}
 
-                style={{
-                    opacity: canUndo ? 1 : 0.5,
-                    
-                }}
+            />
 
-            >
+            <ToolbarButton
 
-                ↶ Undo
+                icon="↷"
 
-            </button>
-
-            <button
+                label="Redo"
 
                 onClick={onRedo}
 
                 disabled={!canRedo}
 
-                style={{
-                    opacity: canRedo ? 1 : 0.5,
+            />
 
-                }}
-
-            >
-
-                ↷ Redo
-
-            </button>
-
-            <div style={{ width: 20 }} />
-
-            <button
-
-                onClick={() =>
-
-                    onToolChange("brush")
-
-                }
+            <div
 
                 style={{
 
-                    background:
+                    width: 1,
 
-                        selectedTool === "brush"
+                    height: 40,
 
-                            ? "#4CAF50"
-
-                            : "#ffffff"
+                    background: "#DDDDDD"
 
                 }}
 
-            >
+            />
 
-                🖌 Brush (B)
+            {/* ========================= */}
+            {/* Tools */}
+            {/* ========================= */}
 
-            </button>
+            <ToolbarButton
 
-            <button
+                icon="🖌"
 
-                onClick={() =>
+                label="Brush"
 
-                    onToolChange("eraser")
+                selected={selectedTool === "brush"}
 
-                }
+                onClick={() => onToolChange("brush")}
 
-                style={{
+            />
 
-                    background:
+            <ToolbarButton
 
-                        selectedTool === "eraser"
+                icon="🩹"
 
-                            ? "#4CAF50"
+                label="Erase"
 
-                            : "#ffffff"
+                selected={selectedTool === "eraser"}
 
-                }}
+                onClick={() => onToolChange("eraser")}
 
-            >
+            />
 
-                🩹 Eraser (E)
+            <ToolbarButton
 
-            </button>
+                icon="🪣"
 
-            <button
+                label="Fill"
 
-                onClick={() =>
+                selected={selectedTool === "fill"}
 
-                    onToolChange("fill")
+                onClick={() => onToolChange("fill")}
 
-                }
-
-                style={{
-
-                    background:
-
-                        selectedTool === "fill"
-
-                            ? "#4CAF50"
-
-                            : "#ffffff"
-
-                }}
-
-            >
-
-                🪣 Fill (F)
-
-            </button>
+            />
 
         </div>
 

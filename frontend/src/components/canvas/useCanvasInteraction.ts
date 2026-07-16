@@ -1,12 +1,13 @@
 // ======================================================
-// CanvasEvents
+// useCanvasInteraction
 // Version : v1.0
-// Last Update : 2026-07-15
+// Last Update : 2026-07-16
 //
 // 역할
-// 1. Canvas 마우스 이벤트 처리
-// 2. 드래그 상태 관리
-// 3. 클릭 좌표 계산
+// 1. Canvas의 마우스 상태 관리
+// 2. Hover Cell 관리
+// 3. Drag 상태 관리
+// 4. 클릭 좌표 계산
 // ======================================================
 
 import { useRef, useState } from "react";
@@ -22,25 +23,11 @@ interface Props {
 
     ) => void;
 
-    onHoverChange?: (
-
-        cell: {
-
-            x: number;
-
-            y: number;
-
-        } | null
-
-    ) => void;
-
 }
 
-export function useCanvasEvents({
+export function useCanvasInteraction({
 
-    onPixelClick,
-
-    onHoverChange
+    onPixelClick
 
 }: Props) {
 
@@ -162,17 +149,13 @@ export function useCanvasEvents({
 
         } = getCellPosition(event);
 
-        const cell = {
+        setHoverCell({
 
             x,
 
             y
 
-        };
-
-        setHoverCell(cell);
-
-        onHoverChange?.(cell);
+        });
 
         paint(
 
@@ -202,17 +185,13 @@ export function useCanvasEvents({
 
         } = getCellPosition(event);
 
-        const cell = {
+        setHoverCell({
 
             x,
 
             y
 
-        };
-
-        setHoverCell(cell);
-
-        onHoverChange?.(cell);
+        });
 
         if (!isDrawing)
 
@@ -228,18 +207,20 @@ export function useCanvasEvents({
 
     }
 
+    // =============================
+    // Mouse Leave
+    // =============================
+
     function handleMouseLeave() {
 
         stopDrawing();
 
         setHoverCell(null);
 
-        onHoverChange?.(null);
-        
     }
 
     // =============================
-    // Stop Drawing
+    // Mouse Up
     // =============================
 
     function stopDrawing() {

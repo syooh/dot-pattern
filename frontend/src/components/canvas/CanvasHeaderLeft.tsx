@@ -26,7 +26,9 @@ import {CanvasTheme} from "./CanvasTheme";
 
 export default function CanvasHeaderLeft({
 
-    height
+    height,
+
+    hoverCell
 
 }: Props) {
 

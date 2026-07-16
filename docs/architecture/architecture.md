@@ -7,32 +7,36 @@
 # 📂 프로젝트 구조
 
 ```text
+# 🏗 Architecture
+
 PatternEditor
 │
 ├── Toolbar
+│   │
+│   ├── ToolbarButton
+│   ├── (ToolbarGroup 예정)
+│   └── (ToolbarDivider 예정)
 │
-└── EditorLayout
+├── EditorLayout
+│   │
+│   ├── LeftPanel
+│   │   │
+│   │   ├── PalettePanel
+│   │   └── StatusBar
+│   │
+│   └── Workspace
+│       │
+│       └── CanvasViewport
+│           │
+│           └── CanvasContainer
+│               │
+│               ├── CanvasHeaderTop
+│               ├── CanvasHeaderLeft
+│               └── PatternCanvas
+│
+└── usePattern
     │
-    ├── PalettePanel
-    │   │
-    │   ├── ColorPalette
-    │   │
-    │   └── AddColorPanel
-    │       │
-    │       └── ColorUtils
-    │
-    └── Workspace
-        │
-        └── CanvasViewport
-            │
-            └── CanvasContainer
-                ├── CanvasHeaderTop
-                ├── CanvasHeaderLeft
-                └── PatternCanvas
-                    │
-                    ├── CanvasRenderer
-                    │
-                    └── CanvasEvents
+    └── PatternEngine
 ```
 
 ---

@@ -25,13 +25,27 @@ interface Props {
 
     ) => void;
 
+    onHoverChange: (
+
+        cell: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
 }
 
 export default function CanvasViewport({
 
     pattern,
 
-    onPixelClick
+    onPixelClick,
+
+    onHoverChange
 
 }: Props) {
 
@@ -78,6 +92,8 @@ export default function CanvasViewport({
                     pattern={pattern}
 
                     onPixelClick={onPixelClick}
+
+                    onHoverChange={onHoverChange}
 
                 />
 

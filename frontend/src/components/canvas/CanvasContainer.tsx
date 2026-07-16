@@ -7,12 +7,12 @@
 // 1. Header와 Canvas를 하나의 작업판으로 출력한다.
 // ======================================================
 
-import type { PatternData } from "../../types/Pattern";
+import { useState } from "react";
 
 import PatternCanvas from "./PatternCanvas";
 import CanvasHeaderTop from "./CanvasHeaderTop";
 import CanvasHeaderLeft from "./CanvasHeaderLeft";
-
+import type { PatternData } from "../../types/Pattern";
 import { HEADER_SIZE } from "./CanvasConstants";
 
 interface Props {
@@ -35,6 +35,18 @@ interface Props {
 
     ) => void;
 
+    onHoverChange?: (
+
+        cell: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
 }
 
 export default function CanvasContainer({
@@ -44,6 +56,16 @@ export default function CanvasContainer({
     onPixelClick
 
 }: Props) {
+
+    const [hoverCell, setHoverCell] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
 
     return (
 
@@ -136,6 +158,8 @@ export default function CanvasContainer({
                     pattern={pattern}
 
                     onPixelClick={onPixelClick}
+
+                    onHoverChange={setHoverCell}
 
                 />
 

@@ -217,6 +217,68 @@ PatternEngine
 PatternData 갱신
 ```
 
+# 🔄 FlowChart
+
+ToolbarButton 클릭
+
+↓
+
+Toolbar
+
+↓
+
+PatternEditor
+
+↓
+
+usePattern
+
+↓
+
+PatternEngine
+
+↓
+
+PatternData 생성
+
+↓
+
+React State 업데이트
+
+↓
+
+CanvasRenderer
+
+↓
+
+PatternCanvas 다시 출력
+
+--------------------------------
+
+Status 정보
+
+Pattern 상태 변경
+
+↓
+
+StatusBar
+
+↓
+
+Tool
+
+↓
+
+Color
+
+↓
+
+Pattern Size
+
+↓
+
+화면 업데이트
+
 ---
 
 # 📌 향후 예정

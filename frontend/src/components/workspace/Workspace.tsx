@@ -4,6 +4,7 @@
 // 1. Canvas 작업 영역
 // ======================================================
 
+import { useState } from "react";
 import type { PatternData } from "../../types/Pattern";
 
 import CanvasViewport from "./CanvasViewport";
@@ -11,6 +12,14 @@ import CanvasViewport from "./CanvasViewport";
 interface Props {
 
     pattern: PatternData;
+
+    hoverCell: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
 
     onPixelClick: (
 
@@ -26,19 +35,35 @@ export default function Workspace({
 
     pattern,
 
-    onPixelClick
+    onPixelClick,
 
 }: Props) {
 
+    const [hoverCell, setHoverCell] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
+
     return (
 
-        <CanvasViewport
+        <div>
 
-            pattern={pattern}
+            <CanvasViewport
 
-            onPixelClick={onPixelClick}
+                pattern={pattern}
 
-        />
+                onPixelClick={onPixelClick}
+
+                onHoverChange={setHoverCell}
+
+            />
+
+        </div>
 
     );
 

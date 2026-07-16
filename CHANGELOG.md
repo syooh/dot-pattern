@@ -232,3 +232,33 @@ setPattern()
 - StatusBar
 - Camera
 - Zoom
+
+
+
+# Changelog
+
+## 2026-07-16
+
+### Added
+
+- ToolbarButton 컴포넌트 추가
+- Toolbar 공통 버튼 구조 생성
+
+### Changed
+
+- StatusBar 레이아웃 개선
+- StatusBar 디자인 개선
+- Toolbar 리팩토링 시작
+- Toolbar 그룹 구조 설계
+
+### Refactor
+
+- Toolbar 버튼 재사용 구조 도입
+- Status Panel 구조 개선
+
+### Planned
+
+- ToolbarGroup
+- ToolbarDivider
+- Zoom
+- Camera System

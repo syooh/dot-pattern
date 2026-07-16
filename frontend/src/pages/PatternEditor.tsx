@@ -15,10 +15,12 @@ import Toolbar from "../components/toolbar/Toolbar";
 import Workspace from "../components/workspace/Workspace";
 import EditorLayout from "../components/layout/EditorLayout";
 import PalettePanel from "../components/palette/PalettePanel";
+import StatusBar from "../components/workspace/StatusBar";
 
 import usePattern from "../hooks/usePattern";
 
 import { useEffect } from "react";
+import LeftPanel from "../components/layout/LeftPanel";
 
 export default function PatternEditor() {
 
@@ -197,30 +199,56 @@ export default function PatternEditor() {
 
                         <EditorLayout
 
-                            palette={
+                            leftPanel={
+                                
+                                <LeftPanel
 
-                                <PalettePanel
+                                    palette={
 
-                                    pattern={pattern}
+                                        <PalettePanel
 
-                                    selectedColor={selectedColor}
+                                            pattern={pattern}
 
-                                    onSelectColor={setSelectedColor}
+                                            selectedColor={selectedColor}
 
-                                    onAddColor={(hex) => {
+                                            onSelectColor={setSelectedColor}
 
-                                        const newId = addColor(hex);
+                                            onAddColor={(hex) => {
 
-                                        if (newId !== undefined) {
+                                                const newId = addColor(hex);
 
-                                            setSelectedColor(newId);
+                                                if (newId !== undefined) {
 
-                                        }
+                                                    setSelectedColor(newId);
 
-                                    }}
+                                                }
 
-                                    onRemoveColor={removeColor}
+                                            }}
 
+                                            onRemoveColor={removeColor}
+
+                                        />
+                                        
+                                    }
+
+                                    statusBar={
+
+                                        <StatusBar
+
+                                            tool={selectedTool}
+
+                                            selectedColorHex={
+                                                pattern.palette[selectedColor].hex
+                                            }
+
+                                            patternWidth={pattern.width}
+
+                                            patternHeight={pattern.height}
+
+                                        />
+
+                                    }
+                                
                                 />
 
                             }
@@ -232,6 +260,14 @@ export default function PatternEditor() {
                                     pattern={pattern}
 
                                     onPixelClick={paintPixel}
+
+                                    selectedTool={selectedTool}
+
+                                    selectedColorHex={
+
+                                        pattern.palette[selectedColor].hex
+
+                                    }
 
                                 />
 

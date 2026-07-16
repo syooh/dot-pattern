@@ -5,19 +5,17 @@
 // 1. Palette와 Workspace를 좌우 배치한다.
 // ======================================================
 
-import type { ReactNode } from "react";
-
 interface Props {
 
-    palette: ReactNode;
+    leftPanel: React.ReactNode;
 
-    workspace: ReactNode;
+    workspace: React.ReactNode;
 
 }
 
 export default function EditorLayout({
 
-    palette,
+    leftPanel,
 
     workspace
 
@@ -57,7 +55,7 @@ export default function EditorLayout({
 
             >
 
-                {palette}
+                {leftPanel}
 
             </aside>
 
