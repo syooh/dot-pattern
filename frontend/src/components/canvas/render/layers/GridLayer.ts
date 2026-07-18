@@ -1,13 +1,8 @@
 import type { CanvasRenderState } from "../CanvasRenderState";
 
-import {
+import { GRID_INTERVAL } from "../../CanvasConstants";
 
-    CELL_SIZE,
-
-    GRID_INTERVAL
-
-} from "../../CanvasConstants";
-
+import { getCellSize } from "../../CanvasUtils";
 import { CanvasTheme } from "../../CanvasTheme";
 
 // ======================================================
@@ -23,6 +18,15 @@ export function drawGrid(
 ) {
 
     const { pattern } = state;
+
+    const cellSize =
+        getCellSize(
+            state.camera.zoom
+        );
+
+    // =========================
+    // Vertical Line
+    // =========================
 
     for (
 
@@ -56,7 +60,7 @@ export function drawGrid(
 
         ctx.moveTo(
 
-            x * CELL_SIZE,
+            x * cellSize,
 
             0
 
@@ -64,15 +68,19 @@ export function drawGrid(
 
         ctx.lineTo(
 
-            x * CELL_SIZE,
+            x * cellSize,
 
-            pattern.height * CELL_SIZE
+            pattern.height * cellSize
 
         );
 
         ctx.stroke();
 
     }
+
+    // =========================
+    // Horizontal Line
+    // =========================
 
     for (
 
@@ -108,15 +116,15 @@ export function drawGrid(
 
             0,
 
-            y * CELL_SIZE
+            y * cellSize
 
         );
 
         ctx.lineTo(
 
-            pattern.width * CELL_SIZE,
+            pattern.width * cellSize,
 
-            y * CELL_SIZE
+            y * cellSize
 
         );
 

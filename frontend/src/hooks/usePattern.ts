@@ -100,6 +100,12 @@ export default function usePattern() {
     const [pattern, setPattern] =
         useState<PatternData | null>(null);
 
+    function clearPattern() {
+
+        setPattern(null);
+
+    }
+
     /**
      * Undo 기록
      */
@@ -122,6 +128,8 @@ export default function usePattern() {
 
     const [selectedTool, setSelectedTool] =
         useState<ToolType>("brush");
+
+    const [showGrid, setShowGrid] = useState(true);
 
     // ==================================================
     // 새 도안 생성
@@ -159,6 +167,12 @@ export default function usePattern() {
         setFuture([]);
 
     };
+
+    function loadPattern(newPattern: PatternData) {
+
+        setPattern(newPattern);
+
+    }
 
     // ==================================================
     // Undo 기록 저장
@@ -508,6 +522,8 @@ export default function usePattern() {
 
         createPattern,
 
+        loadPattern,
+
         paintPixel,
 
         addColor,
@@ -525,6 +541,12 @@ export default function usePattern() {
         selectedTool,
 
         setSelectedTool,
+
+        showGrid,
+
+        setShowGrid,
+
+        clearPattern
 
     };
 

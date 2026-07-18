@@ -6,7 +6,7 @@
 
 # 🏗 전체 구조
 
-```
+```text
 PatternEditor
       │
       ▼
@@ -17,36 +17,32 @@ EditorLayout
       │
       ├───────────────┬──────────────────────┐
       │               │                      │
-      │ PalettePanel  │      Workspace       │
       │               │                      │
-      └───────────────┴──────────────────────┘
-                              │
-                              ▼
-                      CanvasViewport
-                              │
-                              ▼
-                      CanvasContainer
-                   ┌──────────┴──────────┐
-                   │                     │
-                   ▼                     ▼
-          CanvasHeader         PatternCanvas
-                                       │
-                                       ▼
-                               CanvasRenderer
-                                       │
-      ┌──────────────┬──────────────┬──────────────┬──────────────┐
-      ▼              ▼              ▼              ▼
-BackgroundLayer  PixelLayer    GridLayer    HoverLayer
+ LeftPanel      Workspace              StatusBar(예정)
+      │               │
+      ▼               ▼
+PalettePanel   CanvasViewport
+                      │
+                      ▼
+              CanvasContainer
+              ┌────────┴────────┐
+              ▼                 ▼
+     CanvasHeader       PatternCanvas
+                               │
+                               ▼
+                       CanvasRenderer
+                               │
+      ┌────────────┬────────────┬────────────┬────────────┐
+      ▼            ▼            ▼            ▼
+ Background   PixelLayer    GridLayer   HoverLayer
 ```
 
 ---
 
 # 🆕 새 도안 생성
 
-사용자가 새로운 도안을 생성하는 과정입니다.
-
 ```text
-새 도안 생성
+New Pattern
       │
       ▼
 createPattern()
@@ -61,17 +57,58 @@ setPattern()
 React State 업데이트
       │
       ▼
-PatternCanvas 렌더링
+PatternCanvas Render
+```
+
+---
+
+# 📂 도안 열기(Open)
+
+```text
+Toolbar Open
+      │
+      ▼
+File Picker
+      │
+      ▼
+JSON Read
+      │
+      ▼
+loadPattern()
+      │
+      ▼
+setPattern()
+      │
+      ▼
+React State 업데이트
+      │
+      ▼
+Canvas Render
+```
+
+---
+
+# 💾 도안 저장(Save)
+
+```text
+Toolbar Save
+      │
+      ▼
+PatternData
+      │
+      ▼
+JSON 생성
+      │
+      ▼
+Download
 ```
 
 ---
 
 # 🎨 그리기 (Brush / Eraser / Fill)
 
-Canvas에서 편집 기능을 사용하는 과정입니다.
-
 ```text
-사용자 클릭 또는 드래그
+Mouse Down / Drag
         │
         ▼
 CanvasEvents
@@ -95,14 +132,35 @@ React State 업데이트
 CanvasRenderer
         │
         ▼
-Layer 순서대로 다시 출력
+Canvas 다시 출력
+```
+
+---
+
+# 🖱 Canvas 이벤트
+
+```text
+Mouse Down
+      │
+      ▼
+CanvasEvents
+      │
+      ▼
+Cell 좌표 계산
+      │
+      ▼
+onPixelClick()
+      │
+      ▼
+PatternEngine
+      │
+      ▼
+PatternData 갱신
 ```
 
 ---
 
 # 🖌 Canvas Render
-
-Canvas가 다시 그려지는 과정입니다.
 
 ```text
 CanvasRenderer
@@ -120,7 +178,7 @@ GridLayer
 HoverLayer
 ```
 
-향후 추가 예정
+### 향후 추가 예정
 
 ```text
 SelectionLayer
@@ -132,15 +190,47 @@ OverlayLayer
 
 ---
 
-# 🎨 Color 추가
+# 🛠 Tool 동작
 
-새로운 색상을 Palette에 추가하는 과정입니다.
+Toolbar에서 선택한 기능이 Canvas에 적용되는 과정입니다.
+
+```text
+ToolbarButton
+      │
+      ▼
+Toolbar
+      │
+      ▼
+PatternEditor
+      │
+      ▼
+usePattern
+      │
+      ▼
+PatternEngine
+      │
+      ▼
+PatternData 생성
+      │
+      ▼
+React State 업데이트
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+PatternCanvas 다시 출력
+```
+
+---
+
+# 🎨 Color 추가
 
 ```text
 + 버튼 클릭
       │
       ▼
-AddColorPanel 열기
+AddColorPanel
       │
       ▼
 Color Picker
@@ -149,13 +239,13 @@ Color Picker
 HEX / RGB 입력
       │
       ▼
-Color Preview
+Preview
       │
       ▼
 중복 색상 검사
       │
       ▼
-Palette에 색상 추가
+Palette 추가
       │
       ▼
 새 Color 자동 선택
@@ -168,116 +258,128 @@ Panel 닫기
 
 # ↩ Undo / Redo
 
-History를 이용하여 이전 또는 이후 상태를 복원합니다.
-
 ```text
-Undo / Redo 클릭
-        │
-        ▼
+Undo / Redo
+      │
+      ▼
 History 확인
-        │
-        ▼
+      │
+      ▼
 PatternData 복원
-        │
-        ▼
+      │
+      ▼
 setPattern()
-        │
-        ▼
+      │
+      ▼
 React State 업데이트
-        │
-        ▼
-CanvasRenderer 다시 출력
+      │
+      ▼
+Canvas Render
 ```
 
 ---
 
-# 🖱 Canvas 이벤트
+# 📊 StatusBar 갱신
 
-Canvas에서 발생하는 마우스 이벤트 처리 과정입니다.
+Pattern 상태가 변경될 때 StatusBar가 업데이트됩니다.
 
 ```text
-Mouse Down
+Pattern 상태 변경
       │
       ▼
-CanvasEvents
+StatusBar
       │
-      ▼
-Cell 좌표 계산
-      │
-      ▼
-paint()
-      │
-      ▼
-onPixelClick()
-      │
-      ▼
-PatternEngine
-      │
-      ▼
-PatternData 갱신
+      ├── Tool
+      ├── Selected Color
+      ├── Pattern Size
+      └── 기타 상태 정보
 ```
 
-# 🔄 FlowChart
+---
 
-ToolbarButton 클릭
+# 🔳 Grid 표시
 
-↓
-
+```text
 Toolbar
-
-↓
-
-PatternEditor
-
-↓
-
-usePattern
-
-↓
-
-PatternEngine
-
-↓
-
-PatternData 생성
-
-↓
-
-React State 업데이트
-
-↓
-
+      │
+      ▼
+showGrid 변경
+      │
+      ▼
 CanvasRenderer
+      │
+      ▼
+GridLayer 출력 여부 결정
+```
 
-↓
+---
 
-PatternCanvas 다시 출력
+# 🔍 Zoom
 
---------------------------------
+```text
+Toolbar
+      │
+      ▼
+Zoom In / Zoom Out
+      │
+      ▼
+CameraState 변경
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+Pixel
+      │
+      ▼
+Grid
+      │
+      ▼
+Hover
+      │
+      ▼
+Header
+```
 
-Status 정보
+---
 
-Pattern 상태 변경
+# ✋ Pan
 
-↓
+```text
+Space + Drag
+      │
+      ▼
+Camera Offset 변경
+      │
+      ▼
+CameraState 업데이트
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+Canvas 이동
+```
 
-StatusBar
+---
 
-↓
+# 🖱 Mouse Wheel Zoom
 
-Tool
-
-↓
-
-Color
-
-↓
-
-Pattern Size
-
-↓
-
-화면 업데이트
+```text
+Mouse Wheel
+      │
+      ▼
+Camera Zoom 변경
+      │
+      ▼
+CameraState 업데이트
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+Canvas Render
+```
 
 ---
 
@@ -297,39 +399,51 @@ Header Highlight
 
 ---
 
-## Camera
+## Selection Tool
 
 ```text
-Mouse Wheel
+Selection Tool
       │
       ▼
-Camera Zoom
+Drag
       │
       ▼
-CanvasRenderer
+Selection 영역 계산
+      │
+      ▼
+SelectionLayer
+      │
+      ▼
+Canvas Render
 ```
 
 ---
 
-## Pan
+## Import Image
 
 ```text
-Space + Drag
+Import Image
       │
       ▼
-Camera Offset 변경
+Image Loader
       │
       ▼
-CanvasRenderer
+Color Quantization
+      │
+      ▼
+PatternData 생성
+      │
+      ▼
+Canvas Render
 ```
 
 ---
 
 # ✨ 변경 사항
 
-## Color 시스템
+## Color 시스템 개선
 
-기존에는 브라우저 기본 Color Picker를 사용하였습니다.
+### 기존
 
 ```text
 Browser Color Picker
@@ -338,7 +452,7 @@ Browser Color Picker
 Palette
 ```
 
-현재는 독립적인 Color 시스템으로 변경되었습니다.
+### 현재
 
 ```text
 AddColorPanel
@@ -363,11 +477,17 @@ AddColorPanel
 
 ---
 
-# 📅 최근 변경 사항 (2026-07-15)
+# 📅 최근 변경 사항 (2026-07-18)
 
 - CanvasRenderer 구조 도입
 - Layer 기반 렌더링 적용
 - Hover Layer 추가
 - Workspace 구조 개선
-- Canvas 이벤트 처리 개선
-- CanvasContainer 구조 정리
+- CanvasContainer 구조 개선
+- CanvasEvents 분리
+- Color 시스템 리팩토링
+- Camera 구조 추가
+- Zoom / Pan 구조 설계
+- Save / Open Flow 추가
+- StatusBar Flow 추가
+```

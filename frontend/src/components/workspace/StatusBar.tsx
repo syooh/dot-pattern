@@ -17,6 +17,16 @@ interface Props {
 
     patternHeight: number;
 
+    showGrid: boolean;
+
+    hoverCell: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
 }
 
 export default function StatusBar({
@@ -27,7 +37,11 @@ export default function StatusBar({
 
     patternWidth,
 
-    patternHeight
+    patternHeight,
+
+    showGrid,
+
+    hoverCell
 
 }: Props) {
 
@@ -144,6 +158,28 @@ export default function StatusBar({
             >
 
                 {patternWidth} × {patternHeight}
+
+            </StatusItem>
+
+            {/* Cursor */}
+
+            <StatusItem
+
+                icon="📍"
+
+                title="Cursor"
+
+            >
+
+                {
+
+                    hoverCell
+
+                        ? `(${hoverCell.x}, ${hoverCell.y})`
+
+                        : "-"
+
+                }
 
             </StatusItem>
 

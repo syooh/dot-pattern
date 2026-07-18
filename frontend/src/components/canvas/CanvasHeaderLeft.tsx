@@ -7,6 +7,11 @@
 // 1. Canvas의 좌측 번호를 출력한다.
 // ======================================================
 
+import type { CameraState } from "./camera/CameraState";
+import { HEADER_SIZE, GRID_INTERVAL } from "./CanvasConstants";
+import { CanvasTheme } from "./CanvasTheme";
+import { getCellSize } from "./CanvasUtils";
+
 interface Props {
 
     height: number;
@@ -19,18 +24,21 @@ interface Props {
 
     } | null;
 
-}
+    camera: CameraState;
 
-import {CELL_SIZE, HEADER_SIZE, GRID_INTERVAL} from "./CanvasConstants";
-import {CanvasTheme} from "./CanvasTheme";
+}
 
 export default function CanvasHeaderLeft({
 
     height,
 
-    hoverCell
+    hoverCell,
+    
+    camera
 
 }: Props) {
+
+    const cellSize = getCellSize(camera.zoom);
 
     return (
 
@@ -58,7 +66,7 @@ export default function CanvasHeaderLeft({
 
                             width: HEADER_SIZE,
 
-                            height: CELL_SIZE,
+                            height: cellSize,
 
                             display: "flex",
 

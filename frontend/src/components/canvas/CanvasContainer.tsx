@@ -7,19 +7,23 @@
 // 1. Header와 Canvas를 하나의 작업판으로 출력한다.
 // ======================================================
 
-import { useState } from "react";
-
 import PatternCanvas from "./PatternCanvas";
 import CanvasHeaderTop from "./CanvasHeaderTop";
 import CanvasHeaderLeft from "./CanvasHeaderLeft";
+
 import type { PatternData } from "../../types/Pattern";
 import { HEADER_SIZE } from "./CanvasConstants";
+import type { CameraState } from "./camera/CameraState";
 
 interface Props {
 
     pattern: PatternData;
 
-    hoverCell?: {
+    showGrid: boolean;
+    
+    camera: CameraState;
+
+    hoverCell: {
 
         x: number;
 
@@ -35,7 +39,7 @@ interface Props {
 
     ) => void;
 
-    onHoverChange?: (
+    onHoverChange: (
 
         cell: {
 
@@ -53,19 +57,17 @@ export default function CanvasContainer({
 
     pattern,
 
-    onPixelClick
+    showGrid,
+
+    camera,
+
+    hoverCell,
+
+    onPixelClick,
+
+    onHoverChange
 
 }: Props) {
-
-    const [hoverCell, setHoverCell] =
-
-        useState<{
-
-            x: number;
-
-            y: number;
-
-        } | null>(null);
 
     return (
 
@@ -125,6 +127,8 @@ export default function CanvasContainer({
 
                     hoverCell={hoverCell}
 
+                    camera={camera}
+
                 />
 
             </div>
@@ -151,15 +155,21 @@ export default function CanvasContainer({
 
                     hoverCell={hoverCell}
 
+                    camera={camera}
+
                 />
 
                 <PatternCanvas
 
                     pattern={pattern}
 
+                    showGrid={showGrid}
+
+                    camera={camera}
+
                     onPixelClick={onPixelClick}
 
-                    onHoverChange={setHoverCell}
+                    onHoverChange={onHoverChange}
 
                 />
 

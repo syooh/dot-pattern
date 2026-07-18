@@ -12,10 +12,23 @@
 import type { PatternData } from "../../types/Pattern";
 
 import CanvasContainer from "../canvas/CanvasContainer";
+import type { CameraState } from "../canvas/camera/CameraState";
 
 interface Props {
 
     pattern: PatternData;
+
+    showGrid: boolean;
+
+    camera: CameraState;
+
+    hoverCell: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
 
     onPixelClick: (
 
@@ -42,6 +55,12 @@ interface Props {
 export default function CanvasViewport({
 
     pattern,
+
+    showGrid,
+
+    camera,
+
+    hoverCell,
 
     onPixelClick,
 
@@ -90,6 +109,12 @@ export default function CanvasViewport({
                 <CanvasContainer
 
                     pattern={pattern}
+
+                    showGrid={showGrid}
+
+                    camera={camera}
+
+                    hoverCell={hoverCell}
 
                     onPixelClick={onPixelClick}
 

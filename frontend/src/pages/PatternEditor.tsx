@@ -10,17 +10,17 @@
 // 4. Canvas 출력
 // ======================================================
 
+import { useEffect, useState } from "react";
+
 import NewPatternDialog from "../components/dialog/NewPatternDialog";
 import Toolbar from "../components/toolbar/Toolbar";
 import Workspace from "../components/workspace/Workspace";
 import EditorLayout from "../components/layout/EditorLayout";
 import PalettePanel from "../components/palette/PalettePanel";
 import StatusBar from "../components/workspace/StatusBar";
-
 import usePattern from "../hooks/usePattern";
-
-import { useEffect } from "react";
 import LeftPanel from "../components/layout/LeftPanel";
+import useCamera from "../hooks/useCamera";
 
 export default function PatternEditor() {
 
@@ -50,9 +50,71 @@ export default function PatternEditor() {
 
         canUndo,
 
-        canRedo
+        canRedo,
+
+        showGrid,
+
+        setShowGrid,
+
+        clearPattern,
+
+        loadPattern
 
     } = usePattern();
+
+    const {
+
+        camera,
+
+        setCamera
+
+    } = useCamera();
+
+    function handleZoomIn() {
+
+        setCamera(prev => ({
+
+            ...prev,
+
+            zoom: Math.min(prev.zoom + 0.1, 4)
+
+        }));
+
+    }
+
+    function handleZoomOut() {
+
+        setCamera(prev => ({
+
+            ...prev,
+
+            zoom: Math.max(prev.zoom - 0.1, 0.2)
+
+        }));
+
+    }
+
+    function handleNewPattern() {
+
+        const ok = window.confirm(
+
+            "현재 작업을 종료하고 새 도안을 만드시겠습니까?"
+
+        );
+
+        if (!ok) return;
+
+        clearPattern();
+
+    }
+
+    const [hoverCell, setHoverCell] = useState<{
+
+        x: number;
+
+        y: number;
+
+    } | null>(null);
 
     useEffect(() => {
 
@@ -121,6 +183,124 @@ export default function PatternEditor() {
 
     }, [setSelectedTool]);
 
+    function handleSavePattern() {
+
+        if (!pattern) return;
+
+        const now = new Date();
+
+        const yyyy = now.getFullYear();
+
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+
+        const dd = String(now.getDate()).padStart(2, "0");
+
+        const hh = String(now.getHours()).padStart(2, "0");
+
+        const min = String(now.getMinutes()).padStart(2, "0");
+
+        const ss = String(now.getSeconds()).padStart(2, "0");
+
+        const fileName =
+
+            `dot-pattern_${yyyy}-${mm}-${dd}_${hh}${min}${ss}.json`;
+
+        const json = JSON.stringify(
+
+            pattern,
+
+            null,
+
+            2
+
+        );
+
+        const blob = new Blob(
+
+            [json],
+
+            {
+
+                type: "application/json"
+
+            }
+
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+
+        link.download = fileName;
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+
+    }
+
+    function handleOpenPattern() {
+
+        console.log("open");
+
+        const input = document.createElement("input");
+
+        input.type = "file";
+
+        input.accept = ".json";
+
+        input.onchange = (event) => {
+
+            const file =
+
+                (event.target as HTMLInputElement)
+
+                    .files?.[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+
+                try {
+
+                    const json =
+
+                        JSON.parse(
+
+                            reader.result as string
+
+                        );
+
+                    loadPattern(json);
+
+                }
+
+                catch {
+
+                    alert(
+
+                        "올바른 Pattern 파일이 아닙니다."
+
+                    );
+
+                }
+
+            };
+
+            reader.readAsText(file);
+
+        };
+
+        input.click();
+
+    }
+
+
+
     return (
 
         <div
@@ -179,6 +359,12 @@ export default function PatternEditor() {
 
                         <Toolbar
 
+                            onNew={handleNewPattern}
+
+                            onSave={handleSavePattern}
+
+                            onOpen={handleOpenPattern}
+
                             onUndo={undo}
 
                             onRedo={redo}
@@ -190,6 +376,20 @@ export default function PatternEditor() {
                             selectedTool={selectedTool}
 
                             onToolChange={setSelectedTool}
+
+                            showGrid={showGrid}
+
+                            zoom={camera.zoom}
+
+                            onZoomIn={handleZoomIn}
+
+                            onZoomOut={handleZoomOut}
+
+                            onToggleGrid={() =>
+
+                                setShowGrid(prev => !prev)
+
+                            }
 
                         />
 
@@ -245,6 +445,10 @@ export default function PatternEditor() {
 
                                             patternHeight={pattern.height}
 
+                                            showGrid={showGrid}
+
+                                            hoverCell={hoverCell}
+
                                         />
 
                                     }
@@ -259,15 +463,15 @@ export default function PatternEditor() {
 
                                     pattern={pattern}
 
+                                    showGrid={showGrid}
+
+                                    hoverCell={hoverCell}
+
+                                    onHoverChange={setHoverCell}
+
+                                    camera={camera}
+
                                     onPixelClick={paintPixel}
-
-                                    selectedTool={selectedTool}
-
-                                    selectedColorHex={
-
-                                        pattern.palette[selectedColor].hex
-
-                                    }
 
                                 />
 

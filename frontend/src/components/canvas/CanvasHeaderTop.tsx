@@ -7,6 +7,11 @@
 // 1. Canvas의 상단 번호를 출력한다.
 // ======================================================
 
+import { CELL_SIZE, HEADER_SIZE, GRID_INTERVAL } from "./CanvasConstants";
+import { CanvasTheme } from "./CanvasTheme";
+import { getCellSize } from "./CanvasUtils";
+import type { CameraState } from "./camera/CameraState";
+
 interface Props {
 
     width: number;
@@ -19,18 +24,21 @@ interface Props {
 
     } | null;
 
-}
+    camera: CameraState;
 
-import {CELL_SIZE, HEADER_SIZE, GRID_INTERVAL} from "./CanvasConstants";
-import {CanvasTheme} from "./CanvasTheme";
+}
 
 export default function CanvasHeaderTop({
 
     width,
 
-    hoverCell
+    hoverCell,
+
+    camera
 
 }: Props) {
+
+    const cellSize = getCellSize(camera.zoom);
 
     return (
 
@@ -58,7 +66,7 @@ export default function CanvasHeaderTop({
 
                         style={{
 
-                            width: CELL_SIZE,
+                            width: cellSize,
 
                             height: HEADER_SIZE,
 

@@ -7,54 +7,50 @@
 # 📂 프로젝트 구조
 
 ```text
-# 🏗 Architecture
-
 PatternEditor
 │
 ├── Toolbar
-│   │
 │   ├── ToolbarButton
-│   ├── (ToolbarGroup 예정)
-│   └── (ToolbarDivider 예정)
+│   ├── ToolbarGroup (예정)
+│   └── ToolbarDivider (예정)
 │
-├── EditorLayout
-│   │
-│   ├── LeftPanel
-│   │   │
-│   │   ├── PalettePanel
-│   │   └── StatusBar
-│   │
-│   └── Workspace
-│       │
-│       └── CanvasViewport
-│           │
-│           └── CanvasContainer
-│               │
-│               ├── CanvasHeaderTop
-│               ├── CanvasHeaderLeft
-│               └── PatternCanvas
-│
-└── usePattern
+└── EditorLayout
     │
-    └── PatternEngine
+    ├── LeftPanel
+    │   ├── PalettePanel
+    │   └── StatusBar (예정)
+    │
+    └── Workspace
+        │
+        └── CanvasViewport
+            │
+            └── CanvasContainer
+                │
+                ├── CanvasHeaderTop
+                ├── CanvasHeaderLeft
+                └── PatternCanvas
 ```
 
 ---
 
-# 🎨 Canvas Renderer 구조
+# 🎨 Canvas Architecture
 
 Canvas는 Layer 기반으로 렌더링됩니다.
 
+## 현재 구조
+
 ```text
-CanvasRenderer
+PatternCanvas
 │
-├── BackgroundLayer
-├── PixelLayer
-├── GridLayer
-└── HoverLayer
+└── CanvasRenderer
+    │
+    ├── BackgroundLayer
+    ├── PixelLayer
+    ├── GridLayer
+    └── HoverLayer
 ```
 
-향후 추가 예정
+## 향후 확장
 
 ```text
 CanvasRenderer
@@ -66,6 +62,79 @@ CanvasRenderer
 ├── SelectionLayer
 ├── GuideLayer
 └── OverlayLayer
+```
+
+---
+
+# 📷 Camera Architecture
+
+Camera는 Zoom과 Pan을 담당하며 PatternEditor에서 상태를 관리합니다.
+
+```text
+CameraState
+│
+├── zoom
+├── offsetX
+└── offsetY
+      │
+      ▼
+ useCamera()
+      │
+      ▼
+PatternEditor
+      │
+      ▼
+ Workspace
+      │
+      ▼
+CanvasViewport
+      │
+      ▼
+CanvasContainer
+      │
+      ▼
+PatternCanvas
+```
+
+### 역할
+
+- Zoom 상태 관리
+- Pan 상태 관리
+- Viewport 좌표 변환
+- Canvas 렌더링 위치 제어
+
+---
+
+# 🔄 Rendering Flow
+
+Canvas가 다시 그려지는 과정입니다.
+
+```text
+PatternEditor
+      │
+      ▼
+Workspace
+      │
+      ▼
+PatternCanvas
+      │
+      ▼
+CanvasRenderer
+      │
+      ▼
+BackgroundLayer
+      │
+      ▼
+PixelLayer
+      │
+      ▼
+GridLayer
+      │
+      ▼
+HoverLayer
+      │
+      ▼
+SelectionLayer (예정)
 ```
 
 ---
@@ -112,36 +181,36 @@ Canvas 출력
 
 # 🛠 Tool 동작 구조
 
-Toolbar에서 선택한 기능은 `usePattern`을 통해 `PatternEngine`으로 전달됩니다.
+Toolbar에서 선택한 기능은 PatternEngine을 통해 Canvas에 반영됩니다.
 
 ```text
 Toolbar
-    │
-    ├── Brush
-    ├── Eraser
-    ├── Fill
-    ├── Undo
-    └── Redo
-          │
-          ▼
-     usePattern
-          │
-          ▼
-    PatternEngine
-          │
-          ▼
-     PatternData
-          │
-          ▼
-     React State
-          │
-          ▼
-    CanvasRenderer
+│
+├── Brush
+├── Eraser
+├── Fill
+├── Undo
+└── Redo
+      │
+      ▼
+ usePattern
+      │
+      ▼
+PatternEngine
+      │
+      ▼
+ PatternData
+      │
+      ▼
+ React State
+      │
+      ▼
+CanvasRenderer
 ```
 
 ---
 
-# 🎨 Color 시스템 구조
+# 🎨 Color System
 
 Color 기능은 각각의 역할에 맞게 분리되어 있습니다.
 
@@ -151,17 +220,16 @@ PalettePanel
 ├── ColorPalette
 │
 ├── AddColorPanel
-│      │
-│      ├── Color Picker
-│      ├── HEX Input
-│      ├── RGB Input
-│      └── Color Preview
+│   ├── Color Picker
+│   ├── HEX Input
+│   ├── RGB Input
+│   └── Color Preview
 │
 └── ColorUtils
-       │
-       ├── HEX ↔ RGB 변환
-       ├── 중복 색상 검사
-       └── Color 생성
+    ├── HEX ↔ RGB 변환
+    ├── RGB ↔ HEX 변환
+    ├── 중복 색상 검사
+    └── Color 생성
 ```
 
 ---
@@ -175,8 +243,9 @@ PalettePanel
 ### 역할
 
 - Toolbar 관리
-- EditorLayout 출력
+- EditorLayout 관리
 - usePattern 연결
+- Camera 상태 관리
 
 ---
 
@@ -186,8 +255,19 @@ Editor의 전체 레이아웃을 담당합니다.
 
 ### 역할
 
-- PalettePanel 배치
+- LeftPanel 배치
 - Workspace 배치
+
+---
+
+## LeftPanel
+
+좌측 UI 영역입니다.
+
+### 역할
+
+- PalettePanel 출력
+- StatusBar 출력(예정)
 
 ---
 
@@ -198,7 +278,7 @@ Canvas 작업 공간입니다.
 ### 역할
 
 - CanvasViewport 관리
-- 추후 Camera(Viewport) 기능 확장
+- Camera 기능 연결
 
 ---
 
@@ -208,8 +288,9 @@ Canvas가 표시되는 Viewport입니다.
 
 ### 역할
 
-- CanvasContainer 출력
-- 추후 Zoom / Pan 기능 관리
+- Zoom
+- Pan
+- Viewport 관리
 
 ---
 
@@ -234,20 +315,27 @@ Canvas를 관리하는 핵심 컴포넌트입니다.
 - Canvas 생성
 - CanvasRenderer 호출
 - CanvasEvents 연결
+- Camera 적용
 - Canvas 다시 그리기
 
 ---
 
 ## CanvasRenderer
 
-Canvas의 모든 Layer를 순서대로 출력합니다.
+Canvas Layer를 순서대로 렌더링합니다.
 
 ### 현재 Layer
 
-- Background
-- Pixels
-- Grid
-- Hover
+- BackgroundLayer
+- PixelLayer
+- GridLayer
+- HoverLayer
+
+### 예정 Layer
+
+- SelectionLayer
+- GuideLayer
+- OverlayLayer
 
 ---
 
@@ -259,6 +347,7 @@ Canvas의 사용자 입력을 처리합니다.
 
 - Mouse Down
 - Mouse Move
+- Mouse Up
 - Drag
 - Hover Cell 계산
 
@@ -366,7 +455,7 @@ PatternEditor
 PatternEditor
 ├── Toolbar
 └── EditorLayout
-    ├── PalettePanel
+    ├── LeftPanel
     └── Workspace
 ```
 
@@ -461,7 +550,7 @@ CanvasRenderer
 - Selection Layer
 - Zoom
 - Pan
-- Camera 시스템
+- Camera System
 
 ## Drawing
 

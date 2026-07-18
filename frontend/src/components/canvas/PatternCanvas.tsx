@@ -21,11 +21,15 @@ import { useCanvasEvents } from "./CanvasEvents";
 
 import { getCanvasWidth, getCanvasHeight } from "./CanvasUtils";
 
-import useCamera from "../../hooks/useCamera";
+import type { CameraState } from "./camera/CameraState";
 
 interface Props {
 
     pattern: PatternData;
+
+    showGrid: boolean;
+
+    camera: CameraState;
 
     onPixelClick: (
 
@@ -55,7 +59,11 @@ export default function PatternCanvas({
 
     onPixelClick,
 
-    onHoverChange
+    onHoverChange,
+
+    showGrid,
+
+    camera
 
 
 }: Props) {
@@ -91,12 +99,6 @@ export default function PatternCanvas({
 
     });
 
-    const {
-
-        camera
-
-    } = useCamera();
-
     // ==================================================
     // Canvas 다시 그리기
     // ==================================================
@@ -117,7 +119,9 @@ export default function PatternCanvas({
 
             getCanvasWidth(
 
-                pattern.width
+                pattern.width,
+
+                camera.zoom
 
             );
 
@@ -125,10 +129,12 @@ export default function PatternCanvas({
 
             getCanvasHeight(
 
-                pattern.height
+                pattern.height,
+
+                camera.zoom
 
             );
-
+            
         renderCanvas(
 
             ctx,
@@ -137,17 +143,17 @@ export default function PatternCanvas({
 
                 pattern,
 
-                hoverCell,
-
                 camera,
 
-                showGrid: true
+                hoverCell,
+
+                showGrid
 
             }
 
         );
 
-    }, [pattern, hoverCell]);
+    }, [pattern, hoverCell, showGrid, camera]);
 
     // ==================================================
     // Render

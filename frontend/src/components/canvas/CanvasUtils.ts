@@ -8,15 +8,31 @@
 
 import { CELL_SIZE } from "./CanvasConstants";
 
+// ======================================================
+// Cell Size
+// ======================================================
+
+export function getCellSize(
+
+    zoom: number
+
+) {
+
+    return CELL_SIZE * zoom;
+
+}
+
 // Canvas Width
 
 export function getCanvasWidth(
 
-    width: number
+    width: number,
+
+    zoom: number
 
 ) {
 
-    return width * CELL_SIZE;
+    return width * getCellSize(zoom);
 
 }
 
@@ -24,11 +40,13 @@ export function getCanvasWidth(
 
 export function getCanvasHeight(
 
-    height: number
+    height: number,
+
+    zoom: number
 
 ) {
 
-    return height * CELL_SIZE;
+    return height * getCellSize(zoom);
 
 }
 

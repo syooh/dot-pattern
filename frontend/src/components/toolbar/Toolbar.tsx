@@ -1,7 +1,7 @@
 // ======================================================
 // Toolbar
-// Version : v1.0
-// Last Update : 2026-07-16
+// Version : v1.1
+// Last Update : 2026-07-17
 //
 // 역할
 // 1. 편집 기능 버튼을 출력한다.
@@ -10,6 +10,8 @@
 // ======================================================
 
 import ToolbarButton from "./ToolbarButton";
+import ToolbarGroup from "./ToolbarGroup";
+import ToolbarDivider from "./ToolbarDivider";
 
 import type {
     ToolType
@@ -17,11 +19,23 @@ import type {
 
 interface Props {
 
+    onNew?: () => void;
+
+    onSave?: () => void;
+
+    onOpen?: () => void;
+
     onUndo?: () => void;
 
     onRedo?: () => void;
 
     selectedTool: ToolType;
+
+    zoom: number;
+
+    onZoomIn: () => void;
+
+    onZoomOut: () => void;
 
     onToolChange: (
         tool: ToolType
@@ -31,9 +45,19 @@ interface Props {
 
     canRedo?: boolean;
 
+    showGrid: boolean;
+
+    onToggleGrid: () => void;
+
 }
 
 export default function Toolbar({
+
+    onNew,
+
+    onSave,
+
+    onOpen,
 
     onUndo,
 
@@ -45,7 +69,17 @@ export default function Toolbar({
 
     selectedTool,
 
-    onToolChange
+    onToolChange,
+
+    showGrid,
+
+    onToggleGrid,
+
+    zoom,
+
+    onZoomIn,
+
+    onZoomOut
 
 }: Props) {
 
@@ -81,125 +115,183 @@ export default function Toolbar({
             {/* File */}
             {/* ========================= */}
 
-            <ToolbarButton
+            <ToolbarGroup>
 
-                icon="🆕"
+                <ToolbarButton
 
-                label="New"
+                    icon="🆕"
 
-            />
+                    label="New"
 
-            <ToolbarButton
+                    onClick={onNew}
 
-                icon="💾"
+                />
 
-                label="Save"
+                <ToolbarButton
 
-            />
+                    icon="💾"
 
-            <ToolbarButton
+                    label="Save"
 
-                icon="📂"
+                    onClick={onSave}
 
-                label="Open"
+                />
 
-            />
+                <ToolbarButton
 
-            <div
+                    icon="📂"
 
-                style={{
+                    label="Open"
 
-                    width: 1,
+                    onClick={onOpen}
 
-                    height: 40,
+                />
 
-                    background: "#DDDDDD"
+            </ToolbarGroup>
 
-                }}
-
-            />
+            <ToolbarDivider />
 
             {/* ========================= */}
             {/* History */}
             {/* ========================= */}
 
-            <ToolbarButton
+            <ToolbarGroup>
 
-                icon="↶"
+                <ToolbarButton
 
-                label="Undo"
+                    icon="↶"
 
-                onClick={onUndo}
+                    label="Undo"
 
-                disabled={!canUndo}
+                    onClick={onUndo}
 
-            />
+                    disabled={!canUndo}
 
-            <ToolbarButton
+                />
 
-                icon="↷"
+                <ToolbarButton
 
-                label="Redo"
+                    icon="↷"
 
-                onClick={onRedo}
+                    label="Redo"
 
-                disabled={!canRedo}
+                    onClick={onRedo}
 
-            />
+                    disabled={!canRedo}
 
-            <div
+                />
 
-                style={{
+            </ToolbarGroup>
 
-                    width: 1,
-
-                    height: 40,
-
-                    background: "#DDDDDD"
-
-                }}
-
-            />
+            <ToolbarDivider />
 
             {/* ========================= */}
             {/* Tools */}
             {/* ========================= */}
 
-            <ToolbarButton
+            <ToolbarGroup>
 
-                icon="🖌"
+                <ToolbarButton
 
-                label="Brush"
+                    icon="🖌"
 
-                selected={selectedTool === "brush"}
+                    label="Brush"
 
-                onClick={() => onToolChange("brush")}
+                    selected={selectedTool === "brush"}
 
-            />
+                    onClick={() => onToolChange("brush")}
 
-            <ToolbarButton
+                />
 
-                icon="🩹"
+                <ToolbarButton
 
-                label="Erase"
+                    icon="🩹"
 
-                selected={selectedTool === "eraser"}
+                    label="Erase"
 
-                onClick={() => onToolChange("eraser")}
+                    selected={selectedTool === "eraser"}
 
-            />
+                    onClick={() => onToolChange("eraser")}
 
-            <ToolbarButton
+                />
 
-                icon="🪣"
+                <ToolbarButton
 
-                label="Fill"
+                    icon="🪣"
 
-                selected={selectedTool === "fill"}
+                    label="Fill"
 
-                onClick={() => onToolChange("fill")}
+                    selected={selectedTool === "fill"}
 
-            />
+                    onClick={() => onToolChange("fill")}
+
+                />
+
+            </ToolbarGroup>
+
+            <ToolbarDivider />
+
+            <ToolbarGroup>
+
+                <ToolbarButton
+
+                    icon="⊞"
+
+                    label="Grid"
+
+                    selected={showGrid}
+
+                    onClick={onToggleGrid}
+
+                />
+
+            </ToolbarGroup>
+
+            <ToolbarDivider />
+
+            <ToolbarGroup>
+
+                <ToolbarButton
+
+                    icon="➖"
+
+                    label="Zoom Out"
+
+                    onClick={onZoomOut}
+
+                />
+
+                <div
+
+                    style={{
+
+                        width: 70,
+
+                        textAlign: "center",
+
+                        fontWeight: 600,
+
+                        fontSize: 14
+
+                    }}
+
+                >
+
+                    {Math.round(zoom * 100)}%
+
+                </div>
+
+                <ToolbarButton
+
+                    icon="➕"
+
+                    label="Zoom In"
+
+                    onClick={onZoomIn}
+
+                />
+
+            </ToolbarGroup>
 
         </div>
 

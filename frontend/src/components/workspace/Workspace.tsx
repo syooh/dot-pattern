@@ -4,14 +4,18 @@
 // 1. Canvas 작업 영역
 // ======================================================
 
-import { useState } from "react";
 import type { PatternData } from "../../types/Pattern";
 
 import CanvasViewport from "./CanvasViewport";
+import type { CameraState } from "../canvas/camera/CameraState";
 
 interface Props {
 
     pattern: PatternData;
+
+    showGrid: boolean;
+
+    camera:CameraState;
 
     hoverCell: {
 
@@ -20,6 +24,18 @@ interface Props {
         y: number;
 
     } | null;
+
+    onHoverChange: (
+
+        cell: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
 
     onPixelClick: (
 
@@ -35,19 +51,17 @@ export default function Workspace({
 
     pattern,
 
-    onPixelClick,
+    showGrid,
+    
+    camera,
+
+    hoverCell,
+
+    onHoverChange,
+
+    onPixelClick
 
 }: Props) {
-
-    const [hoverCell, setHoverCell] =
-
-        useState<{
-
-            x: number;
-
-            y: number;
-
-        } | null>(null);
 
     return (
 
@@ -57,9 +71,15 @@ export default function Workspace({
 
                 pattern={pattern}
 
-                onPixelClick={onPixelClick}
+                showGrid={showGrid}
 
-                onHoverChange={setHoverCell}
+                camera={camera}
+
+                hoverCell={hoverCell}
+
+                onHoverChange={onHoverChange}
+
+                onPixelClick={onPixelClick}
 
             />
 

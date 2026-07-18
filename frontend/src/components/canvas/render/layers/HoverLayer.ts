@@ -1,6 +1,6 @@
 // ======================================================
 // HoverLayer
-// Version : v1.0
+// Version : v1.1
 //
 // 역할
 // 1. 현재 마우스가 위치한 Cell을 표시한다.
@@ -8,7 +8,7 @@
 
 import type { CanvasRenderState } from "../CanvasRenderState";
 
-import { CELL_SIZE } from "../../CanvasConstants";
+import { getCellSize } from "../../CanvasUtils";
 
 export function drawHover(
 
@@ -26,21 +26,31 @@ export function drawHover(
 
     }
 
+    const cellSize = getCellSize(state.camera.zoom);
+
     ctx.save();
+
+    // =========================
+    // Hover Background
+    // =========================
 
     ctx.fillStyle = "rgba(80,140,255,0.18)";
 
     ctx.fillRect(
 
-        hover.x * CELL_SIZE,
+        hover.x * cellSize,
 
-        hover.y * CELL_SIZE,
+        hover.y * cellSize,
 
-        CELL_SIZE,
+        cellSize,
 
-        CELL_SIZE
+        cellSize
 
     );
+
+    // =========================
+    // Hover Border
+    // =========================
 
     ctx.strokeStyle = "#4F8CFF";
 
@@ -48,13 +58,13 @@ export function drawHover(
 
     ctx.strokeRect(
 
-        hover.x * CELL_SIZE,
+        hover.x * cellSize,
 
-        hover.y * CELL_SIZE,
+        hover.y * cellSize,
 
-        CELL_SIZE,
+        cellSize,
 
-        CELL_SIZE
+        cellSize
 
     );
 

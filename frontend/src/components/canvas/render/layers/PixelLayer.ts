@@ -7,7 +7,7 @@
 
 import type { CanvasRenderState } from "../CanvasRenderState";
 
-import { CELL_SIZE } from "../../CanvasConstants";
+import { getCellSize } from "../../CanvasUtils";
 
 export function drawPixels(
 
@@ -18,6 +18,10 @@ export function drawPixels(
 ) {
 
     const { pattern } = state;
+
+    const cellSize = getCellSize(
+        state.camera.zoom
+    );
 
     for (
 
@@ -51,13 +55,13 @@ export function drawPixels(
 
             ctx.fillRect(
 
-                x * CELL_SIZE,
+                x * cellSize,
 
-                y * CELL_SIZE,
+                y * cellSize,
 
-                CELL_SIZE,
+                cellSize,
 
-                CELL_SIZE
+                cellSize
 
             );
 

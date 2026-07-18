@@ -262,3 +262,49 @@ setPattern()
 - ToolbarDivider
 - Zoom
 - Camera System
+
+
+
+# changelog
+
+## [2026-07-17]
+
+### Added
+
+- Grid Toggle 기능
+- Hover Cursor 정보
+- StatusBar 정보 확장
+
+### Changed
+
+- Hover 상태 전달 구조 변경
+
+### Planned
+
+- Camera 시스템
+- Zoom 기능
+
+
+
+# Changelog
+
+## [2026-07-18]
+
+### Added
+
+- JSON Open 기능
+- CameraState
+- useCamera Hook
+- getCellSize()
+
+### Changed
+
+- Camera 관리 구조 변경
+- Zoom 기반 구조 적용
+- Header Zoom 대응
+- Hover Zoom 대응
+
+### Refactor
+
+- CELL_SIZE 직접 사용 제거
+- Layer Cell Size 계산 통일
