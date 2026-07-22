@@ -66,13 +66,15 @@ export function cellToPixel(
 
 export function pixelToCell(
 
-    value: number
+    pixel: number,
+
+    zoom: number
 
 ) {
 
     return Math.floor(
 
-        value / CELL_SIZE
+        pixel / getCellSize(zoom)
 
     );
 

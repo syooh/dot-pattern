@@ -104,4 +104,6 @@ export type ToolType =
 
     | "eraser"
 
-    | "fill";
+    | "fill"
+
+    | "select";

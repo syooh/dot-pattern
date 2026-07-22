@@ -23,6 +23,10 @@ import { getCanvasWidth, getCanvasHeight } from "./CanvasUtils";
 
 import type { CameraState } from "./camera/CameraState";
 
+import type { Selection } from "../../types/Selection";
+
+import type { ToolType } from "../../types/Pattern";
+
 interface Props {
 
     pattern: PatternData;
@@ -51,6 +55,16 @@ interface Props {
 
     ) => void;
 
+    selectedTool: ToolType;
+
+    selection: Selection | null;
+
+    onSelectionChange: (
+
+        selection: Selection | null
+
+    ) => void;
+
 }
 
 export default function PatternCanvas({
@@ -63,7 +77,13 @@ export default function PatternCanvas({
 
     showGrid,
 
-    camera
+    camera,
+
+    selectedTool,
+
+    selection,
+
+    onSelectionChange,
 
 
 }: Props) {
@@ -95,7 +115,15 @@ export default function PatternCanvas({
 
         onPixelClick,
 
-        onHoverChange
+        onHoverChange,
+
+        camera,
+
+        selectedTool,
+
+        selection,
+
+        onSelectionChange
 
     });
 
@@ -147,13 +175,15 @@ export default function PatternCanvas({
 
                 hoverCell,
 
+                selection,
+
                 showGrid
 
             }
 
         );
 
-    }, [pattern, hoverCell, showGrid, camera]);
+    }, [pattern, hoverCell, selection, showGrid, camera]);
 
     // ==================================================
     // Render

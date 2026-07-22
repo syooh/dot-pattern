@@ -14,6 +14,8 @@ import CanvasHeaderLeft from "./CanvasHeaderLeft";
 import type { PatternData } from "../../types/Pattern";
 import { HEADER_SIZE } from "./CanvasConstants";
 import type { CameraState } from "./camera/CameraState";
+import type { Selection } from "../../types/Selection";
+import type { ToolType } from "../../types/Pattern";
 
 interface Props {
 
@@ -51,6 +53,16 @@ interface Props {
 
     ) => void;
 
+    selection: Selection | null;
+
+    onSelectionChange: (
+
+        selection: Selection | null
+
+    ) => void;
+
+    selectedTool: ToolType;
+
 }
 
 export default function CanvasContainer({
@@ -65,7 +77,13 @@ export default function CanvasContainer({
 
     onPixelClick,
 
-    onHoverChange
+    onHoverChange,
+
+    selection,
+
+    onSelectionChange,
+
+    selectedTool,
 
 }: Props) {
 
@@ -170,6 +188,12 @@ export default function CanvasContainer({
                     onPixelClick={onPixelClick}
 
                     onHoverChange={onHoverChange}
+
+                    selection={selection}
+
+                    onSelectionChange={onSelectionChange}
+
+                    selectedTool={selectedTool}
 
                 />
 

@@ -11,6 +11,9 @@
 // ======================================================
 
 import { useEffect, useState } from "react";
+import type { Selection } from "../types/Selection";
+import { paintPixel, fillSelection } from "../engine/PatternEngine";
+import { useKeyboardShortcuts } from "../components/canvas/hooks/useKeyBoardShortcuts";
 
 import NewPatternDialog from "../components/dialog/NewPatternDialog";
 import Toolbar from "../components/toolbar/Toolbar";
@@ -27,6 +30,8 @@ export default function PatternEditor() {
     const {
 
         pattern,
+
+        setPattern,
 
         createPattern,
 
@@ -61,6 +66,46 @@ export default function PatternEditor() {
         loadPattern
 
     } = usePattern();
+
+    const [selection, setSelection] =
+
+        useState<Selection | null>(null);
+
+    function handleDeleteSelection() {
+
+        if (!pattern || !selection) {
+
+            return;
+
+        }
+
+        setPattern(
+
+            fillSelection(
+
+                pattern,
+
+                selection,
+
+                0
+
+            )
+
+        );
+
+    }
+
+    useKeyboardShortcuts({
+
+        onEscape: () => {
+
+            setSelection(null);
+
+        },
+
+        onDelete: handleDeleteSelection
+
+    });
 
     const {
 
@@ -466,6 +511,12 @@ export default function PatternEditor() {
                                     showGrid={showGrid}
 
                                     hoverCell={hoverCell}
+
+                                    selection={selection}
+
+                                    selectedTool={selectedTool}
+
+                                    onSelectionChange={setSelection}
 
                                     onHoverChange={setHoverCell}
 

@@ -436,6 +436,76 @@ PatternData 생성
       ▼
 Canvas Render
 ```
+## Delete Flow
+
+```text
+Delete Key
+
+↓
+
+useKeyboardShortcuts
+
+↓
+
+handleDeleteSelection()
+
+↓
+
+fillSelection()
+
+↓
+
+clonePattern()
+
+↓
+
+Selection 반복
+
+↓
+
+pixels[][] 수정
+
+↓
+
+setPattern()
+
+↓
+
+Canvas Render
+```
+## Selection Flow
+
+```text
+Select Tool
+
+↓
+
+Mouse Down
+
+↓
+
+Selection 생성
+
+↓
+
+Mouse Drag
+
+↓
+
+Selection Update
+
+↓
+
+Canvas Render
+
+↓
+
+ESC
+
+↓
+
+Selection 제거
+```
 
 ---
 

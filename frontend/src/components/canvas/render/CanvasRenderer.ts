@@ -23,6 +23,8 @@ import { drawGrid } from "./layers/GridLayer";
 
 import { drawHover } from "./layers/HoverLayer";
 
+import { drawSelection } from "./layers/SelectionLayer";
+
 // ======================================================
 // Canvas Render
 // ======================================================
@@ -70,6 +72,14 @@ export function renderCanvas(
     }
 
     drawHover(
+
+        ctx,
+
+        state
+
+    );
+
+    drawSelection(
 
         ctx,
 

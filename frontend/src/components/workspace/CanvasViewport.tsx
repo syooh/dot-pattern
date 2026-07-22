@@ -10,9 +10,11 @@
 // ======================================================
 
 import type { PatternData } from "../../types/Pattern";
+import type { CameraState } from "../canvas/camera/CameraState";
+import type { Selection } from "../../types/Selection";
+import type { ToolType } from "../../types/Pattern";
 
 import CanvasContainer from "../canvas/CanvasContainer";
-import type { CameraState } from "../canvas/camera/CameraState";
 
 interface Props {
 
@@ -50,6 +52,16 @@ interface Props {
 
     ) => void;
 
+    selection: Selection | null;
+
+    onSelectionChange: (
+
+        selection: Selection | null
+
+    ) => void;
+
+    selectedTool: ToolType;
+
 }
 
 export default function CanvasViewport({
@@ -64,7 +76,13 @@ export default function CanvasViewport({
 
     onPixelClick,
 
-    onHoverChange
+    onHoverChange,
+
+    selection,
+
+    onSelectionChange,
+
+    selectedTool,
 
 }: Props) {
 
@@ -115,6 +133,12 @@ export default function CanvasViewport({
                     camera={camera}
 
                     hoverCell={hoverCell}
+
+                    selectedTool={selectedTool}
+
+                    selection={selection}
+
+                    onSelectionChange={onSelectionChange}
 
                     onPixelClick={onPixelClick}
 

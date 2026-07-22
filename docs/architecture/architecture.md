@@ -7,28 +7,96 @@
 # 📂 프로젝트 구조
 
 ```text
+CameraState
+│
+├── zoom
+├── offsetX
+└── offsetY
+      │
+      ▼
+ useCamera()
+      │
+      ▼
 PatternEditor
 │
-├── Toolbar
-│   ├── ToolbarButton
-│   ├── ToolbarGroup (예정)
-│   └── ToolbarDivider (예정)
+├──────────────────────────────────────────────┐
+│                                              │
+│                                      useKeyboardShortcuts
+│                                              │
+│                                      ├── ESC
+│                                      ├── Delete
+│                                      ├── (Ctrl+C 예정)
+│                                      ├── (Ctrl+V 예정)
+│                                      └── (Ctrl+Z 예정)
 │
-└── EditorLayout
-    │
-    ├── LeftPanel
-    │   ├── PalettePanel
-    │   └── StatusBar (예정)
-    │
-    └── Workspace
+▼
+Workspace
+│
+▼
+CanvasViewport
+│
+▼
+CanvasContainer
+│
+▼
+PatternCanvas
+│
+├──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                      useCanvasEvents                         │
+│                                                              │
+├───────────────┬───────────────────────────────┐
+│               │                               │
+▼               ▼                               ▼
+usePaintEvents  useSelectionEvents         Hover State
+│               │
+│               ├── startSelection()
+│               ├── updateSelection()
+│               └── clearSelection()
+│
+▼
+CanvasRenderer
+│
+├──────────────────────────────────────────────────────────────┐
+│
+├── BackgroundLayer
+├── PixelLayer
+├── GridLayer
+├── HoverLayer
+└── SelectionLayer
+│
+▼
+Canvas 출력
+```
+
+---
+
+## Pattern 데이터 처리
+
+```text
+PatternEditor
         │
-        └── CanvasViewport
-            │
-            └── CanvasContainer
+        ▼
+usePattern()
+        │
+        ├── createPattern()
+        ├── loadPattern()
+        ├── paintPixel()
+        ├── addColor()
+        ├── removeColor()
+        ├── undo()
+        ├── redo()
+        ├── clearPattern()
+        └── setPattern()
                 │
-                ├── CanvasHeaderTop
-                ├── CanvasHeaderLeft
-                └── PatternCanvas
+                ▼
+PatternEngine
+        │
+        ├── clonePattern()
+        ├── paintPixel()
+        └── fillSelection()
+```
+
 ```
 
 ---

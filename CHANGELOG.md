@@ -308,3 +308,32 @@ setPattern()
 
 - CELL_SIZE 직접 사용 제거
 - Layer Cell Size 계산 통일
+
+
+
+# Changelog
+
+## 2026-07-22
+
+### Added
+
+* Selection Delete 기능
+* `fillSelection()` PatternEngine 함수
+* `useKeyboardShortcuts` Hook
+* ESC / Delete 단축키 지원
+
+### Changed
+
+* Zoom 좌표 계산 로직 개선
+* `pixelToCell()`이 Zoom을 반영하도록 수정
+* Canvas Render Dependency에 `selection` 추가
+* Canvas Event를 Paint / Selection Hook으로 분리
+* Selection 렌더링 구조 개선
+* TypeScript Null 안전성 강화
+
+### Fixed
+
+* 확대 시 Paint 위치가 어긋나는 문제 수정
+* Hover와 Paint 좌표 불일치 수정
+* Selection 변경 후 Canvas가 갱신되지 않는 문제 수정
+* Delete 기능 구현 중 발생한 `PatternData | null` 타입 오류 해결

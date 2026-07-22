@@ -5,9 +5,11 @@
 // ======================================================
 
 import type { PatternData } from "../../types/Pattern";
+import type { CameraState } from "../canvas/camera/CameraState";
+import type { Selection } from "../../types/Selection";
+import type { ToolType } from "../../types/Pattern";
 
 import CanvasViewport from "./CanvasViewport";
-import type { CameraState } from "../canvas/camera/CameraState";
 
 interface Props {
 
@@ -45,6 +47,16 @@ interface Props {
 
     ) => void;
 
+    selection: Selection | null;
+
+    onSelectionChange: (
+
+        selection: Selection | null
+
+    ) => void;
+
+    selectedTool: ToolType;
+
 }
 
 export default function Workspace({
@@ -59,7 +71,13 @@ export default function Workspace({
 
     onHoverChange,
 
-    onPixelClick
+    onPixelClick,
+
+    selection,
+
+    onSelectionChange,
+
+    selectedTool
 
 }: Props) {
 
@@ -80,6 +98,12 @@ export default function Workspace({
                 onHoverChange={onHoverChange}
 
                 onPixelClick={onPixelClick}
+
+                selectedTool={selectedTool}
+
+                selection={selection}
+
+                onSelectionChange={onSelectionChange}
 
             />
 

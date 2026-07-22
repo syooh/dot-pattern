@@ -8,6 +8,7 @@
 
 import type { PatternData } from "../../../types/Pattern";
 import type { CameraState } from "../camera/CameraState";
+import type { Selection } from "../../../types/Selection";
 
 export interface CanvasRenderState {
 
@@ -23,17 +24,7 @@ export interface CanvasRenderState {
 
     } | null;
 
-    selection?: {
-
-        startX: number;
-
-        startY: number;
-
-        endX: number;
-
-        endY: number;
-
-    } | null;
+    selection?: Selection | null;
 
     showGrid?: boolean;
 

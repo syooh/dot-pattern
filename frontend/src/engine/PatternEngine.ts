@@ -17,6 +17,7 @@
 // =====================================================
 
 import type { PatternData } from "../types/Pattern";
+import type { Selection } from "./../types/Selection";
 
 /**
  * =====================================================
@@ -373,6 +374,80 @@ export function removeColor(
                 next.pixels[y][x] = current - 1;
 
             }
+
+        }
+
+    }
+
+    return next;
+
+}
+
+export function fillSelection(
+
+    pattern: PatternData,
+
+    selection: Selection,
+
+    colorId: number
+
+): PatternData {
+
+    const next = clonePattern(pattern);
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            next.pixels[y][x] = colorId;
 
         }
 

@@ -9,8 +9,13 @@
 // 3. 클릭 좌표 계산
 // ======================================================
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { pixelToCell } from "./CanvasUtils";
+import type { CameraState } from "./camera/CameraState";
+import { usePaintEvents } from "./events/usePaintEvents";
+import type { Selection } from "./../../types/Selection";
+import type { ToolType } from "./../../types/Pattern";
+import { useSelectionEvents } from "./events/useSelectionEvents";
 
 interface Props {
 
@@ -34,13 +39,33 @@ interface Props {
 
     ) => void;
 
+    camera: CameraState;
+
+    selectedTool: ToolType;
+
+    selection: Selection | null;
+
+    onSelectionChange: (
+
+        selection: Selection | null
+
+    ) => void;
+
 }
 
 export function useCanvasEvents({
 
     onPixelClick,
 
-    onHoverChange
+    onHoverChange,
+
+    camera,
+
+    selectedTool,
+
+    selection,
+
+    onSelectionChange
 
 }: Props) {
 
@@ -58,15 +83,36 @@ export function useCanvasEvents({
 
         } | null>(null);
 
-    const lastCell =
+    const {
 
-        useRef<{
+        paint,
 
-            x: number;
+        resetPaint
 
-            y: number;
+    } = usePaintEvents({
 
-        } | null>(null);
+        onPixelClick
+        
+
+    });
+
+    const {
+
+        startSelection,
+
+        updateSelection,
+
+        clearSelection
+
+    } = useSelectionEvents({
+
+        selection,
+
+        onSelectionChange
+
+    });
+    
+    
 
     // =============================
     // Mouse → Cell
@@ -82,63 +128,23 @@ export function useCanvasEvents({
 
             event.currentTarget.getBoundingClientRect();
 
-        return {
+        const x = pixelToCell(
 
-            x: pixelToCell(
+            event.clientX - rect.left,
 
-                event.clientX - rect.left
-
-            ),
-
-            y: pixelToCell(
-
-                event.clientY - rect.top
-
-            )
-
-        };
-
-    }
-
-    // =============================
-    // Paint
-    // =============================
-
-    function paint(
-
-        x: number,
-
-        y: number
-
-    ) {
-
-        if (
-
-            lastCell.current?.x === x &&
-
-            lastCell.current?.y === y
-
-        ) {
-
-            return;
-
-        }
-
-        lastCell.current = {
-
-            x,
-
-            y
-
-        };
-
-        onPixelClick(
-
-            x,
-
-            y
+            camera.zoom
 
         );
+
+        const y = pixelToCell(
+
+            event.clientY - rect.top,
+
+            camera.zoom
+
+        );
+
+        return { x, y };
 
     }
 
@@ -173,6 +179,20 @@ export function useCanvasEvents({
         setHoverCell(cell);
 
         onHoverChange?.(cell);
+
+        if (selectedTool === "select") {
+
+            startSelection(
+
+                x,
+
+                y
+
+            );
+
+            return;
+
+        }
 
         paint(
 
@@ -218,6 +238,20 @@ export function useCanvasEvents({
 
             return;
 
+        if (selectedTool === "select") {
+
+            updateSelection(
+
+                x,
+
+                y
+
+            );
+
+            return;
+
+        }
+
         paint(
 
             x,
@@ -246,7 +280,7 @@ export function useCanvasEvents({
 
         setIsDrawing(false);
 
-        lastCell.current = null;
+        resetPaint();
 
     }
 
