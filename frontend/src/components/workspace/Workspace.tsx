@@ -8,6 +8,7 @@ import type { PatternData } from "../../types/Pattern";
 import type { CameraState } from "../canvas/camera/CameraState";
 import type { Selection } from "../../types/Selection";
 import type { ToolType } from "../../types/Pattern";
+import type { ClipboardData } from "../../types/Clipboard";
 
 import CanvasViewport from "./CanvasViewport";
 
@@ -57,6 +58,10 @@ interface Props {
 
     selectedTool: ToolType;
 
+    isPasteMode: boolean;
+
+    clipboard: ClipboardData | null;
+
 }
 
 export default function Workspace({
@@ -77,7 +82,11 @@ export default function Workspace({
 
     onSelectionChange,
 
-    selectedTool
+    selectedTool,
+
+    isPasteMode,
+
+    clipboard
 
 }: Props) {
 
@@ -104,6 +113,10 @@ export default function Workspace({
                 selection={selection}
 
                 onSelectionChange={onSelectionChange}
+
+                isPasteMode={isPasteMode}
+                
+                clipboard={clipboard}
 
             />
 

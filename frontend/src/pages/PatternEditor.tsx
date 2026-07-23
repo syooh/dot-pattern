@@ -63,7 +63,17 @@ export default function PatternEditor() {
 
         clearPattern,
 
-        loadPattern
+        loadPattern,
+
+        copySelection,
+
+        clipboard,
+
+        isPasteMode,
+
+        setIsPasteMode,
+
+        paste
 
     } = usePattern();
 
@@ -95,6 +105,52 @@ export default function PatternEditor() {
 
     }
 
+    function handleCanvasClick(
+
+        x: number,
+
+        y: number
+
+    ) {
+
+        console.log("Canvas Click");
+
+        if (
+
+            isPasteMode &&
+
+            clipboard
+
+        ) {
+
+            console.log("Paste!");
+
+            paste(
+
+                clipboard,
+
+                x,
+
+                y
+
+            );
+
+            setIsPasteMode(false);
+
+            return;
+
+        }
+
+        paintPixel(
+
+            x,
+
+            y
+
+        );
+
+    }
+
     useKeyboardShortcuts({
 
         onEscape: () => {
@@ -103,7 +159,47 @@ export default function PatternEditor() {
 
         },
 
-        onDelete: handleDeleteSelection
+        onDelete: handleDeleteSelection,
+
+        onCopy: () => {
+
+            if (!selection) {
+
+                return;
+
+            }
+
+            copySelection(selection);
+
+        },
+
+        onCut: () => {
+
+            if (!selection) {
+
+                return;
+
+            }
+
+            copySelection(selection);
+
+            handleDeleteSelection();
+
+        },
+
+        onPaste: () => {
+
+            if (!clipboard) {
+
+                return;
+
+            }
+
+            console.log("Paste Mode");
+
+            setIsPasteMode(true);
+
+        }
 
     });
 
@@ -522,7 +618,11 @@ export default function PatternEditor() {
 
                                     camera={camera}
 
-                                    onPixelClick={paintPixel}
+                                    onPixelClick={handleCanvasClick}
+
+                                    isPasteMode={isPasteMode}
+                                    
+                                    clipboard={clipboard}
 
                                 />
 

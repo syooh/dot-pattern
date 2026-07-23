@@ -9,6 +9,7 @@
 import type { PatternData } from "../../../types/Pattern";
 import type { CameraState } from "../camera/CameraState";
 import type { Selection } from "../../../types/Selection";
+import type { ClipboardData } from "../../../types/Clipboard";
 
 export interface CanvasRenderState {
 
@@ -27,5 +28,15 @@ export interface CanvasRenderState {
     selection?: Selection | null;
 
     showGrid?: boolean;
+
+    clipboard?: ClipboardData | null;
+
+    pastePreview?: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
 
 }

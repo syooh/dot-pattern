@@ -90,13 +90,13 @@
 
 모든 편집 기능을 아래 구조로 통일
 
-```
+```text
 Canvas
-↓
+   ↓
 saveHistory()
-↓
+   ↓
 PatternEngine
-↓
+   ↓
 setPattern()
 ```
 
@@ -170,170 +170,215 @@ setPattern()
 
 ### 📌 Next
 
-- Fill Tool 구현
-- Tool 단축키
-- Toolbar UI 개선
-- 브러시 크기 기능
+- 레이아웃 리팩토링
+- Workspace 구성
+- Panel 분리
 
+---
 
-# Changelog
+## v0.9.0 (2026-07-14)
 
-## (2026-07-14)
-
-### Added
+### ✨ Added
 
 - EditorLayout 컴포넌트 추가
 - PalettePanel 컴포넌트 추가
 - Workspace 컴포넌트 추가
 - CanvasViewport 컴포넌트 추가
 
-### Changed
+### 🔨 Changed
 
 - Palette를 상단에서 좌측 Panel로 이동
 - CanvasContainer UI 개선
 - 프로젝트 레이아웃 구조 변경
 - PatternEditor 구조 단순화
-- 페이지 폭을 전체 화면 기반으로 변경
+- 전체 화면 기반 레이아웃 적용
 
-### Refactored
+### ♻ Refactored
 
 - Editor 역할 분리
 - Palette 역할 분리
 - Workspace 구조 개선
 - Canvas 구조 개선
 
-### Fixed
+### 🐛 Fixed
 
 - 컴포넌트 책임 분리
 - 레이아웃 구조 개선
 
+### 📌 Next
 
+- Hover Layer
+- Camera 구조
+- Canvas Renderer 개선
 
-# Changelog
+---
 
-## v0.8.0 (2026-07-15)
+## v1.0.0 (2026-07-15)
 
-### Added
+### 🎉 Major Update
+
+Canvas 렌더링 구조를 Layer 기반으로 개편했습니다.
+
+### ✨ Added
+
 - Hover Layer 추가
 - CanvasRenderer Layer 구조 적용
 
-### Changed
+### 🔨 Changed
+
 - Workspace 구조 리팩토링
 - CanvasContainer 구조 개선
 - RenderState 구조 개선
 
-### Fixed
-- 첫 클릭이 동작하지 않는 문제
-- Hover 좌표 계산 오류
-- 클릭/드래그 동작 수정
+### 🐛 Fixed
 
-### Planned
-- Header Highlight
+- 첫 클릭이 동작하지 않는 문제 수정
+- Hover 좌표 계산 오류 수정
+- 클릭 및 드래그 동작 수정
+
+### 📌 Next
+
 - StatusBar
 - Camera
 - Zoom
 
+---
 
+## v1.1.0 (2026-07-16)
 
-# Changelog
-
-## 2026-07-16
-
-### Added
+### ✨ Added
 
 - ToolbarButton 컴포넌트 추가
 - Toolbar 공통 버튼 구조 생성
 
-### Changed
+### 🔨 Changed
 
 - StatusBar 레이아웃 개선
 - StatusBar 디자인 개선
 - Toolbar 리팩토링 시작
 - Toolbar 그룹 구조 설계
 
-### Refactor
+### ♻ Refactored
 
-- Toolbar 버튼 재사용 구조 도입
+- Toolbar 버튼 재사용 구조 적용
 - Status Panel 구조 개선
 
-### Planned
+### 📌 Next
 
 - ToolbarGroup
 - ToolbarDivider
 - Zoom
 - Camera System
 
+---
 
+## v1.2.0 (2026-07-17)
 
-# changelog
-
-## [2026-07-17]
-
-### Added
+### ✨ Added
 
 - Grid Toggle 기능
-- Hover Cursor 정보
+- Hover Cursor 정보 표시
 - StatusBar 정보 확장
 
-### Changed
+### 🔨 Changed
 
 - Hover 상태 전달 구조 변경
 
-### Planned
+### 📌 Next
 
-- Camera 시스템
-- Zoom 기능
+- Camera System
+- Zoom
 
+---
 
+## v1.3.0 (2026-07-18)
 
-# Changelog
-
-## [2026-07-18]
-
-### Added
+### ✨ Added
 
 - JSON Open 기능
-- CameraState
-- useCamera Hook
-- getCellSize()
+- CameraState 추가
+- useCamera Hook 추가
+- getCellSize() 함수 추가
 
-### Changed
+### 🔨 Changed
 
 - Camera 관리 구조 변경
 - Zoom 기반 구조 적용
 - Header Zoom 대응
 - Hover Zoom 대응
 
-### Refactor
+### ♻ Refactored
 
 - CELL_SIZE 직접 사용 제거
-- Layer Cell Size 계산 통일
+- Layer Cell Size 계산 방식 통일
+
+### 📌 Next
+
+- Selection Tool
+- Delete 기능
+- Keyboard Shortcut
+
+---
+
+## v1.4.0 (2026-07-22)
+
+### ✨ Added
+
+- Selection Delete 기능
+- fillSelection() 함수 추가
+- useKeyboardShortcuts Hook 추가
+- ESC / Delete 단축키 지원
+
+### 🔨 Changed
+
+- Zoom 좌표 계산 로직 개선
+- pixelToCell()에 Zoom 계산 적용
+- Canvas Render Dependency에 selection 추가
+- Canvas Event를 Paint / Selection Hook으로 분리
+- Selection 렌더링 구조 개선
+- TypeScript Null 안전성 강화
+
+### 🐛 Fixed
+
+- 확대 시 Paint 위치가 어긋나는 문제 수정
+- Hover와 Paint 좌표 불일치 수정
+- Selection 변경 후 Canvas가 갱신되지 않는 문제 수정
+- Delete 기능 구현 중 발생한 PatternData | null 타입 오류 해결
+
+### 📌 Next
+
+- Copy / Paste
+- Multi Selection
+- Export 기능 개선
+- 단축키 확장
 
 
 
-# Changelog
+# CHANGELOG
 
-## 2026-07-22
+---
 
-### Added
+## v0.8.0 (2026-07-23)
 
-* Selection Delete 기능
-* `fillSelection()` PatternEngine 함수
-* `useKeyboardShortcuts` Hook
-* ESC / Delete 단축키 지원
+### ✨ Added
 
-### Changed
+#### Clipboard
 
-* Zoom 좌표 계산 로직 개선
-* `pixelToCell()`이 Zoom을 반영하도록 수정
-* Canvas Render Dependency에 `selection` 추가
-* Canvas Event를 Paint / Selection Hook으로 분리
-* Selection 렌더링 구조 개선
-* TypeScript Null 안전성 강화
+* ClipboardData 타입 추가
+* Copy(Ctrl + C) 기능 구현
+* Cut(Ctrl + X) 기능 구현
+* Delete 기능 구현
+* Paste Mode 추가
+* Paste Preview Overlay 추가
+* Preview 이동 기능 구현
+* `pasteClipboard()` 추가
+* `paste()` Hook 추가
 
-### Fixed
+### 🔧 Changed
 
-* 확대 시 Paint 위치가 어긋나는 문제 수정
-* Hover와 Paint 좌표 불일치 수정
-* Selection 변경 후 Canvas가 갱신되지 않는 문제 수정
-* Delete 기능 구현 중 발생한 `PatternData | null` 타입 오류 해결
+* Canvas 클릭 이벤트를 Clipboard Workflow와 연결
+* Paste Mode를 Selection Tool보다 우선 처리하도록 이벤트 흐름 개선
+
+### 🐛 Fixed
+
+* Selection Tool 사용 시 Paste가 호출되지 않던 문제 수정

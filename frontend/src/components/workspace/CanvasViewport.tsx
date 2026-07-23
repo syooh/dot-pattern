@@ -13,6 +13,7 @@ import type { PatternData } from "../../types/Pattern";
 import type { CameraState } from "../canvas/camera/CameraState";
 import type { Selection } from "../../types/Selection";
 import type { ToolType } from "../../types/Pattern";
+import type { ClipboardData } from "../../types/Clipboard";
 
 import CanvasContainer from "../canvas/CanvasContainer";
 
@@ -62,6 +63,10 @@ interface Props {
 
     selectedTool: ToolType;
 
+    isPasteMode: boolean;
+
+    clipboard: ClipboardData | null;
+
 }
 
 export default function CanvasViewport({
@@ -83,6 +88,10 @@ export default function CanvasViewport({
     onSelectionChange,
 
     selectedTool,
+
+    isPasteMode,
+
+    clipboard,
 
 }: Props) {
 
@@ -143,6 +152,10 @@ export default function CanvasViewport({
                     onPixelClick={onPixelClick}
 
                     onHoverChange={onHoverChange}
+
+                    isPasteMode={isPasteMode}
+
+                    clipboard={clipboard}
 
                 />
 

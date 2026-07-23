@@ -18,6 +18,7 @@
 
 import type { PatternData } from "../types/Pattern";
 import type { Selection } from "./../types/Selection";
+import type { ClipboardData } from "./../types/Clipboard";
 
 /**
  * =====================================================
@@ -448,6 +449,161 @@ export function fillSelection(
         ) {
 
             next.pixels[y][x] = colorId;
+
+        }
+
+    }
+
+    return next;
+
+}
+
+export function copySelectionData(
+
+    pattern: PatternData,
+
+    selection: Selection
+
+): ClipboardData {
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const pixels: number[][] = [];
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        const row: number[] = [];
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            row.push(
+
+                pattern.pixels[y][x]
+
+            );
+
+        }
+
+        pixels.push(row);
+
+    }
+
+    return {
+
+        width: right - left + 1,
+
+        height: bottom - top + 1,
+
+        pixels
+
+    };
+
+}
+
+export function pasteClipboard(
+
+    pattern: PatternData,
+
+    clipboard: ClipboardData,
+
+    startX: number,
+
+    startY: number
+
+): PatternData {
+
+    const next = clonePattern(pattern);
+
+    for (
+
+        let y = 0;
+
+        y < clipboard.height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < clipboard.width;
+
+            x++
+
+        ) {
+
+            const targetX = startX + x;
+
+            const targetY = startY + y;
+
+            // 도안 밖은 무시
+            if (
+
+                targetX < 0 ||
+
+                targetY < 0 ||
+
+                targetX >= next.width ||
+
+                targetY >= next.height
+
+            ) {
+
+                continue;
+
+            }
+
+            next.pixels[targetY][targetX] =
+
+                clipboard.pixels[y][x];
 
         }
 

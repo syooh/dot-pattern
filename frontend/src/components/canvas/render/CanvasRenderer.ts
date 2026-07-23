@@ -25,6 +25,8 @@ import { drawHover } from "./layers/HoverLayer";
 
 import { drawSelection } from "./layers/SelectionLayer";
 
+import { drawPastePreview } from "./layers/PastePreviewLayer";
+
 // ======================================================
 // Canvas Render
 // ======================================================
@@ -80,6 +82,14 @@ export function renderCanvas(
     );
 
     drawSelection(
+
+        ctx,
+
+        state
+
+    );
+
+    drawPastePreview(
 
         ctx,
 

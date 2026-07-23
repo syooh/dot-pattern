@@ -51,6 +51,20 @@ interface Props {
 
     ) => void;
 
+    isPasteMode: boolean;
+
+    onPastePreviewChange?: (
+
+        preview: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
 }
 
 export function useCanvasEvents({
@@ -65,7 +79,11 @@ export function useCanvasEvents({
 
     selection,
 
-    onSelectionChange
+    onSelectionChange,
+
+    isPasteMode,
+
+    onPastePreviewChange
 
 }: Props) {
 
@@ -180,6 +198,28 @@ export function useCanvasEvents({
 
         onHoverChange?.(cell);
 
+        // ===================================
+        // Paste Mode
+        // ===================================
+
+        if (isPasteMode) {
+
+            onPixelClick(
+
+                x,
+
+                y
+
+            );
+
+            return;
+
+        }
+
+        // ===================================
+        // Selection
+        // ===================================
+
         if (selectedTool === "select") {
 
             startSelection(
@@ -194,6 +234,10 @@ export function useCanvasEvents({
 
         }
 
+        // ===================================
+        // Brush / Eraser / Fill
+        // ===================================
+
         paint(
 
             x,
@@ -201,7 +245,6 @@ export function useCanvasEvents({
             y
 
         );
-
     }
 
     // =============================
@@ -233,6 +276,22 @@ export function useCanvasEvents({
         setHoverCell(cell);
 
         onHoverChange?.(cell);
+
+        if (
+
+            isPasteMode
+
+        ) {
+
+            onPastePreviewChange?.({
+
+                x,
+
+                y
+
+            });
+
+        }
 
         if (!isDrawing)
 

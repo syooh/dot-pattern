@@ -146,13 +146,17 @@ CameraState
 └── offsetY
       │
       ▼
- useCamera()
+useCamera()
       │
       ▼
 PatternEditor
       │
-      ▼
- Workspace
+      ├── usePattern()
+      ├── useKeyboardShortcuts()
+      └── Clipboard Workflow
+              │
+              ▼
+Workspace
       │
       ▼
 CanvasViewport
@@ -162,6 +166,12 @@ CanvasContainer
       │
       ▼
 PatternCanvas
+      │
+      ▼
+CanvasEvents
+      │
+      ▼
+PatternEngine
 ```
 
 ### 역할

@@ -13,13 +13,25 @@ interface Props {
 
     onDelete?: () => void;
 
+    onCopy?: () => void;
+
+    onCut?: () => void;
+
+    onPaste?: () => void;
+
 }
 
 export function useKeyboardShortcuts({
 
     onEscape,
 
-    onDelete
+    onDelete,
+
+    onCopy,
+
+    onCut,
+
+    onPaste
 
 }: Props) {
 
@@ -52,6 +64,48 @@ export function useKeyboardShortcuts({
                 event.preventDefault();
 
                 onDelete?.();
+
+            }
+
+            if (
+
+                event.ctrlKey &&
+
+                event.key.toLowerCase() === "c"
+
+            ) {
+
+                event.preventDefault();
+
+                onCopy?.();
+
+            }
+
+            if (
+
+                event.ctrlKey &&
+
+                event.key.toLowerCase() === "x"
+
+            ) {
+
+                event.preventDefault();
+
+                onCut?.();
+
+            }
+
+            if (
+
+                event.ctrlKey &&
+
+                event.key.toLowerCase() === "v"
+
+            ) {
+
+                event.preventDefault();
+
+                onPaste?.();
 
             }
 

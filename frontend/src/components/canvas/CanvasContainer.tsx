@@ -16,6 +16,7 @@ import { HEADER_SIZE } from "./CanvasConstants";
 import type { CameraState } from "./camera/CameraState";
 import type { Selection } from "../../types/Selection";
 import type { ToolType } from "../../types/Pattern";
+import type { ClipboardData } from "../../types/Clipboard";
 
 interface Props {
 
@@ -63,6 +64,10 @@ interface Props {
 
     selectedTool: ToolType;
 
+    isPasteMode: boolean;
+
+    clipboard: ClipboardData | null;
+
 }
 
 export default function CanvasContainer({
@@ -84,6 +89,10 @@ export default function CanvasContainer({
     onSelectionChange,
 
     selectedTool,
+
+    isPasteMode,
+
+    clipboard,
 
 }: Props) {
 
@@ -194,6 +203,10 @@ export default function CanvasContainer({
                     onSelectionChange={onSelectionChange}
 
                     selectedTool={selectedTool}
+
+                    isPasteMode={isPasteMode}
+
+                    clipboard={clipboard}
 
                 />
 

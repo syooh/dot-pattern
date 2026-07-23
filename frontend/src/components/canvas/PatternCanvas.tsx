@@ -11,21 +11,15 @@
 // 실제 도안 수정은 PatternEngine이 담당한다.
 // ======================================================
 
-import { useEffect, useRef } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import type { PatternData } from "../../types/Pattern";
-
 import { renderCanvas } from "./render/CanvasRenderer";
-
 import { useCanvasEvents } from "./CanvasEvents";
-
 import { getCanvasWidth, getCanvasHeight } from "./CanvasUtils";
-
 import type { CameraState } from "./camera/CameraState";
-
 import type { Selection } from "../../types/Selection";
-
 import type { ToolType } from "../../types/Pattern";
+import type { ClipboardData } from "../../types/Clipboard";
 
 interface Props {
 
@@ -65,6 +59,10 @@ interface Props {
 
     ) => void;
 
+    clipboard: ClipboardData | null;
+
+    isPasteMode: boolean;
+
 }
 
 export default function PatternCanvas({
@@ -85,6 +83,9 @@ export default function PatternCanvas({
 
     onSelectionChange,
 
+    clipboard,
+
+    isPasteMode
 
 }: Props) {
 
@@ -94,6 +95,16 @@ export default function PatternCanvas({
 
     const canvasRef =
         useRef<HTMLCanvasElement>(null);
+
+    const [pastePreview, setPastePreview] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
 
     // ==================================================
     // Canvas 이벤트
@@ -123,7 +134,11 @@ export default function PatternCanvas({
 
         selection,
 
-        onSelectionChange
+        onSelectionChange,
+
+        isPasteMode,
+
+        onPastePreviewChange: setPastePreview
 
     });
 
@@ -177,13 +192,17 @@ export default function PatternCanvas({
 
                 selection,
 
-                showGrid
+                showGrid,
+
+                clipboard,
+
+                pastePreview
 
             }
 
         );
 
-    }, [pattern, hoverCell, selection, showGrid, camera]);
+    }, [pattern, hoverCell, selection, showGrid, camera, clipboard, pastePreview]);
 
     // ==================================================
     // Render

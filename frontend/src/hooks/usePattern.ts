@@ -19,6 +19,8 @@
 // ======================================================
 
 import { useState } from "react";
+import type { ClipboardData } from "./../types/Clipboard";
+import type { Selection } from "../types/Selection";
 
 // ======================================================
 // Types
@@ -41,7 +43,11 @@ import {
 
     floodFill,
 
-    removeColor as removeColorEngine
+    removeColor as removeColorEngine,
+
+    copySelectionData,
+
+    pasteClipboard
 
 } from "../engine/PatternEngine";
 
@@ -131,6 +137,42 @@ export default function usePattern() {
 
     const [showGrid, setShowGrid] = useState(true);
 
+    const [clipboard, setClipboard] =
+
+        useState<ClipboardData | null>(null);
+
+    function copySelection(
+
+        selection: Selection
+
+    ) {
+
+        if (!pattern) {
+
+            return;
+
+        }
+
+        const data =
+
+            copySelectionData(
+
+                pattern,
+
+                selection
+
+            );
+
+        console.log(data);
+
+        setClipboard(data);
+
+    }
+
+    const [isPasteMode, setIsPasteMode] =
+
+        useState(false);
+
     // ==================================================
     // 새 도안 생성
     // ==================================================
@@ -173,6 +215,44 @@ export default function usePattern() {
         setPattern(newPattern);
 
     }
+
+    const paste = (
+
+        clipboard: ClipboardData,
+
+        x: number,
+
+        y: number
+
+    ) => {
+
+        console.log("paste()");
+
+        if (!pattern) {
+
+            return;
+
+        }
+
+        saveHistory(pattern);
+
+        const nextPattern =
+
+            pasteClipboard(
+
+                pattern,
+
+                clipboard,
+
+                x,
+
+                y
+
+            );
+
+        setPattern(nextPattern);
+
+    };
 
     // ==================================================
     // Undo 기록 저장
@@ -546,7 +626,17 @@ export default function usePattern() {
 
         setShowGrid,
 
-        clearPattern
+        clearPattern,
+
+        clipboard,
+
+        copySelection,
+
+        isPasteMode,
+
+        setIsPasteMode,
+
+        paste,
 
     };
 
