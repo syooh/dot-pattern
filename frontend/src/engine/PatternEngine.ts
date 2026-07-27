@@ -612,3 +612,189 @@ export function pasteClipboard(
     return next;
 
 }
+
+export function moveSelection(
+
+    pattern: PatternData,
+
+    selection: Selection
+
+): PatternData {
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const offsetX =
+
+        selection.offsetX ?? 0;
+
+    const offsetY =
+
+        selection.offsetY ?? 0;
+
+    const copiedPixels: number[][] = [];
+
+    const nextPattern: PatternData = {
+
+        ...pattern,
+
+        pixels: pattern.pixels.map(
+
+            row => [...row]
+
+        )
+
+    };
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        const row: number[] = [];
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            row.push(
+
+                pattern.pixels[y][x]
+
+            );
+
+        }
+
+        copiedPixels.push(row);
+
+    }
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[y][x] = 0;
+
+        }
+
+    }
+
+    const targetLeft =
+
+        left + offsetX;
+
+    const targetTop =
+
+        top + offsetY;
+
+    for (
+
+        let y = 0;
+
+        y < copiedPixels.length;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < copiedPixels[y].length;
+
+            x++
+
+        ) {
+
+            const targetX =
+
+                targetLeft + x;
+
+            const targetY =
+
+                targetTop + y;
+
+            if (
+
+                targetX < 0 ||
+
+                targetY < 0 ||
+
+                targetX >= nextPattern.width ||
+
+                targetY >= nextPattern.height
+
+            ) {
+
+                continue;
+
+            }
+
+            nextPattern.pixels[targetY][targetX] =
+
+                copiedPixels[y][x];
+
+        }
+
+    }
+
+    return nextPattern;
+
+}

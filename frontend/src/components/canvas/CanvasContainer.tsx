@@ -68,6 +68,28 @@ interface Props {
 
     clipboard: ClipboardData | null;
 
+    pastePreview: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
+    onPastePreviewChange: (
+
+        preview: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
+    onMoveSelection: () => void;
+
 }
 
 export default function CanvasContainer({
@@ -93,6 +115,12 @@ export default function CanvasContainer({
     isPasteMode,
 
     clipboard,
+
+    pastePreview,
+
+    onPastePreviewChange,
+
+    onMoveSelection,
 
 }: Props) {
 
@@ -202,11 +230,17 @@ export default function CanvasContainer({
 
                     onSelectionChange={onSelectionChange}
 
+                    onMoveSelection={onMoveSelection}
+
                     selectedTool={selectedTool}
 
                     isPasteMode={isPasteMode}
 
                     clipboard={clipboard}
+
+                    pastePreview={pastePreview}
+
+                    onPastePreviewChange={onPastePreviewChange}
 
                 />
 

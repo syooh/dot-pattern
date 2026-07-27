@@ -382,3 +382,51 @@ Canvas 렌더링 구조를 Layer 기반으로 개편했습니다.
 ### 🐛 Fixed
 
 * Selection Tool 사용 시 Paste가 호출되지 않던 문제 수정
+
+
+
+
+# CHANGELOG
+
+---
+
+## v0.2.0 (2026-07-27)
+
+### ✨ Added
+
+#### Move Tool
+
+- Move Tool 추가
+- Toolbar에 Move Tool 버튼 추가
+- ToolType에 move 추가
+- Selection Drag 기능 구현
+- Selection Preview 이동 구현
+- 실제 Selection 이동 기능 구현
+- Selection offset(offsetX, offsetY) 상태 추가
+- Move 완료 이벤트(onMoveSelection) 추가
+
+#### Clipboard
+
+- Paste Preview Layer 추가
+- Paste Preview 출력 개선
+- Paste Preview와 Selection Layer 분리
+- Paste Preview가 마우스를 따라다니도록 수정
+
+#### Engine
+
+- PatternEngine.moveSelection() 추가
+- 선택 영역 복사
+- 기존 위치 삭제
+- 새 위치 붙여넣기
+- 새로운 Pattern 반환
+
+#### Hook
+
+- usePattern.moveCurrentSelection() 추가
+- History 저장 후 Move 실행
+
+### 🔨 Changed
+
+- CanvasEvents → PatternEditor → usePattern → PatternEngine 이벤트 전달 구조 개선
+- Selection Layer가 offset 기반으로 렌더링되도록 수정
+- Move Tool Preview 렌더링 개선

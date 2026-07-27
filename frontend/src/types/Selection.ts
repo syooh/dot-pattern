@@ -16,4 +16,10 @@ export interface Selection {
 
     endY: number;
 
+    offsetX?: number;
+
+    offsetY?: number;
+
+    isDragging?: boolean;
+
 }

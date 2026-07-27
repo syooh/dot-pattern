@@ -62,6 +62,27 @@ interface Props {
 
     clipboard: ClipboardData | null;
 
+    pastePreview: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
+    onPastePreviewChange: (
+
+        preview: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
+    onMoveSelection: () => void;
 }
 
 export default function Workspace({
@@ -86,7 +107,13 @@ export default function Workspace({
 
     isPasteMode,
 
-    clipboard
+    clipboard,
+
+    pastePreview,
+
+    onPastePreviewChange,
+
+    onMoveSelection,
 
 }: Props) {
 
@@ -114,9 +141,15 @@ export default function Workspace({
 
                 onSelectionChange={onSelectionChange}
 
+                onMoveSelection={onMoveSelection}
+
                 isPasteMode={isPasteMode}
                 
                 clipboard={clipboard}
+
+                pastePreview={pastePreview}
+
+                onPastePreviewChange={onPastePreviewChange}
 
             />
 

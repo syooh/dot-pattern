@@ -73,13 +73,25 @@ export default function PatternEditor() {
 
         setIsPasteMode,
 
-        paste
+        paste,
+
+        moveCurrentSelection,
 
     } = usePattern();
 
     const [selection, setSelection] =
 
         useState<Selection | null>(null);
+
+    const [pastePreview, setPastePreview] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
 
     function handleDeleteSelection() {
 
@@ -440,7 +452,19 @@ export default function PatternEditor() {
 
     }
 
+    function handleMoveSelection() {
 
+        if (!selection) {
+
+            return;
+
+        }
+
+        moveCurrentSelection(selection);
+
+        setSelection(null);
+
+    }
 
     return (
 
@@ -614,6 +638,8 @@ export default function PatternEditor() {
 
                                     onSelectionChange={setSelection}
 
+                                    onMoveSelection={handleMoveSelection}
+
                                     onHoverChange={setHoverCell}
 
                                     camera={camera}
@@ -623,6 +649,10 @@ export default function PatternEditor() {
                                     isPasteMode={isPasteMode}
                                     
                                     clipboard={clipboard}
+
+                                    pastePreview={pastePreview}
+
+                                    onPastePreviewChange={setPastePreview}
 
                                 />
 

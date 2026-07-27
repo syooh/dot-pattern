@@ -63,6 +63,28 @@ interface Props {
 
     isPasteMode: boolean;
 
+    pastePreview: {
+
+        x: number;
+
+        y: number;
+
+    } | null;
+
+    onPastePreviewChange: (
+
+        preview: {
+
+            x: number;
+
+            y: number;
+
+        } | null
+
+    ) => void;
+
+    onMoveSelection: () => void;
+
 }
 
 export default function PatternCanvas({
@@ -85,7 +107,13 @@ export default function PatternCanvas({
 
     clipboard,
 
-    isPasteMode
+    isPasteMode,
+
+    pastePreview,
+
+    onPastePreviewChange,
+
+    onMoveSelection,
 
 }: Props) {
 
@@ -95,16 +123,6 @@ export default function PatternCanvas({
 
     const canvasRef =
         useRef<HTMLCanvasElement>(null);
-
-    const [pastePreview, setPastePreview] =
-
-        useState<{
-
-            x: number;
-
-            y: number;
-
-        } | null>(null);
 
     // ==================================================
     // Canvas 이벤트
@@ -136,9 +154,11 @@ export default function PatternCanvas({
 
         onSelectionChange,
 
+        onMoveSelection,
+
         isPasteMode,
 
-        onPastePreviewChange: setPastePreview
+        onPastePreviewChange
 
     });
 

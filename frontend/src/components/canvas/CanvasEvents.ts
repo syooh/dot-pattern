@@ -51,6 +51,8 @@ interface Props {
 
     ) => void;
 
+    onMoveSelection: () => void;
+
     isPasteMode: boolean;
 
     onPastePreviewChange?: (
@@ -81,6 +83,8 @@ export function useCanvasEvents({
 
     onSelectionChange,
 
+    onMoveSelection,
+
     isPasteMode,
 
     onPastePreviewChange
@@ -90,6 +94,20 @@ export function useCanvasEvents({
     const [isDrawing, setIsDrawing] =
 
         useState(false);
+
+    const [isDraggingSelection, setIsDraggingSelection] =
+
+        useState(false);
+
+    const [dragStart, setDragStart] =
+
+        useState<{
+
+            x: number;
+
+            y: number;
+
+        } | null>(null);
 
     const [hoverCell, setHoverCell] =
 
@@ -220,7 +238,16 @@ export function useCanvasEvents({
         // Selection
         // ===================================
 
-        if (selectedTool === "select") {
+        // ===================================
+        // Select
+        // ===================================
+
+        if (
+
+            selectedTool === "select"
+
+        ) {
+            console.log(selectedTool);
 
             startSelection(
 
@@ -229,6 +256,28 @@ export function useCanvasEvents({
                 y
 
             );
+
+            return;
+
+        }
+
+        if (
+
+            selectedTool === "move" &&
+
+            selection
+
+        ) {
+
+            setIsDraggingSelection(true);
+
+            setDragStart({
+
+                x,
+
+                y
+
+            });
 
             return;
 
@@ -276,6 +325,30 @@ export function useCanvasEvents({
         setHoverCell(cell);
 
         onHoverChange?.(cell);
+
+        if (
+
+            isDraggingSelection &&
+
+            selection &&
+
+            dragStart
+
+        ) {
+
+            onSelectionChange({
+
+                ...selection,
+
+                offsetX: x - dragStart.x,
+
+                offsetY: y - dragStart.y,
+
+                isDragging: true
+
+            });
+
+        }
 
         if (
 
@@ -337,7 +410,17 @@ export function useCanvasEvents({
 
     function stopDrawing() {
 
+        if (isDraggingSelection) {
+
+            onMoveSelection();
+
+        }
+
         setIsDrawing(false);
+
+        setIsDraggingSelection(false);
+
+        setDragStart(null);
 
         resetPaint();
 

@@ -106,4 +106,6 @@ export type ToolType =
 
     | "fill"
 
-    | "select";
+    | "select"
+    
+    | "move";

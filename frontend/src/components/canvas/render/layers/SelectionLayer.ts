@@ -34,18 +34,38 @@ export function drawSelection(
 
         endX,
 
-        endY
+        endY,
+
+        offsetX = 0,
+
+        offsetY = 0
 
     } = state.selection;
 
-    const left = Math.min(startX, endX);
+    const left =
 
-    const top = Math.min(startY, endY);
+        Math.min(startX, endX) +
 
-    const right = Math.max(startX, endX);
+        offsetX;
 
-    const bottom = Math.max(startY, endY);
+    const top =
 
+        Math.min(startY, endY) +
+
+        offsetY;
+
+    const right =
+
+        Math.max(startX, endX) +
+
+        offsetX;
+
+    const bottom =
+
+        Math.max(startY, endY) +
+
+        offsetY;
+        
     ctx.save();
 
     ctx.strokeStyle = "#4F8CFF";

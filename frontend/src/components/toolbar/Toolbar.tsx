@@ -239,6 +239,18 @@ export default function Toolbar({
 
                 />
 
+                <ToolbarButton
+
+                    icon="✋"
+
+                    label="Move"
+
+                    selected={selectedTool === "move"}
+
+                    onClick={() => onToolChange("move")}
+
+                />
+
             </ToolbarGroup>
 
             <ToolbarDivider />

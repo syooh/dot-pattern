@@ -47,7 +47,9 @@ import {
 
     copySelectionData,
 
-    pasteClipboard
+    pasteClipboard,
+
+    moveSelection
 
 } from "../engine/PatternEngine";
 
@@ -574,6 +576,32 @@ export default function usePattern() {
 
     };
 
+    function moveCurrentSelection(
+
+        selection: Selection
+
+    ) {
+
+        if (!pattern)
+
+            return;
+
+        saveHistory(pattern);
+
+        const nextPattern =
+
+            moveSelection(
+
+                pattern,
+
+                selection
+
+            );
+
+        setPattern(nextPattern);
+
+    }
+
     // ==================================================
     // 외부에서 사용하는 값
     // ==================================================
@@ -637,6 +665,8 @@ export default function usePattern() {
         setIsPasteMode,
 
         paste,
+
+        moveCurrentSelection,
 
     };
 
