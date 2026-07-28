@@ -430,3 +430,39 @@ Canvas 렌더링 구조를 Layer 기반으로 개편했습니다.
 - CanvasEvents → PatternEditor → usePattern → PatternEngine 이벤트 전달 구조 개선
 - Selection Layer가 offset 기반으로 렌더링되도록 수정
 - Move Tool Preview 렌더링 개선
+
+
+
+# CHANGELOG
+
+---
+
+## v0.2.0 (2026-07-28)
+
+### ✨ Added
+
+#### Editor
+
+* Rotate Selection (90° Clockwise) 기능 추가
+* Rotate Toolbar 버튼 추가
+* Rotate Engine 구현
+* Rotate와 Undo/Redo 연동
+* Rotate 후 Selection 자동 갱신
+* Selection Offset 초기화
+* Rotate UX 개선
+
+### 🔧 Improved
+
+* Selection 처리 구조 개선
+* PatternEngine 구조 확장
+* Toolbar 기능 확장
+* 회전 알고리즘 안정화
+
+### ✅ Tested
+
+* Rotate
+* Undo / Redo
+* Horizontal Selection
+* Vertical Selection
+* Rectangle Selection
+* Selection 유지

@@ -49,6 +49,12 @@ interface Props {
 
     onToggleGrid: () => void;
 
+    onRotate: () => void;
+
+    onFlipHorizontal: () => void;
+
+    onFlipVertical: () => void;
+
 }
 
 export default function Toolbar({
@@ -79,7 +85,13 @@ export default function Toolbar({
 
     onZoomIn,
 
-    onZoomOut
+    onZoomOut,
+
+    onRotate,
+
+    onFlipHorizontal,
+
+    onFlipVertical,
 
 }: Props) {
 
@@ -178,6 +190,48 @@ export default function Toolbar({
                     onClick={onRedo}
 
                     disabled={!canRedo}
+
+                />
+
+            </ToolbarGroup>
+
+            <ToolbarDivider />
+
+            <ToolbarGroup>
+
+                <ToolbarButton
+
+                    icon="↻"
+
+                    label="회전"
+
+                    selected={false}
+
+                    onClick={onRotate}
+
+                />
+
+                <ToolbarButton
+
+                    icon="↔"
+
+                    label="좌우반전"
+
+                    selected={false}
+
+                    onClick={onFlipHorizontal}
+
+                />
+
+                <ToolbarButton
+
+                    icon="↕"
+
+                    label="상하반전"
+
+                    selected={false}
+
+                    onClick={onFlipVertical}
 
                 />
 

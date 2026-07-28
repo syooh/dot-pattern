@@ -77,6 +77,8 @@ export default function PatternEditor() {
 
         moveCurrentSelection,
 
+        rotateCurrentSelection,
+
     } = usePattern();
 
     const [selection, setSelection] =
@@ -125,8 +127,6 @@ export default function PatternEditor() {
 
     ) {
 
-        console.log("Canvas Click");
-
         if (
 
             isPasteMode &&
@@ -134,8 +134,6 @@ export default function PatternEditor() {
             clipboard
 
         ) {
-
-            console.log("Paste!");
 
             paste(
 
@@ -146,6 +144,8 @@ export default function PatternEditor() {
                 y
 
             );
+
+            setPastePreview(null);
 
             setIsPasteMode(false);
 
@@ -166,6 +166,24 @@ export default function PatternEditor() {
     useKeyboardShortcuts({
 
         onEscape: () => {
+
+            // ==========================
+            // Paste Mode 취소
+            // ==========================
+
+            if (isPasteMode) {
+
+                setIsPasteMode(false);
+
+                setPastePreview(null);
+
+                return;
+
+            }
+
+            // ==========================
+            // Selection 해제
+            // ==========================
 
             setSelection(null);
 
@@ -211,7 +229,11 @@ export default function PatternEditor() {
 
             setIsPasteMode(true);
 
-        }
+        },
+
+        onUndo: undo,
+
+        onRedo: redo
 
     });
 
@@ -466,6 +488,46 @@ export default function PatternEditor() {
 
     }
 
+    // ==================================================
+    // TODO
+    // Rotate / Flip / Mirror 이후 Selection 갱신은
+    // SelectionUtils로 분리 예정
+    // ==================================================
+
+    function handleRotateSelection() {
+
+        if (!selection) {
+
+            return;
+
+        }
+
+        rotateCurrentSelection(selection);
+
+        const left = Math.min(selection.startX, selection.endX);
+        const top = Math.min(selection.startY, selection.endY);
+
+        const width =
+            Math.abs(selection.endX - selection.startX) + 1;
+
+        const height =
+            Math.abs(selection.endY - selection.startY) + 1;
+
+        setSelection({
+
+            startX: left,
+            startY: top,
+
+            endX: left + height - 1,
+            endY: top + width - 1,
+
+            offsetX: 0,
+            offsetY: 0
+
+        });
+
+    }
+
     return (
 
         <div
@@ -486,7 +548,7 @@ export default function PatternEditor() {
 
             <h1>
 
-                🧶 Dot Pattern Editor
+                🧶 도안 편집기
 
             </h1>
 
@@ -537,6 +599,8 @@ export default function PatternEditor() {
                             canUndo={canUndo}
 
                             canRedo={canRedo}
+
+                            onRotate={handleRotateSelection}
 
                             selectedTool={selectedTool}
 

@@ -798,3 +798,231 @@ export function moveSelection(
     return nextPattern;
 
 }
+
+// ==================================================
+// Rotate Selection (90° Clockwise)
+// ==================================================
+
+export function rotateSelection(
+
+    pattern: PatternData,
+
+    selection: Selection
+
+): PatternData {
+
+    // TODO
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const width =
+
+        right - left + 1;
+
+    const height =
+
+        bottom - top + 1;
+
+    const copiedPixels: number[][] = [];
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        const row: number[] = [];
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            row.push(
+
+                pattern.pixels[y][x]
+
+            );
+
+        }
+
+        copiedPixels.push(row);
+
+    }
+
+    const rotatedPixels: number[][] = [];
+
+    for (
+
+        let y = 0;
+
+        y < width;
+
+        y++
+
+    ) {
+
+        rotatedPixels.push(
+
+            new Array(height)
+
+        );
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < width;
+
+            x++
+
+        ) {
+
+            rotatedPixels[x][height - 1 - y] =
+
+                copiedPixels[y][x];
+
+        }
+
+    }
+
+    const nextPattern: PatternData = {
+
+        ...pattern,
+
+        pixels: pattern.pixels.map(
+
+            row => [...row]
+
+        )
+
+    };
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[y][x] = 0;
+
+        }
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < rotatedPixels.length;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < rotatedPixels[y].length;
+
+            x++
+
+        ) {
+
+            const targetX = left + x;
+
+            const targetY = top + y;
+
+            if (
+
+                targetX < 0 ||
+
+                targetY < 0 ||
+
+                targetX >= nextPattern.width ||
+
+                targetY >= nextPattern.height
+
+            ) {
+
+                continue;
+
+            }
+
+            nextPattern.pixels[targetY][targetX] =
+
+                rotatedPixels[y][x];
+
+        }
+
+    }
+
+    return nextPattern;
+
+}

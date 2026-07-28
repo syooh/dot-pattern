@@ -19,15 +19,28 @@ CameraState
       ▼
 PatternEditor
 │
-├──────────────────────────────────────────────┐
-│                                              │
-│                                      useKeyboardShortcuts
-│                                              │
-│                                      ├── ESC
-│                                      ├── Delete
-│                                      ├── (Ctrl+C 예정)
-│                                      ├── (Ctrl+V 예정)
-│                                      └── (Ctrl+Z 예정)
+├──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                                                      usePattern
+│                                                              │
+│                                          ├── Paint
+│                                          ├── Erase
+│                                          ├── Fill
+│                                          ├── MoveSelection
+│                                          ├── History
+│                                          └── Clipboard
+│
+├──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                                              useKeyboardShortcuts
+│                                                              │
+│                                              ├── ESC
+│                                              ├── Delete
+│                                              ├── Ctrl + C
+│                                              ├── Ctrl + X
+│                                              ├── Ctrl + V
+│                                              ├── Ctrl + Z (예정)
+│                                              └── Ctrl + Shift + Z (예정)
 │
 ▼
 Workspace
@@ -45,14 +58,16 @@ PatternCanvas
 │                                                              │
 │                      useCanvasEvents                         │
 │                                                              │
-├───────────────┬───────────────────────────────┐
-│               │                               │
-▼               ▼                               ▼
-usePaintEvents  useSelectionEvents         Hover State
-│               │
-│               ├── startSelection()
-│               ├── updateSelection()
-│               └── clearSelection()
+├───────────────┬──────────────────────┬───────────────────────┐
+│               │                      │
+▼               ▼                      ▼
+usePaintEvents  useSelectionEvents     Hover State
+                │
+                ├── startSelection()
+                ├── updateSelection()
+                ├── moveSelection()
+                ├── clearSelection()
+                └── Paste Preview
 │
 ▼
 CanvasRenderer
@@ -63,7 +78,8 @@ CanvasRenderer
 ├── PixelLayer
 ├── GridLayer
 ├── HoverLayer
-└── SelectionLayer
+├── SelectionLayer
+└── PastePreviewLayer
 │
 ▼
 Canvas 출력
@@ -460,6 +476,16 @@ Canvas의 사용자 입력을 처리합니다.
 - Pattern 복사
 
 React와 분리되어 있어 재사용이 가능합니다.
+
+PatternEngine
+│
+├── paintPixel()
+├── erasePixel()
+├── floodFill()
+├── copySelection()
+├── cutSelection()
+├── pasteSelection()
+└── moveSelection()
 
 ---
 

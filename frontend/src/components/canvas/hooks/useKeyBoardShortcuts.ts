@@ -19,6 +19,10 @@ interface Props {
 
     onPaste?: () => void;
 
+    onUndo?: () => void;
+
+    onRedo?: () => void;
+
 }
 
 export function useKeyboardShortcuts({
@@ -31,7 +35,11 @@ export function useKeyboardShortcuts({
 
     onCut,
 
-    onPaste
+    onPaste,
+
+    onUndo,
+
+    onRedo,
 
 }: Props) {
 
@@ -109,6 +117,46 @@ export function useKeyboardShortcuts({
 
             }
 
+            // ======================================
+            // Undo
+            // ======================================
+
+            if (
+
+                event.ctrlKey &&
+
+                !event.shiftKey &&
+
+                event.key.toLowerCase() === "z"
+
+            ) {
+
+                event.preventDefault();
+
+                onUndo?.();
+
+            }
+
+            // ======================================
+            // Redo
+            // ======================================
+
+            if (
+
+                event.ctrlKey &&
+
+                event.shiftKey &&
+
+                event.key.toLowerCase() === "z"
+
+            ) {
+
+                event.preventDefault();
+
+                onRedo?.();
+
+            }
+
         }
 
         window.addEventListener(
@@ -133,7 +181,17 @@ export function useKeyboardShortcuts({
 
         onEscape,
 
-        onDelete
+        onDelete,
+
+        onCopy,
+
+        onCut,
+
+        onPaste,
+
+        onUndo,
+
+        onRedo
 
     ]);
 

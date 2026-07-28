@@ -507,6 +507,26 @@ ESC
 Selection 제거
 ```
 
+### move Flow
+
+```text
+Select
+    ↓
+Selection 생성
+    ↓
+Move Tool 선택
+    ↓
+Drag
+    ↓
+Preview 이동
+    ↓
+Mouse Up
+    ↓
+PatternEngine.moveSelection()
+    ↓
+Pattern 갱신
+```
+
 ---
 
 # ✨ 변경 사항
