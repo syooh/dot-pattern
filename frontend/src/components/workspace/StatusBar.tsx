@@ -85,6 +85,12 @@ export default function StatusBar({
 
             </h3>
 
+            <hr
+                style={{
+                    border: "1px solid #D9D9D9"
+                }}>
+            </hr>
+
             {/* Tool */}
 
             <StatusItem

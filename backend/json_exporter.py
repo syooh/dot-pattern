@@ -2,6 +2,8 @@ import json
 import numpy as np
 
 
+print("✅ json_exporter 실행됨")
+
 def image_to_pattern_json(
         image,
         output_path,
@@ -26,9 +28,21 @@ def image_to_pattern_json(
     # palette 생성
     # =====================
 
-    palette = []
+    palette = [
 
-    color_to_index = {}
+    "#FFFFFF",
+
+    "#000000"
+
+    ]
+
+    color_to_index = {
+
+        (255, 255, 255): 0,
+
+        (0, 0, 0): 1
+
+    }
 
     pixels = []
 
@@ -44,12 +58,12 @@ def image_to_pattern_json(
 
             if color not in color_to_index:
 
-                color_to_index[color] = len(
-                    palette
-                )
+                color_to_index[color] = len(palette)
 
                 palette.append(
+
                     '#%02x%02x%02x' % color
+
                 )
 
             row.append(
@@ -64,7 +78,29 @@ def image_to_pattern_json(
 
     total_pixels = width * height
 
-    colors = []
+    colors = [
+
+        {
+
+            "hex": "#FFFFFF",
+
+            "count": 0,
+
+            "percent": 0
+
+        },
+
+        {
+
+            "hex": "#000000",
+
+            "count": 0,
+
+            "percent": 0
+
+        }
+
+    ]
 
     for color, count in color_data:
 
@@ -77,13 +113,33 @@ def image_to_pattern_json(
             2
         )
 
-        colors.append(
-            {
-                "hex": hex_color,
-                "count": count,
-                "percent": percent
-            }
-        )
+        if hex_color.upper() == "#FFFFFF":
+
+            colors[0]["count"] = count
+
+            colors[0]["percent"] = percent
+
+        elif hex_color.upper() == "#000000":
+
+            colors[1]["count"] = count
+
+            colors[1]["percent"] = percent
+
+        else:
+
+            colors.append(
+
+                {
+
+                    "hex": hex_color,
+
+                    "count": count,
+
+                    "percent": percent
+
+                }
+
+            )
 
     # =====================
     # 최종 데이터

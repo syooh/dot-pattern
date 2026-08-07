@@ -1026,3 +1026,419 @@ export function rotateSelection(
     return nextPattern;
 
 }
+
+// ==================================================
+// Flip Horizontal
+// ==================================================
+
+export function flipHorizontal(
+
+    pattern: PatternData,
+
+    selection: Selection
+
+): PatternData {
+
+    // TODO
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const width =
+
+        right - left + 1;
+
+    const height =
+
+        bottom - top + 1;
+
+    const nextPattern: PatternData = {
+
+        ...pattern,
+
+        pixels: pattern.pixels.map(
+
+            row => [...row]
+
+        )
+
+    };
+
+    const copiedPixels: number[][] = [];
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        const row: number[] = [];
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            row.push(
+
+                pattern.pixels[y][x]
+
+            );
+
+        }
+
+        copiedPixels.push(row);
+
+    }
+
+    const flippedPixels: number[][] = [];
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        flippedPixels.push(
+
+            new Array(width)
+
+        );
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < width;
+
+            x++
+
+        ) {
+
+            flippedPixels[y][width - 1 - x] =
+
+                copiedPixels[y][x];
+
+        }
+
+    }
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[y][x] = 0;
+
+        }
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < width;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[top + y][left + x] =
+
+                flippedPixels[y][x];
+
+        }
+
+    }
+
+    return nextPattern;
+
+}
+
+// ==================================================
+// Flip Vertical
+// ==================================================
+
+export function flipVertical(
+
+    pattern: PatternData,
+
+    selection: Selection
+
+): PatternData {
+
+    const left = Math.min(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const right = Math.max(
+
+        selection.startX,
+
+        selection.endX
+
+    );
+
+    const top = Math.min(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const bottom = Math.max(
+
+        selection.startY,
+
+        selection.endY
+
+    );
+
+    const width =
+
+        right - left + 1;
+
+    const height =
+
+        bottom - top + 1;
+
+    const nextPattern: PatternData = {
+
+        ...pattern,
+
+        pixels: pattern.pixels.map(
+
+            row => [...row]
+
+        )
+
+    };
+
+    const copiedPixels: number[][] = [];
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        const row: number[] = [];
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            row.push(
+
+                pattern.pixels[y][x]
+
+            );
+
+        }
+
+        copiedPixels.push(row);
+
+        
+
+    }
+
+    const flippedPixels: number[][] = [];
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        flippedPixels.push(
+
+            new Array(width)
+
+        );
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < width;
+
+            x++
+
+        ) {
+
+            flippedPixels[height - 1 - y][x] =
+
+                copiedPixels[y][x];
+
+        }
+
+    }
+
+    for (
+
+        let y = top;
+
+        y <= bottom;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = left;
+
+            x <= right;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[y][x] = 0;
+
+        }
+
+    }
+
+    for (
+
+        let y = 0;
+
+        y < height;
+
+        y++
+
+    ) {
+
+        for (
+
+            let x = 0;
+
+            x < width;
+
+            x++
+
+        ) {
+
+            nextPattern.pixels[top + y][left + x] =
+
+                flippedPixels[y][x];
+
+        }
+
+    }
+
+    return nextPattern;
+
+}

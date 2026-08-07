@@ -12,10 +12,13 @@
 
 import { useEffect, useState } from "react";
 import type { Selection } from "../types/Selection";
-import { paintPixel, fillSelection } from "../engine/PatternEngine";
+import { fillSelection } from "../engine/PatternEngine";
 import { useKeyboardShortcuts } from "../components/canvas/hooks/useKeyBoardShortcuts";
+import { generatePattern } from "../api/patternApi";
+import { exportPatternAsPNG } from "../utils/exportPng";
 
 import NewPatternDialog from "../components/dialog/NewPatternDialog";
+import PatternPanel from "../components/panel/PatternPanel";
 import Toolbar from "../components/toolbar/Toolbar";
 import Workspace from "../components/workspace/Workspace";
 import EditorLayout from "../components/layout/EditorLayout";
@@ -24,6 +27,8 @@ import StatusBar from "../components/workspace/StatusBar";
 import usePattern from "../hooks/usePattern";
 import LeftPanel from "../components/layout/LeftPanel";
 import useCamera from "../hooks/useCamera";
+import ImportImagePanel from "../components/panel/ImportImagePanel";
+
 
 export default function PatternEditor() {
 
@@ -78,6 +83,10 @@ export default function PatternEditor() {
         moveCurrentSelection,
 
         rotateCurrentSelection,
+
+        flipCurrentSelection,
+
+        flipCurrentSelectionVertical,
 
     } = usePattern();
 
@@ -528,6 +537,78 @@ export default function PatternEditor() {
 
     }
 
+    function handleFlipHorizontal() {
+
+        if (!selection) {
+
+            return;
+
+        }
+
+        flipCurrentSelection(selection);
+
+    }
+
+    function handleFlipVertical() {
+
+        if (!selection) {
+
+            return;
+
+        }
+
+        flipCurrentSelectionVertical(selection);
+
+    }
+
+    async function handleImportImage(
+
+        file: File,
+
+        width: number,
+
+        height: number | null,
+
+        colors: number
+
+    ) {
+
+        try {
+
+            const newPattern = await generatePattern(
+
+                file,
+
+                width,
+
+                height,
+
+                colors
+
+            );
+
+            setPattern(newPattern);
+
+        }
+
+        catch (err) {
+
+            console.error(err);
+
+            alert("도안 생성에 실패했습니다.");
+
+        }
+
+    }
+
+    const handleExportPNG = () => {
+
+        if (!pattern) return;
+
+        exportPatternAsPNG(pattern);
+
+    };
+
     return (
 
         <div
@@ -556,7 +637,7 @@ export default function PatternEditor() {
             {/* 새 도안 생성 */}
             {/* -------------------------------- */}
 
-            {
+            {/* {
 
                 !pattern && (
 
@@ -568,17 +649,11 @@ export default function PatternEditor() {
 
                 )
 
-            }
+            } */}
 
             {/* -------------------------------- */}
             {/* 도안이 생성된 이후 */}
             {/* -------------------------------- */}
-
-            {
-
-                pattern && (
-
-                    <>
 
                         {/* ========================= */}
                         {/* Toolbar */}
@@ -589,6 +664,8 @@ export default function PatternEditor() {
                             onNew={handleNewPattern}
 
                             onSave={handleSavePattern}
+
+                            onExportPNG={handleExportPNG}
 
                             onOpen={handleOpenPattern}
 
@@ -601,6 +678,10 @@ export default function PatternEditor() {
                             canRedo={canRedo}
 
                             onRotate={handleRotateSelection}
+
+                            onFlipHorizontal={handleFlipHorizontal}
+
+                            onFlipVertical={handleFlipVertical}
 
                             selectedTool={selectedTool}
 
@@ -629,35 +710,51 @@ export default function PatternEditor() {
                         <EditorLayout
 
                             leftPanel={
-                                
+
                                 <LeftPanel
+
+                                    pattern={
+                                        <PatternPanel
+                                            onCreate={createPattern}
+                                        />
+                                    }
+
+                                    imageImport={
+                                        <ImportImagePanel
+                                            onImport={handleImportImage}
+                                        />
+                                    }
 
                                     palette={
 
-                                        <PalettePanel
+                                        <>
 
-                                            pattern={pattern}
+                                            <PalettePanel
 
-                                            selectedColor={selectedColor}
+                                                pattern={pattern}
 
-                                            onSelectColor={setSelectedColor}
+                                                selectedColor={selectedColor}
 
-                                            onAddColor={(hex) => {
+                                                onSelectColor={setSelectedColor}
 
-                                                const newId = addColor(hex);
+                                                onAddColor={(hex) => {
 
-                                                if (newId !== undefined) {
+                                                    const newId = addColor(hex);
 
-                                                    setSelectedColor(newId);
+                                                    if (newId !== undefined) {
 
-                                                }
+                                                        setSelectedColor(newId);
 
-                                            }}
+                                                    }
 
-                                            onRemoveColor={removeColor}
+                                                }}
 
-                                        />
-                                        
+                                                onRemoveColor={removeColor}
+
+                                            />
+
+                                        </>
+
                                     }
 
                                     statusBar={
@@ -723,12 +820,6 @@ export default function PatternEditor() {
                             }
 
                         />
-
-                    </>
-
-                )
-
-            }
 
         </div>
 

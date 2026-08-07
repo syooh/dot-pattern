@@ -18,6 +18,8 @@ import uuid
 import os
 import shutil
 
+from generator import generate_pattern
+
 
 # ======================
 # 설정
@@ -32,53 +34,35 @@ COLORS = 8
 
 CELL_SIZE = 15
 
-
 # ======================
 # 이미지 불러오기
 # ======================
 
 img = Image.open(IMAGE_PATH)
 
-WIDTH, HEIGHT = calculate_size(
-    img.width,
-    img.height,
+result = generate_pattern(
+
+    image=img,
+
     target_width=TARGET_WIDTH,
-    target_height=TARGET_HEIGHT
+
+    target_height=TARGET_HEIGHT,
+
+    colors=COLORS,
+
+    cell_size=CELL_SIZE
+
 )
 
-print(
-    f"원본 크기 : {img.width} x {img.height}"
-)
+img = result["image"]
 
-print(
-    f"변환 크기 : {WIDTH} x {HEIGHT}"
-)
+pattern = result["preview"]
 
-# ======================
-# 크기 조절
-# ======================
+color_data = result["palette"]
 
-img = img.resize(
-    (WIDTH, HEIGHT),
-    Image.Resampling.NEAREST
-)
+WIDTH = result["width"]
 
-
-# ======================
-# 색상 압축
-# ======================
-
-img = quantize_colors_kmeans(
-    img,
-    COLORS
-)
-
-
-# ======================
-# 색상표 계산
-# ======================
-
-color_data = count_colors(img)
+HEIGHT = result["height"]
 
 total_pixels = WIDTH * HEIGHT
 
@@ -89,24 +73,18 @@ for color, count in color_data:
     hex_color = '#%02x%02x%02x' % color
 
     percent = round(
+
         (count / total_pixels) * 100,
+
         2
+
     )
 
     print(
+
         f"{hex_color} | {count}칸 | {percent}%"
+
     )
-
-
-# ======================
-# 도안 생성
-# ======================
-
-pattern = create_grid_pattern(
-    img,
-    cell_size=CELL_SIZE
-)
-
 
 # ======================
 # 파일명 생성

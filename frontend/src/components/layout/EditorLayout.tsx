@@ -60,15 +60,11 @@ export default function EditorLayout({
             </aside>
 
             <main
-
                 style={{
-
                     flex: 1,
-
-                    minWidth: 0
-
+                    minWidth: 0,
+                    width: "100%"
                 }}
-
             >
 
                 {workspace}

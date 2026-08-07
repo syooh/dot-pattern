@@ -33,7 +33,9 @@ def calculate_size(
 
     if (
         target_width is not None
+        and target_width > 0
         and target_height is not None
+        and target_height > 0
     ):
         return (
             target_width,
@@ -42,7 +44,7 @@ def calculate_size(
 
     # 가로 기준
 
-    if target_width is not None:
+    if target_width is not None and target_width > 0:
 
         ratio = (
             original_height /
@@ -60,7 +62,7 @@ def calculate_size(
 
     # 세로 기준
 
-    if target_height is not None:
+    if target_height is not None and target_height > 0:
 
         ratio = (
             original_width /

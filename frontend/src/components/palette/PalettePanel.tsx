@@ -7,6 +7,7 @@
 import type { PatternData } from "../../types/Pattern";
 
 import ColorPalette from "./ColorPalette";
+import PanelCard from "../common/PanelCard";
 
 interface Props {
 
@@ -38,37 +39,7 @@ export default function PalettePanel({
 
     return (
 
-        <div
-
-            style={{
-
-                background: "#FFFFFF",
-
-                border: "1px solid #D8D8D8",
-
-                borderRadius: 8,
-
-                padding: 16
-
-            }}
-
-        >
-
-            <h3
-
-                style={{
-
-                    marginTop: 0,
-
-                    marginBottom: 16
-
-                }}
-
-            >
-
-                🎨 Palette
-
-            </h3>
+        <PanelCard title="🎨 palette">
 
             <ColorPalette
 
@@ -84,7 +55,7 @@ export default function PalettePanel({
 
             />
 
-        </div>
+        </PanelCard>
 
     );
 

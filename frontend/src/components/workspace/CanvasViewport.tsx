@@ -126,28 +126,23 @@ export default function CanvasViewport({
     return (
 
         <div
-
             style={{
 
                 marginTop: 25,
+
+                width: "100%",
 
                 display: "flex",
 
                 justifyContent: "center"
 
             }}
-
         >
 
             <div
-
                 style={{
 
-                    maxWidth: "100%",
-
-                    maxHeight: "70vh",
-
-                    overflow: "auto",
+                    width: "100%",
 
                     padding: 20,
 
@@ -155,10 +150,17 @@ export default function CanvasViewport({
 
                     border: "1px solid #CCCCCC",
 
-                    borderRadius: 10
+                    borderRadius: 10,
+
+                    display: "flex",
+
+                    justifyContent: "center",
+
+                    alignItems: "flex-start",
+
+                    boxSizing: "border-box"
 
                 }}
-
             >
 
                 <CanvasContainer

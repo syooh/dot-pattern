@@ -23,7 +23,11 @@ interface Props {
 
     onSave?: () => void;
 
+    onExportPNG?: () => void;
+
     onOpen?: () => void;
+
+    onImportImage?: () => void;
 
     onUndo?: () => void;
 
@@ -64,6 +68,8 @@ export default function Toolbar({
     onSave,
 
     onOpen,
+
+    onExportPNG,
 
     onUndo,
 
@@ -146,6 +152,16 @@ export default function Toolbar({
                     label="Save"
 
                     onClick={onSave}
+
+                />
+
+                <ToolbarButton
+
+                    icon="🖼️"
+
+                    label="Image"
+
+                    onClick={onExportPNG}
 
                 />
 

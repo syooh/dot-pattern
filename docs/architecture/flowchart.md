@@ -8,33 +8,50 @@
 
 ```text
 PatternEditor
-      │
-      ▼
-Toolbar
-      │
-      ▼
+│
+├───────────────┬──────────────────────────────┐
+│               │                              │
+▼               ▼                              ▼
+Toolbar     usePattern               useKeyboardShortcuts
+│               │                              │
+│               ├── Paint                     ├── ESC
+│               ├── Erase                     ├── Delete
+│               ├── Fill                      ├── Ctrl + C
+│               ├── MoveSelection             ├── Ctrl + X
+│               ├── RotateSelection           ├── Ctrl + V
+│               ├── History                   ├── Ctrl + Z
+│               └── Clipboard                 └── Ctrl + Shift + Z
+│
+▼
 EditorLayout
-      │
-      ├───────────────┬──────────────────────┐
-      │               │                      │
-      │               │                      │
- LeftPanel      Workspace              StatusBar(예정)
-      │               │
-      ▼               ▼
+│
+├───────────────┬──────────────────────────────┐
+│               │                              │
+▼               ▼                              ▼
+LeftPanel   Workspace                   StatusBar(예정)
+│               │
+▼               ▼
 PalettePanel   CanvasViewport
-                      │
-                      ▼
-              CanvasContainer
-              ┌────────┴────────┐
-              ▼                 ▼
-     CanvasHeader       PatternCanvas
-                               │
-                               ▼
+                    │
+                    ▼
+            CanvasContainer
+            ┌────────┴────────┐
+            ▼                 ▼
+    CanvasHeader       PatternCanvas
+                              │
+                              ▼
+                      useCanvasEvents
+                              │
+            ┌─────────────────┼─────────────────┐
+            ▼                 ▼                 ▼
+     Paint Events      Selection Events     Hover State
+                              │
+                              ▼
                        CanvasRenderer
-                               │
-      ┌────────────┬────────────┬────────────┬────────────┐
-      ▼            ▼            ▼            ▼
- Background   PixelLayer    GridLayer   HoverLayer
+                              │
+      ┌──────────┬──────────┬──────────┬────────────┬────────────────┬──────────────────┐
+      ▼          ▼          ▼          ▼            ▼                ▼
+ Background  PixelLayer  GridLayer  HoverLayer  SelectionLayer  PastePreviewLayer
 ```
 
 ---
@@ -176,13 +193,17 @@ GridLayer
       │
       ▼
 HoverLayer
+      │
+      ▼
+SelectionLayer
+      │
+      ▼
+PastePreviewLayer
 ```
 
 ### 향후 추가 예정
 
 ```text
-SelectionLayer
-      │
 GuideLayer
       │
 OverlayLayer
@@ -207,10 +228,16 @@ PatternEditor
 usePattern
       │
       ▼
+saveHistory()
+      │
+      ▼
 PatternEngine
       │
       ▼
-PatternData 생성
+새 PatternData 생성
+      │
+      ▼
+setPattern()
       │
       ▼
 React State 업데이트
@@ -405,16 +432,94 @@ Header Highlight
 Selection Tool
       │
       ▼
-Drag
+Mouse Down
       │
       ▼
-Selection 영역 계산
+Selection 생성
+      │
+      ▼
+Mouse Drag
+      │
+      ▼
+Selection Update
       │
       ▼
 SelectionLayer
       │
       ▼
 Canvas Render
+      │
+      ▼
+ESC
+      │
+      ▼
+Selection 제거
+```
+
+### Copy/Cut/Paste Flow
+
+```text
+Copy / Cut
+
+      │
+
+      ▼
+
+Selection 확인
+
+      │
+
+      ▼
+
+Clipboard 생성
+
+      │
+
+      ▼
+
+ClipboardData 저장
+
+      │
+
+      ▼
+
+Ctrl + V
+
+      │
+
+      ▼
+
+Paste Preview 생성
+
+      │
+
+      ▼
+
+Mouse Move
+
+      │
+
+      ▼
+
+Preview 이동
+
+      │
+
+      ▼
+
+Mouse Click
+
+      │
+
+      ▼
+
+PatternEngine
+
+      │
+
+      ▼
+
+Pattern 갱신
 ```
 
 ---
@@ -451,19 +556,19 @@ handleDeleteSelection()
 
 ↓
 
+saveHistory()
+
+↓
+
 fillSelection()
 
 ↓
 
-clonePattern()
+PatternEngine
 
 ↓
 
-Selection 반복
-
-↓
-
-pixels[][] 수정
+PatternData 수정
 
 ↓
 
@@ -473,6 +578,7 @@ setPattern()
 
 Canvas Render
 ```
+
 ## Selection Flow
 
 ```text
@@ -525,6 +631,40 @@ Mouse Up
 PatternEngine.moveSelection()
     ↓
 Pattern 갱신
+```
+
+### Rotate Flow
+
+```text
+Rotate
+
+    ↓
+
+Selection 확인
+
+    ↓
+
+saveHistory()
+
+    ↓
+
+PatternEngine.rotateSelection()
+
+    ↓
+
+Selection 크기 갱신
+
+    ↓
+
+offset 초기화
+
+    ↓
+
+Pattern 갱신
+
+    ↓
+
+Canvas Render
 ```
 
 ---
@@ -580,4 +720,17 @@ AddColorPanel
 - Zoom / Pan 구조 설계
 - Save / Open Flow 추가
 - StatusBar Flow 추가
+
+# 📅 최근 변경 사항 (2026-07-28)
+
+- Undo / Redo 구현
+- Clipboard 시스템 추가
+- Copy / Cut / Paste 구현
+- Paste Preview Layer 추가
+- Move Tool 구현
+- Rotate Engine 구현
+- Rotate Toolbar 추가
+- Rotate UX 개선
+- Selection 자동 갱신
+- Selection Offset 초기화
 ```

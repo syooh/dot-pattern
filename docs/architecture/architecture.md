@@ -27,6 +27,7 @@ PatternEditor
 │                                          ├── Erase
 │                                          ├── Fill
 │                                          ├── MoveSelection
+│                                          ├── RotateSelection
 │                                          ├── History
 │                                          └── Clipboard
 │
@@ -39,8 +40,8 @@ PatternEditor
 │                                              ├── Ctrl + C
 │                                              ├── Ctrl + X
 │                                              ├── Ctrl + V
-│                                              ├── Ctrl + Z (예정)
-│                                              └── Ctrl + Shift + Z (예정)
+│                                              ├── Ctrl + Z
+│                                              └── Ctrl + Shift + Z
 │
 ▼
 Workspace
@@ -66,6 +67,7 @@ usePaintEvents  useSelectionEvents     Hover State
                 ├── startSelection()
                 ├── updateSelection()
                 ├── moveSelection()
+                ├── rotateSelection()
                 ├── clearSelection()
                 └── Paste Preview
 │
@@ -83,6 +85,17 @@ CanvasRenderer
 │
 ▼
 Canvas 출력
+
+───────────────────────────────────────────────────────────────
+
+PatternEngine
+│
+├── Paint Engine
+├── Fill Engine
+├── Move Engine
+└── Rotate Engine
+    │
+    └── rotateSelection()
 ```
 
 ---
@@ -146,6 +159,50 @@ CanvasRenderer
 ├── SelectionLayer
 ├── GuideLayer
 └── OverlayLayer
+```
+
+---
+
+# 🌐 Backend Architecture
+
+```text
+ImportImagePanel
+
+        │
+
+        ▼
+
+FastAPI (/generate)
+
+        │
+
+        ▼
+
+Pillow
+
+        │
+
+        ▼
+
+KMeans Color Quantizer
+
+        │
+
+        ▼
+
+Pattern Generator
+
+        │
+
+        ▼
+
+PatternData(JSON)
+
+        │
+
+        ▼
+
+React PatternEditor
 ```
 
 ---
@@ -273,6 +330,86 @@ Canvas 출력
 
 ---
 
+# 🖼 PNG Export
+
+```text
+Toolbar
+
+↓
+
+Export PNG
+
+↓
+
+PatternData
+
+↓
+
+Canvas 생성
+
+↓
+
+Grid 출력
+
+↓
+
+5칸 Grid 출력
+
+↓
+
+PNG Download
+```
+
+---
+
+# 💾 JSON Save
+
+```text
+Toolbar
+
+↓
+
+Save
+
+↓
+
+PatternData
+
+↓
+
+JSON
+
+↓
+
+Download
+```
+
+---
+
+# 📂 JSON Open
+
+```text
+Toolbar
+
+↓
+
+Open
+
+↓
+
+JSON
+
+↓
+
+PatternData
+
+↓
+
+Canvas 출력
+```
+
+---
+
 # 🛠 Tool 동작 구조
 
 Toolbar에서 선택한 기능은 PatternEngine을 통해 Canvas에 반영됩니다.
@@ -360,8 +497,23 @@ Editor의 전체 레이아웃을 담당합니다.
 
 ### 역할
 
-- PalettePanel 출력
-- StatusBar 출력(예정)
+- PatternPanel
+- ImportImagePanel
+- PalettePanel
+- StatusBar
+
+---
+
+## PatternPanel
+
+도안 생성 및 초기화를 담당하는 컴포넌트입니다.
+
+### 역할
+
+- Width 입력
+- Height 입력
+- 빈 도안 생성
+- 새 도안 초기화
 
 ---
 

@@ -466,3 +466,391 @@ Canvas 렌더링 구조를 Layer 기반으로 개편했습니다.
 * Vertical Selection
 * Rectangle Selection
 * Selection 유지
+
+
+
+## v0.4.0 (2026-07-28 ~ 2026-08-02)
+
+### ✨ Added
+
+#### Frontend
+
+- Fill Tool 구현
+- Selection 복사/붙여넣기
+- Selection 삭제
+- Selection 이동
+- Selection 90도 회전
+- Selection 좌우 반전
+- Selection 상하 반전
+- Toolbar 개선
+- Palette 기능 개선
+- Image Import UI 추가
+- FastAPI 연동
+- PNG Export 기능 추가(진행 중)
+- Grid Export 기능 추가(진행 중)
+
+#### Backend
+
+- FastAPI API (/generate) 구현
+- 이미지 업로드 기능
+- K-Means 기반 도트 도안 생성
+- PatternData JSON 생성
+- 이미지 비율 자동 계산 개선
+- Width / Height 예외 처리 추가
+- JSON Export 구조 개선
+
+### ♻ Changed
+
+- PatternEditor 구조 개선
+- Toolbar 이벤트 구조 개선
+- PatternData 구조 정리
+- Palette 관리 방식 개선
+- Import UI 개선
+
+
+
+# CHANGELOG
+
+이 프로젝트의 모든 변경 사항을 기록합니다.
+
+---
+
+# v0.2.0 (2026-08-02 ~ 2026-08-05)
+
+## 🎉 주요 업데이트
+
+Dot Pattern Editor의 기본 기능 구현 완료
+
+- 이미지 → 도안 변환
+- 도안 편집
+- Palette 관리
+- JSON 저장 / 불러오기
+- PNG 저장
+- FastAPI 연동
+- React UI 개선
+
+---
+
+# ✨ Added
+
+## Pattern
+
+- PatternData 구조 정의
+- 빈 도안 생성 기능
+- Pattern 생성 기능
+- PatternPanel 컴포넌트 추가
+- 좌측 패널에서 도안 생성 가능
+- Pattern 초기화(clearPattern) 기능
+
+---
+
+## Image Import
+
+- 이미지 업로드 기능
+- Width 지정
+- Height 지정
+- Color Count 지정
+- FastAPI 연동
+- React ↔ Backend 통신
+- PatternData 자동 생성
+- ImportImagePanel 컴포넌트 추가
+
+---
+
+## Drawing Tool
+
+- Brush Tool
+- Eraser Tool
+- Fill Tool
+- Select Tool
+- Move Tool
+
+---
+
+## Editing
+
+- Undo
+- Redo
+- Selection 이동
+- Selection 회전
+- Selection 좌우 반전
+- Selection 상하 반전
+
+---
+
+## Canvas
+
+- Hover Cell 표시
+- Grid 표시
+- Grid ON/OFF
+- Zoom In
+- Zoom Out
+- Camera 구조 적용
+- Canvas Header 추가
+- Row Header
+- Column Header
+
+---
+
+## Palette
+
+- Palette 출력
+- 색상 선택
+- 색상 추가
+- 색상 삭제
+- AddColorPanel 추가
+- 자동 색상 선택
+
+---
+
+## Export
+
+- JSON 저장
+- JSON 불러오기
+- PNG 저장
+- PNG 다운로드
+- Grid 포함 PNG 저장
+- 5칸마다 굵은 Grid 저장
+
+---
+
+## Backend
+
+- FastAPI 구축
+- /generate API 구현
+- UploadFile 처리
+- 이미지 업로드
+- Width 전달
+- Height 전달
+- Color Count 전달
+- PatternData 반환
+- Pillow 이미지 처리
+- K-Means 색상 압축
+
+---
+
+## Layout
+
+- EditorLayout 생성
+- Workspace 생성
+- CanvasViewport 생성
+- CanvasContainer 생성
+- LeftPanel 생성
+- Toolbar 생성
+- StatusBar 생성
+
+---
+
+# 🔨 Changed
+
+## Pattern 생성
+
+- NewPatternDialog 제거
+- Pattern 생성 위치 변경
+- PatternPanel로 기능 이동
+- createPattern 구조 변경
+- clearPattern 구조 변경
+
+---
+
+## Left Panel
+
+- Pattern Panel 추가
+- Image Import Panel 추가
+- Palette Panel 추가
+- StatusBar 추가
+- Panel 순서 변경
+
+기존
+
+Pattern 생성 Dialog
+
+↓
+
+변경
+
+Pattern Panel
+Image Import
+Palette
+StatusBar
+
+---
+
+## Image Import UI
+
+- PanelCard 제거
+- Pattern Panel과 동일한 스타일 적용
+- 입력창 스타일 통일
+- 버튼 스타일 통일
+- 여백 감소
+- Panel 크기 축소
+
+---
+
+## Palette UI
+
+- Compact UI 적용
+- 여백 감소
+- Palette 높이 감소
+- Add Button 위치 조정
+- Delete Button 개선
+
+---
+
+## Toolbar
+
+- PNG 저장 버튼 추가
+- Tool 선택 방식 개선
+- Grid 토글 버튼 추가
+- Zoom 버튼 추가
+
+---
+
+## PNG Export
+
+- Canvas 저장 방식 개선
+- Grid 저장
+- 5칸마다 굵은 Grid 저장
+- 화면과 동일한 결과 저장
+
+---
+
+## Grid
+
+- 일반 Grid 출력
+- 5칸마다 굵은 선 출력
+- PNG Export와 동일한 Grid 적용
+
+---
+
+## Workspace
+
+- Layout 구조 검토
+- Workspace 구조 개선 시작
+- CanvasViewport 리팩터링 준비
+
+---
+
+# ♻ Refactored
+
+## Component
+
+- LeftPanel 분리
+- Workspace 분리
+- CanvasViewport 분리
+- CanvasContainer 분리
+- PatternPanel 추가
+- ImportImagePanel 분리
+
+---
+
+## Pattern
+
+- Pattern 생성 로직 정리
+- Pattern 상태 관리 정리
+- Pattern 초기화 로직 정리
+
+---
+
+## Palette
+
+- Palette 구조 개선
+- Color 선택 구조 개선
+- AddColor 구조 개선
+
+---
+
+## Backend
+
+- API 구조 정리
+- PatternData 반환 구조 개선
+- Import 로직 정리
+
+---
+
+## Export
+
+- PNG Export 함수 분리
+- Toolbar와 Export 연결
+- 저장 구조 개선
+
+---
+
+# 🐞 Fixed
+
+## Pattern
+
+- Pattern 생성 오류 수정
+- Pattern 상태 초기화 오류 수정
+
+---
+
+## PNG
+
+- exportPatternAsPNG import 오류 수정
+- 저장 버튼 연결 오류 수정
+- Grid 저장 오류 수정
+
+---
+
+## Image Import
+
+- Import 버튼 스타일 수정
+- Panel 중복 출력 수정
+- Image Import 중복 Panel 제거
+
+---
+
+## Palette
+
+- Palette 여백 수정
+- Panel 높이 수정
+- 색상 선택 오류 수정
+
+---
+
+## Layout
+
+- LeftPanel Props 수정
+- Pattern Panel 연결 오류 수정
+- Workspace 연결 오류 수정
+
+---
+
+# 📄 Documentation
+
+- README 작성
+- DEVLOG 작성
+- CHANGELOG 작성
+
+---
+
+# 🚧 진행 예정 (v0.3.0)
+
+## UI
+
+- Workspace 전체 리팩터링
+- CanvasViewport 구조 개선
+- 반응형 UI
+- 단축키
+- Panel 접기
+- 우클릭 메뉴
+
+---
+
+## Backend
+
+- Django 연동
+- MySQL 연동
+- 사용자 계정
+- 프로젝트 저장
+
+---
+
+## Pattern
+
+- DMC 실번호 지원
+- Anchor 실번호 지원
+- Symbol 자동 생성
+- PDF Export
+- Print Layout

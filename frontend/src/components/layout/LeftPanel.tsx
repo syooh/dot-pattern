@@ -10,6 +10,10 @@
 
 interface Props {
 
+    pattern: React.ReactNode;
+
+    imageImport: React.ReactNode;
+
     palette: React.ReactNode;
 
     statusBar: React.ReactNode;
@@ -17,6 +21,10 @@ interface Props {
 }
 
 export default function LeftPanel({
+
+    pattern,
+
+    imageImport,
 
     palette,
 
@@ -36,13 +44,17 @@ export default function LeftPanel({
 
                 flexDirection: "column",
 
-                gap: 16,
+                gap: 10,
 
                 flexShrink: 0
 
             }}
 
         >
+
+            {pattern}
+
+            {imageImport}
 
             {palette}
 

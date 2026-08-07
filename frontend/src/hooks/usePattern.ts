@@ -51,7 +51,11 @@ import {
 
     moveSelection,
 
-    rotateSelection
+    rotateSelection,
+
+    flipHorizontal,
+
+    flipVertical
 
 } from "../engine/PatternEngine";
 
@@ -108,11 +112,26 @@ export default function usePattern() {
      * 현재 작업 중인 도안
      */
     const [pattern, setPattern] =
-        useState<PatternData | null>(null);
+        useState<PatternData>(
+            createEmptyPattern(40, 40)
+        );
 
     function clearPattern() {
 
-        setPattern(null);
+        setPattern(
+
+            createEmptyPattern(
+
+                pattern.width,
+
+                pattern.height
+
+            )
+
+        );
+
+        setHistory([]);
+        setFuture([]);
 
     }
 
@@ -631,6 +650,70 @@ export default function usePattern() {
     }
 
     // ==================================================
+    // Flip Horizontal
+    // ==================================================
+
+    const flipCurrentSelection = (
+
+        selection: Selection
+
+    ) => {
+
+        if (!pattern) {
+
+            return;
+
+        }
+
+        saveHistory(pattern);
+
+        const nextPattern =
+
+            flipHorizontal(
+
+                pattern,
+
+                selection
+
+            );
+
+        setPattern(nextPattern);
+
+    };
+
+    // ==================================================
+    // Flip Vertical
+    // ==================================================
+
+    const flipCurrentSelectionVertical = (
+
+        selection: Selection
+
+    ) => {
+
+        if (!pattern) {
+
+            return;
+
+        }
+
+        saveHistory(pattern);
+
+        const nextPattern =
+
+            flipVertical(
+
+                pattern,
+
+                selection
+
+            );
+
+        setPattern(nextPattern);
+
+    };
+
+    // ==================================================
     // 외부에서 사용하는 값
     // ==================================================
 
@@ -697,6 +780,10 @@ export default function usePattern() {
         moveCurrentSelection,
 
         rotateCurrentSelection,
+
+        flipCurrentSelection,
+
+        flipCurrentSelectionVertical
 
     };
 
