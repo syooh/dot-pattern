@@ -1,828 +1,375 @@
-# 🏗 Architecture
+# 🏗 Dot Pattern Editor Architecture
 
-프로젝트의 전체 구조와 컴포넌트 역할, 데이터 흐름을 정리한 문서입니다.
+## 1. 전체 구조
+
+현재 프로젝트는 **React Frontend + FastAPI Backend** 구조입니다.
+
+```text
+                    Browser
+                       │
+                       ▼
+              React / TypeScript
+                       │
+              ┌────────┴────────┐
+              │                 │
+              ▼                 ▼
+        PatternEditor       patternApi
+              │                 │
+              ▼                 │ HTTP POST
+        EditorLayout            │
+        ┌──────┴──────┐         ▼
+        │             │     FastAPI
+   LeftPanel       Workspace    │
+        │             │         ▼
+ Pattern/Palette   Canvas     Generator
+ Import/Status       │         │
+                     ▼         ▼
+              CanvasRenderer  Pillow
+                     │       K-Means
+                     ▼
+                 Canvas
+```
 
 ---
 
-# 📂 프로젝트 구조
+## 2. Frontend 계층
+
+### Page
+
+`PatternEditor`
+
+애플리케이션의 편집 화면을 조합합니다.
+
+담당:
+
+- Pattern 상태 연결
+- Edit/View Mode 상태
+- 현재 작업 행
+- Camera
+- Selection
+- Clipboard
+- Toolbar 이벤트
+- Workspace 이벤트
+- 저장/불러오기
+- 이미지 Import
+
+### Components
+
+화면 UI를 담당합니다.
 
 ```text
-CameraState
-│
-├── zoom
-├── offsetX
-└── offsetY
-      │
-      ▼
- useCamera()
-      │
-      ▼
-PatternEditor
-│
-├──────────────────────────────────────────────────────────────┐
-│                                                              │
-│                                                      usePattern
-│                                                              │
-│                                          ├── Paint
-│                                          ├── Erase
-│                                          ├── Fill
-│                                          ├── MoveSelection
-│                                          ├── RotateSelection
-│                                          ├── History
-│                                          └── Clipboard
-│
-├──────────────────────────────────────────────────────────────┐
-│                                                              │
-│                                              useKeyboardShortcuts
-│                                                              │
-│                                              ├── ESC
-│                                              ├── Delete
-│                                              ├── Ctrl + C
-│                                              ├── Ctrl + X
-│                                              ├── Ctrl + V
-│                                              ├── Ctrl + Z
-│                                              └── Ctrl + Shift + Z
-│
-▼
-Workspace
-│
-▼
-CanvasViewport
-│
-▼
-CanvasContainer
-│
-▼
+components/
+├── canvas/
+├── common/
+├── dialog/
+├── layout/
+├── palette/
+├── panel/
+├── toolbar/
+└── workspace/
+```
+
+### Hooks
+
+React 상태 및 사용자 입력을 관리합니다.
+
+```text
+hooks/
+├── usePattern
+└── useCamera
+```
+
+Canvas 관련 키보드 입력은:
+
+```text
+components/canvas/hooks/useKeyBoardShortcuts.ts
+```
+
+에서 처리합니다.
+
+### Engine
+
+`PatternEngine.ts`
+
+도안 데이터를 수정하는 순수 로직 계층입니다.
+
+주요 기능:
+
+- clonePattern
+- paintPixel
+- erasePixel
+- floodFill
+- removeColor
+- fillSelection
+- copySelectionData
+- pasteClipboard
+- 선택 영역 이동/변환 관련 로직
+
+원칙:
+
+```text
+Canvas → PatternEngine
+```
+
+Canvas가 직접 PatternData를 수정하지 않습니다.
+
+---
+
+## 3. Canvas Rendering Architecture
+
+```text
 PatternCanvas
-│
-├──────────────────────────────────────────────────────────────┐
-│                                                              │
-│                      useCanvasEvents                         │
-│                                                              │
-├───────────────┬──────────────────────┬───────────────────────┐
-│               │                      │
-▼               ▼                      ▼
-usePaintEvents  useSelectionEvents     Hover State
-                │
-                ├── startSelection()
-                ├── updateSelection()
-                ├── moveSelection()
-                ├── rotateSelection()
-                ├── clearSelection()
-                └── Paste Preview
-│
-▼
-CanvasRenderer
-│
-├──────────────────────────────────────────────────────────────┐
-│
-├── BackgroundLayer
-├── PixelLayer
-├── GridLayer
-├── HoverLayer
-├── SelectionLayer
-└── PastePreviewLayer
-│
-▼
-Canvas 출력
+      │
+      ├── useCanvasEvents
+      │
+      └── renderCanvas()
+               │
+               ▼
+        CanvasRenderer
+               │
+               ├── Background
+               ├── Pixels
+               ├── Grid
+               ├── Current Row
+               ├── Hover
+               ├── Selection
+               └── Paste Preview
+```
 
-───────────────────────────────────────────────────────────────
+`CanvasRenderState`는 Renderer에 필요한 상태를 전달합니다.
 
-PatternEngine
-│
-├── Paint Engine
-├── Fill Engine
-├── Move Engine
-└── Rotate Engine
+핵심 상태:
+
+```text
+pattern
+camera
+mode
+currentRow
+hoverCell
+selection
+showGrid
+clipboard
+pastePreview
+```
+
+### Current Row
+
+`mode === "view"`일 때만 `CurrentRowLayer`를 렌더링합니다.
+
+현재 작업 행은:
+
+```text
+pattern.height - y
+```
+
+방식으로 도안의 아래쪽을 1행으로 취급합니다.
+
+---
+
+## 4. Edit Mode / View Mode
+
+### Edit Mode
+
+```text
+Toolbar
+ ├── Brush
+ ├── Eraser
+ ├── Fill
+ ├── Select
+ ├── Move
+ ├── Undo / Redo
+ └── Rotate / Flip
+```
+
+Canvas 입력:
+
+```text
+MouseDown
+ → Tool 판별
+ → PatternEngine 호출
+ → PatternData 변경
+ → Canvas 재렌더링
+```
+
+### View Mode
+
+```text
+Toolbar
+ ├── View
+ ├── Grid
+ └── Zoom
+```
+
+Canvas 입력:
+
+```text
+MouseDown
+ → 클릭한 y 계산
+ → currentRow 변경
+ → return
+```
+
+View Mode에서는:
+
+- 색칠하지 않음
+- 삭제하지 않음
+- 선택하지 않음
+- 이동하지 않음
+- Paste하지 않음
+- Undo/Redo하지 않음
+- 편집 단축키를 실행하지 않음
+
+즉, 버튼을 단순히 disabled 처리하는 것이 아니라 **이벤트/로직 레벨에서도 편집을 차단**합니다.
+
+---
+
+## 5. Backend Architecture
+
+현재 Backend는 FastAPI 기반 이미지 변환 API입니다.
+
+```text
+POST /generate
+      │
+      ▼
+UploadFile
+      │
+      ▼
+Pillow Image
+      │
+      ▼
+generate_pattern()
+      │
+      ├── resize
+      ├── K-Means color quantization
+      └── pixel pattern generation
+      │
+      ▼
+PatternData JSON
+```
+
+Frontend는:
+
+```text
+frontend/src/api/patternApi.ts
+```
+
+에서 다음 API를 호출합니다.
+
+```text
+http://127.0.0.1:8000/generate
+```
+
+---
+
+## 6. 향후 Django Architecture
+
+서비스화 단계에서는 FastAPI 이미지 생성 기능과 별개로 Django REST API를 중심으로 사용자/도안 저장 기능을 추가할 계획입니다.
+
+```text
+React
+  │
+  ▼
+Django REST Framework
+  │
+  ├── JWT Authentication
+  ├── User
+  ├── Pattern CRUD
+  └── Permission
+  │
+  ▼
+MySQL
+```
+
+권한 예:
+
+```text
+Pattern Owner
+   └── Edit
+
+Other User
+   └── View
+
+Public Pattern
+   └── View
+
+Private Pattern
+   └── Owner Only
+```
+
+---
+
+## 11. 설계 원칙
+
+### 관심사 분리
+
+```text
+UI             → Components
+State          → Hooks / Page
+Pattern Logic  → Engine
+Canvas Drawing → Renderer / Layers
+API            → api/
+Data Model     → types/
+Export         → utils/
+```
+
+### 원본 데이터 보존
+
+View/표시 방식 때문에 `PatternData` 자체를 변경하지 않습니다.
+
+향후 뜨개/코바늘 기호 표시를 추가하더라도 원본 PatternData와 표시 계층을 분리합니다.
+
+
+---
+
+## 8. PNG Export Architecture
+
+PNG Export는 화면용 Canvas와 별도의 다운로드용 Canvas를 생성하여 처리합니다.
+
+```text
+PatternData
     │
-    └── rotateSelection()
-```
-
----
-
-## Pattern 데이터 처리
-
-```text
-PatternEditor
-        │
-        ▼
-usePattern()
-        │
-        ├── createPattern()
-        ├── loadPattern()
-        ├── paintPixel()
-        ├── addColor()
-        ├── removeColor()
-        ├── undo()
-        ├── redo()
-        ├── clearPattern()
-        └── setPattern()
-                │
-                ▼
-PatternEngine
-        │
-        ├── clonePattern()
-        ├── paintPixel()
-        └── fillSelection()
-```
-
-```
-
----
-
-# 🎨 Canvas Architecture
-
-Canvas는 Layer 기반으로 렌더링됩니다.
-
-## 현재 구조
-
-```text
-PatternCanvas
-│
-└── CanvasRenderer
+    ▼
+exportPatternAsPNG()
     │
-    ├── BackgroundLayer
-    ├── PixelLayer
-    ├── GridLayer
-    └── HoverLayer
+    ├── Canvas 생성
+    │
+    ├── Pixel 전체 렌더링
+    │
+    ├── 세로 Grid 전체 렌더링
+    │
+    ├── 가로 Grid 전체 렌더링
+    │
+    └── canvas.toBlob()
+             │
+             ▼
+          PNG 다운로드
 ```
 
-## 향후 확장
+### Grid 렌더링 최적화
+
+기존에는 Pixel 반복문 내부에서 전체 Grid를 반복해서 그리는 구조였습니다.
 
 ```text
-CanvasRenderer
-│
-├── BackgroundLayer
-├── PixelLayer
-├── GridLayer
-├── HoverLayer
-├── SelectionLayer
-├── GuideLayer
-└── OverlayLayer
+for each pixel
+    draw pixel
+    draw all vertical grid
+    draw all horizontal grid
 ```
 
----
-
-# 🌐 Backend Architecture
+수정 후에는:
 
 ```text
-ImportImagePanel
-
-        │
-
-        ▼
-
-FastAPI (/generate)
-
-        │
-
-        ▼
-
-Pillow
-
-        │
-
-        ▼
-
-KMeans Color Quantizer
-
-        │
-
-        ▼
-
-Pattern Generator
-
-        │
-
-        ▼
-
-PatternData(JSON)
-
-        │
-
-        ▼
-
-React PatternEditor
+draw all pixels
+draw all vertical grid
+draw all horizontal grid
 ```
 
----
+로 변경했습니다.
 
-# 📷 Camera Architecture
+예를 들어 `40 × 100` 패턴에서는 Pixel이 4,000개이므로 기존 구조에서는 전체 Grid가 Pixel마다 반복될 수 있었지만, 현재 구조에서는 세로/가로 Grid를 각각 한 번만 처리합니다.
 
-Camera는 Zoom과 Pan을 담당하며 PatternEditor에서 상태를 관리합니다.
-
-```text
-CameraState
-│
-├── zoom
-├── offsetX
-└── offsetY
-      │
-      ▼
-useCamera()
-      │
-      ▼
-PatternEditor
-      │
-      ├── usePattern()
-      ├── useKeyboardShortcuts()
-      └── Clipboard Workflow
-              │
-              ▼
-Workspace
-      │
-      ▼
-CanvasViewport
-      │
-      ▼
-CanvasContainer
-      │
-      ▼
-PatternCanvas
-      │
-      ▼
-CanvasEvents
-      │
-      ▼
-PatternEngine
-```
-
-### 역할
-
-- Zoom 상태 관리
-- Pan 상태 관리
-- Viewport 좌표 변환
-- Canvas 렌더링 위치 제어
+이 변경은 **PNG 결과의 디자인을 변경하지 않으면서 불필요한 렌더링을 줄이는 최적화**입니다.
 
 ---
 
-# 🔄 Rendering Flow
-
-Canvas가 다시 그려지는 과정입니다.
-
-```text
-PatternEditor
-      │
-      ▼
-Workspace
-      │
-      ▼
-PatternCanvas
-      │
-      ▼
-CanvasRenderer
-      │
-      ▼
-BackgroundLayer
-      │
-      ▼
-PixelLayer
-      │
-      ▼
-GridLayer
-      │
-      ▼
-HoverLayer
-      │
-      ▼
-SelectionLayer (예정)
-```
-
----
-
-# 🔄 데이터 흐름
-
-사용자의 입력은 다음 순서로 처리됩니다.
-
-```text
-사용자 입력
-      │
-      ▼
-CanvasEvents
-      │
-      ▼
-onPixelClick()
-      │
-      ▼
-usePattern
-      │
-      ▼
-saveHistory()
-      │
-      ▼
-PatternEngine
-      │
-      ▼
-새 PatternData 생성
-      │
-      ▼
-setPattern()
-      │
-      ▼
-React State 업데이트
-      │
-      ▼
-CanvasRenderer
-      │
-      ▼
-Canvas 출력
-```
-
----
-
-# 🖼 PNG Export
-
-```text
-Toolbar
-
-↓
-
-Export PNG
-
-↓
-
-PatternData
-
-↓
-
-Canvas 생성
-
-↓
-
-Grid 출력
-
-↓
-
-5칸 Grid 출력
-
-↓
-
-PNG Download
-```
-
----
-
-# 💾 JSON Save
-
-```text
-Toolbar
-
-↓
-
-Save
-
-↓
-
-PatternData
-
-↓
-
-JSON
-
-↓
-
-Download
-```
-
----
-
-# 📂 JSON Open
-
-```text
-Toolbar
-
-↓
-
-Open
-
-↓
-
-JSON
-
-↓
-
-PatternData
-
-↓
-
-Canvas 출력
-```
-
----
-
-# 🛠 Tool 동작 구조
-
-Toolbar에서 선택한 기능은 PatternEngine을 통해 Canvas에 반영됩니다.
-
-```text
-Toolbar
-│
-├── Brush
-├── Eraser
-├── Fill
-├── Undo
-└── Redo
-      │
-      ▼
- usePattern
-      │
-      ▼
-PatternEngine
-      │
-      ▼
- PatternData
-      │
-      ▼
- React State
-      │
-      ▼
-CanvasRenderer
-```
-
----
-
-# 🎨 Color System
-
-Color 기능은 각각의 역할에 맞게 분리되어 있습니다.
-
-```text
-PalettePanel
-│
-├── ColorPalette
-│
-├── AddColorPanel
-│   ├── Color Picker
-│   ├── HEX Input
-│   ├── RGB Input
-│   └── Color Preview
-│
-└── ColorUtils
-    ├── HEX ↔ RGB 변환
-    ├── RGB ↔ HEX 변환
-    ├── 중복 색상 검사
-    └── Color 생성
-```
-
----
-
-# 🧩 주요 컴포넌트
-
-## PatternEditor
-
-프로젝트의 최상위 페이지입니다.
-
-### 역할
-
-- Toolbar 관리
-- EditorLayout 관리
-- usePattern 연결
-- Camera 상태 관리
-
----
-
-## EditorLayout
-
-Editor의 전체 레이아웃을 담당합니다.
-
-### 역할
-
-- LeftPanel 배치
-- Workspace 배치
-
----
-
-## LeftPanel
-
-좌측 UI 영역입니다.
-
-### 역할
-
-- PatternPanel
-- ImportImagePanel
-- PalettePanel
-- StatusBar
-
----
-
-## PatternPanel
-
-도안 생성 및 초기화를 담당하는 컴포넌트입니다.
-
-### 역할
-
-- Width 입력
-- Height 입력
-- 빈 도안 생성
-- 새 도안 초기화
-
----
-
-## Workspace
-
-Canvas 작업 공간입니다.
-
-### 역할
-
-- CanvasViewport 관리
-- Camera 기능 연결
-
----
-
-## CanvasViewport
-
-Canvas가 표시되는 Viewport입니다.
-
-### 역할
-
-- Zoom
-- Pan
-- Viewport 관리
-
----
-
-## CanvasContainer
-
-Canvas와 Header를 하나의 영역으로 관리합니다.
-
-### 역할
-
-- CanvasHeaderTop 출력
-- CanvasHeaderLeft 출력
-- PatternCanvas 출력
-
----
-
-## PatternCanvas
-
-Canvas를 관리하는 핵심 컴포넌트입니다.
-
-### 역할
-
-- Canvas 생성
-- CanvasRenderer 호출
-- CanvasEvents 연결
-- Camera 적용
-- Canvas 다시 그리기
-
----
-
-## CanvasRenderer
-
-Canvas Layer를 순서대로 렌더링합니다.
-
-### 현재 Layer
-
-- BackgroundLayer
-- PixelLayer
-- GridLayer
-- HoverLayer
-
-### 예정 Layer
-
-- SelectionLayer
-- GuideLayer
-- OverlayLayer
-
----
-
-## CanvasEvents
-
-Canvas의 사용자 입력을 처리합니다.
-
-### 역할
-
-- Mouse Down
-- Mouse Move
-- Mouse Up
-- Drag
-- Hover Cell 계산
-
----
-
-## usePattern
-
-프로젝트의 핵심 상태 관리 Hook입니다.
-
-### 역할
-
-- Pattern 상태 관리
-- Tool 상태 관리
-- 선택 Color 관리
-- Undo / Redo 관리
-- History 저장
-- PatternEngine 호출
-
----
-
-## PatternEngine
-
-실제 도안 수정 로직을 담당합니다.
-
-### 역할
-
-- Paint
-- Fill
-- Eraser
-- Remove Color
-- Pattern 생성
-- Pattern 복사
-
-React와 분리되어 있어 재사용이 가능합니다.
-
-PatternEngine
-│
-├── paintPixel()
-├── erasePixel()
-├── floodFill()
-├── copySelection()
-├── cutSelection()
-├── pasteSelection()
-└── moveSelection()
-
----
-
-## PalettePanel
-
-Palette UI를 관리합니다.
-
-### 역할
-
-- ColorPalette 출력
-- AddColorPanel 연결
-
----
-
-## ColorPalette
-
-현재 Palette를 표시합니다.
-
-### 역할
-
-- 색상 선택
-- Palette 출력
-
----
-
-## AddColorPanel
-
-새로운 색상을 추가하는 UI입니다.
-
-### 기능
-
-- Color Picker
-- HEX 입력
-- RGB 입력
-- Preview
-- 색상 추가
-
----
-
-## ColorUtils
-
-색상 관련 공통 함수입니다.
-
-### 기능
-
-- HEX ↔ RGB 변환
-- RGB ↔ HEX 변환
-- 중복 색상 검사
-- Color 생성
-
----
-
-# ✨ 최근 리팩토링
-
-## Editor 구조 개선
-
-기존
-
-```text
-PatternEditor
-├── Toolbar
-├── Palette
-└── Canvas
-```
-
-↓
-
-현재
-
-```text
-PatternEditor
-├── Toolbar
-└── EditorLayout
-    ├── LeftPanel
-    └── Workspace
-```
-
----
-
-## Canvas 구조 개선
-
-기존
-
-```text
-PatternCanvas
-└── CanvasDrawer
-```
-
-↓
-
-현재
-
-```text
-PatternCanvas
-├── CanvasRenderer
-└── CanvasEvents
-```
-
----
-
-## Render 구조 개선
-
-기존
-
-```text
-CanvasDrawer
-```
-
-↓
-
-현재
-
-```text
-CanvasRenderer
-├── BackgroundLayer
-├── PixelLayer
-├── GridLayer
-└── HoverLayer
-```
-
----
-
-# 🚀 현재 구현 기능
-
-## Drawing
-
-- ✅ Brush
-- ✅ Eraser
-- ✅ Fill
-
-## History
-
-- ✅ Undo
-- ✅ Redo
-
-## Color
-
-- ✅ Color Picker
-- ✅ HEX 입력
-- ✅ RGB 입력
-- ✅ Color Preview
-- ✅ 중복 색상 검사
-- ✅ Color 추가
-- ✅ Color 삭제
-- ✅ 자동 선택
-
-## Canvas
-
-- ✅ 빈 도안 생성
-- ✅ 클릭 색칠
-- ✅ 드래그 색칠
-- ✅ Hover 표시
-- ✅ Grid 출력
-- ✅ Header 출력
-- ✅ Layer 기반 Render
-
----
-
-# 📌 향후 개발 예정
-
-## Canvas
-
-- Header Highlight
-- StatusBar
-- Selection Tool
-- Selection Layer
-- Zoom
-- Pan
-- Camera System
-
-## Drawing
-
-- Brush Size
-- Line Tool
-- Rectangle Tool
-
-## File
-
-- Import
-- Export
-- JSON 저장
-- 이미지 저장
-
-## View
-
-- Grid 표시 옵션
-- Grid 색상 변경
-- 단축키 확장
+## 10. 향후 Django Architecture

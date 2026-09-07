@@ -1,20 +1,24 @@
 // ======================================================
 // useCanvasInteraction
-// Version : v1.0
-// Last Update : 2026-07-16
+// Version : v1.1
+// Last Update : 2026-09-07
 //
 // 역할
 // 1. Canvas의 마우스 상태 관리
 // 2. Hover Cell 관리
 // 3. Drag 상태 관리
 // 4. 클릭 좌표 계산
+// 5. Zoom을 고려한 Cell 좌표 계산
 // ======================================================
 
 import { useRef, useState } from "react";
+
 import { pixelToCell } from "./CanvasUtils";
+
 
 interface Props {
 
+    // 셀을 클릭했을 때 실행할 함수
     onPixelClick: (
 
         x: number,
@@ -23,11 +27,17 @@ interface Props {
 
     ) => void;
 
+    // 현재 Canvas 확대/축소 비율
+    zoom: number;
+
 }
+
 
 export function useCanvasInteraction({
 
-    onPixelClick
+    onPixelClick,
+
+    zoom
 
 }: Props) {
 
@@ -55,6 +65,7 @@ export function useCanvasInteraction({
 
         } | null>(null);
 
+
     // =============================
     // Mouse → Cell
     // =============================
@@ -69,23 +80,33 @@ export function useCanvasInteraction({
 
             event.currentTarget.getBoundingClientRect();
 
+
         return {
 
+            // 화면상의 X 좌표를
+            // 현재 zoom 기준의 Cell 좌표로 변환
             x: pixelToCell(
 
-                event.clientX - rect.left
+                event.clientX - rect.left,
+
+                zoom
 
             ),
 
+            // 화면상의 Y 좌표를
+            // 현재 zoom 기준의 Cell 좌표로 변환
             y: pixelToCell(
 
-                event.clientY - rect.top
+                event.clientY - rect.top,
+
+                zoom
 
             )
 
         };
 
     }
+
 
     // =============================
     // Paint
@@ -111,6 +132,7 @@ export function useCanvasInteraction({
 
         }
 
+
         lastCell.current = {
 
             x,
@@ -118,6 +140,7 @@ export function useCanvasInteraction({
             y
 
         };
+
 
         onPixelClick(
 
@@ -128,6 +151,7 @@ export function useCanvasInteraction({
         );
 
     }
+
 
     // =============================
     // Mouse Down
@@ -141,6 +165,7 @@ export function useCanvasInteraction({
 
         setIsDrawing(true);
 
+
         const {
 
             x,
@@ -149,6 +174,7 @@ export function useCanvasInteraction({
 
         } = getCellPosition(event);
 
+
         setHoverCell({
 
             x,
@@ -156,6 +182,7 @@ export function useCanvasInteraction({
             y
 
         });
+
 
         paint(
 
@@ -166,6 +193,7 @@ export function useCanvasInteraction({
         );
 
     }
+
 
     // =============================
     // Mouse Move
@@ -185,6 +213,7 @@ export function useCanvasInteraction({
 
         } = getCellPosition(event);
 
+
         setHoverCell({
 
             x,
@@ -193,9 +222,11 @@ export function useCanvasInteraction({
 
         });
 
+
         if (!isDrawing)
 
             return;
+
 
         paint(
 
@@ -206,6 +237,7 @@ export function useCanvasInteraction({
         );
 
     }
+
 
     // =============================
     // Mouse Leave
@@ -219,6 +251,7 @@ export function useCanvasInteraction({
 
     }
 
+
     // =============================
     // Mouse Up
     // =============================
@@ -230,6 +263,7 @@ export function useCanvasInteraction({
         lastCell.current = null;
 
     }
+
 
     return {
 

@@ -34,7 +34,7 @@ export default function PanelCard({
 
                 gap: 8,
 
-                boxShadow: "0 1px 4px rgba(0,0,0,0.05)"
+                boxShadow: "none"
 
             }}
 

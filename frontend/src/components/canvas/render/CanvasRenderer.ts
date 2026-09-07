@@ -23,6 +23,8 @@ import { drawGrid } from "./layers/GridLayer";
 
 import { drawHover } from "./layers/HoverLayer";
 
+import { drawCurrentRow } from "./layers/CurrentRowLayer";
+
 import { drawSelection } from "./layers/SelectionLayer";
 
 import { drawPastePreview } from "./layers/PastePreviewLayer";
@@ -44,7 +46,6 @@ export function renderCanvas(
     drawBackground(
 
         ctx,
-
         state
 
     );
@@ -52,7 +53,6 @@ export function renderCanvas(
     drawPixels(
 
         ctx,
-
         state
 
     );
@@ -66,9 +66,17 @@ export function renderCanvas(
         drawGrid(
 
             ctx,
-
             state
 
+        );
+
+    }
+
+    if (state.mode === "view") {
+
+        drawCurrentRow(
+            ctx,
+            state
         );
 
     }
@@ -76,7 +84,6 @@ export function renderCanvas(
     drawHover(
 
         ctx,
-
         state
 
     );
@@ -84,7 +91,6 @@ export function renderCanvas(
     drawSelection(
 
         ctx,
-
         state
 
     );
@@ -92,7 +98,6 @@ export function renderCanvas(
     drawPastePreview(
 
         ctx,
-
         state
 
     );

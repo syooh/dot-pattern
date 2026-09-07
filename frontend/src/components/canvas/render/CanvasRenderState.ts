@@ -17,6 +17,10 @@ export interface CanvasRenderState {
 
     camera: CameraState;
 
+    mode: "edit" | "view";
+
+    currentRow?: number;
+
     hoverCell?: {
 
         x: number;

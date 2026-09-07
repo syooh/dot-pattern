@@ -185,9 +185,11 @@ export default function PatternPanel({
 
                 style={{
 
-                    marginTop: 6,
+                    width: "100%",
 
                     height: 36,
+
+                    marginTop: 6,
 
                     padding: "0 12px",
 
@@ -201,7 +203,9 @@ export default function PatternPanel({
 
                     fontWeight: 600,
 
-                    cursor: "pointer"
+                    cursor: "pointer",
+
+                    boxSizing: "border-box"
 
                 }}
 

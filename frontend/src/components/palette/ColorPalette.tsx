@@ -12,13 +12,9 @@
 
 import { useState } from "react";
 
-import type {
+import type { PaletteColor } from "../../types/Pattern";
 
-    PaletteColor
-
-} from "../../types/Pattern";
-
-import AddColorPanel from "./AddColorPanel";
+import AddColorModal from "./AddColorModal";
 
 import "./Palette.css";
 
@@ -52,19 +48,13 @@ export default function ColorPalette({
 
     //--------------------------------------------------
 
-    const [showPanel, setShowPanel] =
-
-        useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     //--------------------------------------------------
 
     return (
 
         <div className="palette">
-
-            <h3 className="palette-title">
-
-            </h3>
 
             <div className="palette-list">
 
@@ -76,7 +66,7 @@ export default function ColorPalette({
 
                     onClick={() =>
 
-                        setShowPanel(
+                        setShowModal(
 
                             prev => !prev
 
@@ -158,7 +148,7 @@ export default function ColorPalette({
 
                                     >
 
-                                        ❌
+                                        X
 
                                     </button>
 
@@ -177,18 +167,15 @@ export default function ColorPalette({
             {/* Add Color Panel */}
 
             {
+                showModal && (
 
-                showPanel && (
-
-                    <AddColorPanel
+                    <AddColorModal
 
                         palette={
 
                             palette.map(
 
-                                color =>
-
-                                    color.hex
+                                color => color.hex
 
                             )
 
@@ -202,14 +189,13 @@ export default function ColorPalette({
 
                         onClose={() =>
 
-                            setShowPanel(false)
+                            setShowModal(false)
 
                         }
 
                     />
 
                 )
-
             }
 
         </div>

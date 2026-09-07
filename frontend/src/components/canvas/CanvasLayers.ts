@@ -8,16 +8,7 @@
 
 import type { PatternData } from "../../types/Pattern";
 
-import {
-
-    CELL_SIZE,
-
-    GRID_INTERVAL
-
-} from "./CanvasConstants";
-
-import { CanvasTheme } from "./CanvasTheme";
-
+import { CELL_SIZE } from "./CanvasConstants";
 
 // ======================================================
 // Background Layer

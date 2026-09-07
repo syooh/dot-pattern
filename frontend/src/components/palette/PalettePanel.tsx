@@ -39,7 +39,7 @@ export default function PalettePanel({
 
     return (
 
-        <PanelCard title="🎨 palette">
+        <PanelCard title="🎨 Palette">
 
             <ColorPalette
 

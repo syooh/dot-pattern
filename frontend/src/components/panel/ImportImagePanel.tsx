@@ -83,14 +83,26 @@ export default function ImportImagePanel({
 
                     style={{
 
-                        height: 36
+                        width: "100%",
+
+                        height: 36,
+
+                        border: "1px solid #CCCCCC",
+
+                        borderRadius: 6,
+
+                        background: "#FFFFFF",
+
+                        fontWeight: 600,
+
+                        cursor: "pointer",
+
+                        boxSizing: "border-box"
 
                     }}
 
                     onClick={() =>
-
                         fileInputRef.current?.click()
-
                     }
 
                 >
@@ -137,18 +149,24 @@ export default function ImportImagePanel({
 
                 >
 
-                    <div style={{ flex: 1 }}>
+                    <div
+                        style={{
+                            flex: 1
+                        }}
+                    >
 
                         <label
-
                             style={{
+
+                                display: "block",
+
+                                marginBottom: 4,
 
                                 fontSize: 13,
 
                                 fontWeight: 500
-
+                                
                             }}
-
                         >
 
                             Width
@@ -179,6 +197,10 @@ export default function ImportImagePanel({
 
                                 padding: "4px 8px",
 
+                                borderRadius: 6,
+
+                                border: "1px solid #CCC",
+
                                 boxSizing: "border-box"
 
                             }}
@@ -187,18 +209,24 @@ export default function ImportImagePanel({
 
                     </div>
 
-                    <div style={{ flex: 1 }}>
+                    <div
+                        style={{
+                            flex: 1
+                        }}
+                    >
 
                         <label
-
                             style={{
+
+                                display: "block",
+
+                                marginBottom: 4,
 
                                 fontSize: 13,
 
                                 fontWeight: 500
 
                             }}
-
                         >
 
                             Height
@@ -235,6 +263,10 @@ export default function ImportImagePanel({
 
                                 padding: "4px 8px",
 
+                                borderRadius: 6,
+
+                                border: "1px solid #CCC",
+
                                 boxSizing: "border-box"
 
                             }}
@@ -250,15 +282,12 @@ export default function ImportImagePanel({
                 <div>
 
                     <label
-
                         style={{
-
+                            display: "block",
+                            marginBottom: 4,
                             fontSize: 13,
-
                             fontWeight: 500
-
                         }}
-
                     >
 
                         Colors
@@ -293,6 +322,10 @@ export default function ImportImagePanel({
 
                             padding: "4px 8px",
 
+                            borderRadius: 6,
+
+                            border: "1px solid #CCC",
+
                             boxSizing: "border-box"
 
                         }}
@@ -307,10 +340,24 @@ export default function ImportImagePanel({
 
                     style={{
 
+                        width: "100%",
+
                         height: 36,
 
-                        marginTop: 4
+                        border: "none",
 
+                        borderRadius: 6,
+
+                        background: "#4A90E2",
+
+                        color: "#FFFFFF",
+
+                        fontWeight: 600,
+
+                        cursor: "pointer",
+
+                        boxSizing: "border-box"
+                        
                     }}
 
                     onClick={() => {

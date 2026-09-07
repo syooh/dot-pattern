@@ -47,6 +47,12 @@ export default function CanvasHeaderLeft({
 
                 width: HEADER_SIZE,
 
+                minWidth: HEADER_SIZE,
+
+                height: height * cellSize,
+
+                flexShrink: 0,
+
             }}
         >
 
@@ -65,6 +71,10 @@ export default function CanvasHeaderLeft({
                         style={{
 
                             width: HEADER_SIZE,
+
+                            minWidth: HEADER_SIZE,
+
+                            flexShrink: 0,
 
                             height: cellSize,
 
@@ -110,7 +120,7 @@ export default function CanvasHeaderLeft({
 
                     >
 
-                        {index}
+                        {height - index}
 
                     </div>
 

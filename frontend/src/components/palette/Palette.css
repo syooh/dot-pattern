@@ -1,20 +1,17 @@
 /* ======================================================
    Palette
-   Version : v1.0
-   Last Update : 2026-07-09
+   Version : v1.1
+   Last Update : 2026-08-28
 ====================================================== */
 
-/* ---------- Palette ---------- */
+
+/* ======================================================
+   Palette
+====================================================== */
 
 .palette {
 
-    margin-top: 0px;
-
-}
-
-.palette-title {
-
-    margin-bottom: 6px;
+    width: 100%;
 
 }
 
@@ -24,13 +21,16 @@
 
     align-items: flex-start;
 
-    gap: 6px;
+    gap: 5px;
 
     flex-wrap: wrap;
 
 }
 
-/* ---------- Color Button ---------- */
+
+/* ======================================================
+   Color Button
+====================================================== */
 
 .palette-color {
 
@@ -44,15 +44,19 @@
 
 .color-button {
 
-    width: 32px;
+    width: 25px;
 
-    height: 32px;
+    height: 25px;
+
+    padding: 0;
 
     border: 1px solid #999;
 
     cursor: pointer;
 
     transition: 0.15s;
+
+    box-sizing: border-box;
 
 }
 
@@ -68,37 +72,49 @@
 
 }
 
-/* ---------- Add Button ---------- */
+
+/* ======================================================
+   Add Button
+====================================================== */
 
 .add-color-button {
 
-    width: 32px;
+    width: 25px;
 
-    height: 32px;
+    height: 25px;
+
+    padding: 0;
 
     font-size: 20px;
 
-    border: 1px solid #999;
+    border: 1px solid #FFFFFF;
 
-    background: white;
+    background: #FFFFFF;
 
     cursor: pointer;
 
     transition: 0.15s;
 
+    box-sizing: border-box;
+
 }
 
 .add-color-button:hover {
 
-    background: #f3f3f3;
+    background: #F3F3F3;
 
 }
 
-/* ---------- Delete Button ---------- */
+
+/* ======================================================
+   Delete Button
+====================================================== */
 
 .delete-color-button {
 
     margin-top: 5px;
+
+    padding: 0;
 
     font-size: 12px;
 
@@ -108,188 +124,20 @@
 
     border: none;
 
-    padding: 0;
 }
+
 
 /* ======================================================
-   Add Color Panel
+   Add Color Modal
 ====================================================== */
 
-.add-color-panel {
+.add-color-modal-overlay {
 
-    margin-top: 20px;
+    position: fixed;
 
-    width: 320px;
+    inset: 0;
 
-    padding: 18px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 10px;
-
-    background: #fafafa;
-
-}
-
-.add-color-panel h4 {
-
-    margin-top: 0;
-
-    margin-bottom: 18px;
-
-}
-
-.add-color-panel label {
-
-    display: block;
-
-    margin-top: 15px;
-
-    margin-bottom: 5px;
-
-    font-weight: 600;
-
-}
-
-/* ---------- Preview ---------- */
-
-.color-preview {
-
-    width: 100%;
-
-    height: 70px;
-
-    border: 1px solid #999;
-
-    border-radius: 6px;
-
-    margin-top: 10px;
-
-}
-
-/* ---------- Inputs ---------- */
-
-.hex-input {
-
-    width: 100%;
-
-    padding: 8px;
-
-    font-size: 14px;
-
-    box-sizing: border-box;
-
-}
-
-.rgb-row {
-
-    display: flex;
-
-    align-items: center;
-
-    margin-bottom: 8px;
-
-}
-
-.rgb-row span {
-
-    width: 20px;
-
-    font-weight: bold;
-
-}
-
-.rgb-row input {
-
-    width: 80px;
-
-    padding: 6px;
-
-}
-
-/* ---------- Add Button ---------- */
-
-.submit-color-button {
-
-    margin-top: 20px;
-
-    width: 100%;
-
-    padding: 10px;
-
-    font-size: 15px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-}
-
-.submit-color-button:disabled {
-
-    opacity: 0.5;
-
-    cursor: not-allowed;
-
-}
-
-/* ======================================================
-   react-colorful
-====================================================== */
-
-.react-colorful {
-
-    width: 100% !important;
-
-    height: 180px !important;
-
-    margin-top: 10px;
-
-}
-
-.react-colorful__saturation {
-
-    border-radius: 6px 6px 0 0;
-
-}
-
-.react-colorful__hue {
-
-    height: 18px !important;
-
-}
-
-.react-colorful__pointer {
-
-    width: 18px !important;
-
-    height: 18px !important;
-
-}
-
-.import-panel {
-
-    /* margin-top: 20px; */
-
-    background: white;
-
-    /* border: 1px solid #d9d9d9;
-
-    border-radius: 12px; */
-
-    padding: 16px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-}
-
-.import-panel h3 {
+    background: rgba(0, 0, 0, 0.35);
 
     display: flex;
 
@@ -297,108 +145,317 @@
 
     align-items: center;
 
-    gap: 8px;
-
-    margin: 0;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    color: #5f5670;
+    z-index: 1000;
 
 }
 
-.import-panel label {
 
-    font-size: 12px;
+/* ---------- Modal ---------- */
 
-    color: #666;
+.add-color-modal {
+
+    width: 360px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #D9D9D9;
+
+    border-radius: 8px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+    overflow: hidden;
 
 }
 
-.import-panel input[type="number"] {
 
-    width: 100%;
+/* ---------- Header ---------- */
 
-    height: 36px;
+.add-color-modal-header {
 
-    padding: 0 10px;
+    height: 52px;
 
-    border: 1px solid #d0d0d0;
+    padding: 0 16px;
 
-    border-radius: 6px;
+    display: flex;
 
-    background: white;
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #E6E6E6;
 
     box-sizing: border-box;
 
 }
 
-.import-panel input[type="file"] {
+.add-color-modal-header h3 {
 
-    font-size: 12px;
+    margin: 0 auto;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #444;
 
 }
 
-.import-panel button {
 
-    /* margin-top: 8px; */
+.add-color-modal-close {
 
-    height: 40px;
+    width: 30px;
+
+    height: 30px;
 
     border: none;
 
-    border-radius: 8px;
+    background: transparent;
 
-    background: #4b82f0;
+    font-size: 24px;
 
-    color: white;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-}
-
-.import-panel button:disabled {
-
-    background: #bdbdbd;
-
-    cursor: not-allowed;
-
-}
-
-.import-file-button {
-
-    height: 38px;
-
-    border: 1px solid #cccccc;
-
-    background: white;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: 600;
-
-    transition: .15s;
-
-}
-
-.import-file-button:hover {
-
-    background: #f3f3f3;
-
-}
-
-.import-file-name {
-
-    font-size: 12px;
+    line-height: 1;
 
     color: #777;
 
-    text-align: center;
+    cursor: pointer;
+
+    border-radius: 6px;
+
+}
+
+
+.add-color-modal-close:hover {
+
+    background: #F3F3F3;
+
+}
+
+
+/* ---------- Content ---------- */
+
+.react-colorful {
+
+    width: 100% !important;
+
+    max-width: 280px;
+
+    height: 180px !important;
+
+    margin: 0 auto;
+
+}
+
+.add-color-modal-content {
+
+    padding: 16px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+/* ---------- Label ---------- */
+
+.add-color-modal-content label {
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    color: #555;
+
+}
+
+
+/* ---------- HEX ---------- */
+
+.hex-input {
+
+    width: 100%;
+
+    height: 34px;
+
+    padding: 4px 8px;
+
+    border: 1px solid #CCC;
+
+    border-radius: 6px;
+
+    box-sizing: border-box;
+
+    font-size: 14px;
+
+}
+
+
+/* ---------- RGB ---------- */
+
+.rgb-input-group {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.rgb-input-item {
+
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+}
+
+
+.rgb-input-item span {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #555;
+
+}
+
+
+.rgb-input-item input {
+
+    width: 100%;
+
+    height: 34px;
+
+    padding: 4px 8px;
+
+    border: 1px solid #CCC;
+
+    border-radius: 6px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ---------- Preview ---------- */
+
+.color-preview {
+
+    width: 100%;
+
+    height: 50px;
+
+    border: 1px solid #999;
+
+    border-radius: 6px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ---------- Error ---------- */
+
+.color-error {
+
+    margin: 2px 0 0;
+
+    font-size: 12px;
+
+    color: #E53935;
+
+}
+
+
+/* ---------- Footer ---------- */
+
+.add-color-modal-footer {
+
+    padding: 12px 16px 16px;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+}
+
+
+/* ---------- Cancel ---------- */
+
+.cancel-color-button {
+
+    height: 36px;
+
+    padding: 0 14px;
+
+    border: 1px solid #CCC;
+
+    border-radius: 6px;
+
+    background: #FFFFFF;
+
+    color: #444;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+}
+
+
+.cancel-color-button:hover {
+
+    background: #F5F5F5;
+
+}
+
+
+/* ---------- Submit ---------- */
+
+.submit-color-button {
+
+    height: 36px;
+
+    padding: 0 14px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #4A90E2;
+
+    color: #FFFFFF;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.submit-color-button:hover:not(:disabled) {
+
+    background: #3F7FD1;
+
+}
+
+
+.submit-color-button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
 
 }

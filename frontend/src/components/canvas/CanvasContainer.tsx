@@ -23,6 +23,11 @@ interface Props {
     pattern: PatternData;
 
     showGrid: boolean;
+
+    mode: "edit" | "view";
+
+    currentRow: number;
+    onCurrentRowChange: (row: number) => void;
     
     camera: CameraState;
 
@@ -98,6 +103,11 @@ export default function CanvasContainer({
 
     showGrid,
 
+    mode,
+
+    currentRow,
+    onCurrentRowChange,
+
     camera,
 
     hoverCell,
@@ -132,6 +142,8 @@ export default function CanvasContainer({
 
                 display: "inline-block",
 
+                flexShrink: 0,
+
                 background: "#FFFFFF",
 
                 border: "1px solid #BDBDBD",
@@ -156,7 +168,9 @@ export default function CanvasContainer({
 
                     display: "flex",
 
-                    alignItems: "flex-start"
+                    alignItems: "flex-start",
+
+                    flexShrink: 0
 
                 }}
 
@@ -198,7 +212,9 @@ export default function CanvasContainer({
 
                     display: "flex",
 
-                    alignItems: "flex-start"
+                    alignItems: "flex-start",
+
+                    flexShrink: 0
 
                 }}
 
@@ -219,6 +235,11 @@ export default function CanvasContainer({
                     pattern={pattern}
 
                     showGrid={showGrid}
+
+                    mode={mode}
+
+                    currentRow={currentRow}
+                    onCurrentRowChange={onCurrentRowChange}
 
                     camera={camera}
 

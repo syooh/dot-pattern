@@ -27,6 +27,12 @@ interface Props {
 
     ) => void;
 
+    mode: "edit" | "view";
+
+    patternHeight: number;
+
+    onCurrentRowChange: (row: number) => void;
+
     onHoverChange?: (
 
         cell: {
@@ -72,6 +78,12 @@ interface Props {
 export function useCanvasEvents({
 
     onPixelClick,
+    
+    mode,
+
+    patternHeight,
+
+    onCurrentRowChange,
 
     onHoverChange,
 
@@ -138,8 +150,6 @@ export function useCanvasEvents({
 
         updateSelection,
 
-        clearSelection
-
     } = useSelectionEvents({
 
         selection,
@@ -194,7 +204,9 @@ export function useCanvasEvents({
 
     ) {
 
-        setIsDrawing(true);
+        // ===================================
+        // 클릭한 Canvas 셀 위치
+        // ===================================
 
         const {
 
@@ -216,6 +228,28 @@ export function useCanvasEvents({
 
         onHoverChange?.(cell);
 
+
+        // ===================================
+        // View Mode
+        //
+        // 편집하지 않고
+        // 클릭한 행을 현재 작업 행으로 변경한다.
+        // ===================================
+
+        if (mode === "view") {
+
+            const row = patternHeight - y;
+
+            onCurrentRowChange(row);
+
+            return;
+
+        }
+
+
+        setIsDrawing(true);
+
+
         // ===================================
         // Paste Mode
         // ===================================
@@ -234,6 +268,7 @@ export function useCanvasEvents({
 
         }
 
+
         // ===================================
         // Selection
         // ===================================
@@ -247,6 +282,7 @@ export function useCanvasEvents({
             selectedTool === "select"
 
         ) {
+
             console.log(selectedTool);
 
             startSelection(
@@ -260,6 +296,7 @@ export function useCanvasEvents({
             return;
 
         }
+
 
         if (
 
@@ -283,6 +320,7 @@ export function useCanvasEvents({
 
         }
 
+
         // ===================================
         // Brush / Eraser / Fill
         // ===================================
@@ -294,6 +332,7 @@ export function useCanvasEvents({
             y
 
         );
+
     }
 
     // =============================
@@ -325,6 +364,16 @@ export function useCanvasEvents({
         setHoverCell(cell);
 
         onHoverChange?.(cell);
+
+        // ===================================
+        // View Mode에서는 Hover만 처리한다.
+        // ===================================
+
+        if (mode === "view") {
+
+            return;
+
+        }
 
         if (
 
@@ -409,6 +458,24 @@ export function useCanvasEvents({
     // =============================
 
     function stopDrawing() {
+
+        // ===================================
+        // View Mode에서는 편집 동작을 수행하지 않는다.
+        // ===================================
+
+        if (mode === "view") {
+
+            setIsDrawing(false);
+
+            setIsDraggingSelection(false);
+
+            setDragStart(null);
+
+            resetPaint();
+
+            return;
+
+        }
 
         if (isDraggingSelection) {
 

@@ -11,7 +11,7 @@
 // 실제 도안 수정은 PatternEngine이 담당한다.
 // ======================================================
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { PatternData } from "../../types/Pattern";
 import { renderCanvas } from "./render/CanvasRenderer";
 import { useCanvasEvents } from "./CanvasEvents";
@@ -26,6 +26,12 @@ interface Props {
     pattern: PatternData;
 
     showGrid: boolean;
+
+    mode: "edit" | "view";
+
+    currentRow: number;
+
+    onCurrentRowChange: (row: number) => void;
 
     camera: CameraState;
 
@@ -97,6 +103,12 @@ export default function PatternCanvas({
 
     showGrid,
 
+    mode,
+
+    currentRow,
+
+    onCurrentRowChange,
+
     camera,
 
     selectedTool,
@@ -148,6 +160,12 @@ export default function PatternCanvas({
 
         camera,
 
+        mode,
+
+        patternHeight: pattern.height,
+
+        onCurrentRowChange,
+
         selectedTool,
 
         selection,
@@ -179,50 +197,43 @@ export default function PatternCanvas({
             return;
 
         canvas.width =
-
             getCanvasWidth(
-
                 pattern.width,
-
                 camera.zoom
-
             );
 
         canvas.height =
-
             getCanvasHeight(
-
                 pattern.height,
-
                 camera.zoom
-
             );
-            
+
         renderCanvas(
-
             ctx,
-
             {
-
                 pattern,
-
                 camera,
-
+                mode,
                 hoverCell,
-
+                currentRow,
                 selection,
-
                 showGrid,
-
                 clipboard,
-
                 pastePreview
-
             }
-
         );
 
-    }, [pattern, hoverCell, selection, showGrid, camera, clipboard, pastePreview]);
+    }, [
+        pattern,
+        mode,
+        hoverCell,
+        currentRow,
+        selection,
+        showGrid,
+        camera,
+        clipboard,
+        pastePreview
+    ]);
 
     // ==================================================
     // Render

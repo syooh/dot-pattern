@@ -18,6 +18,12 @@ interface Props {
 
     showGrid: boolean;
 
+    mode: "edit" | "view";
+
+    currentRow: number;
+
+    onCurrentRowChange: (row: number) => void;
+
     camera:CameraState;
 
     hoverCell: {
@@ -90,6 +96,11 @@ export default function Workspace({
     pattern,
 
     showGrid,
+
+    mode,
+
+    currentRow,
+    onCurrentRowChange,
     
     camera,
 
@@ -119,13 +130,34 @@ export default function Workspace({
 
     return (
 
-        <div>
+        <div
+            style={{
+
+                width: "100%",
+
+                flex: 1,
+
+                minWidth: 0,
+
+                minHeight: 0,
+
+                display: "flex",
+
+                flexDirection: "column"
+
+            }}
+        >
 
             <CanvasViewport
 
                 pattern={pattern}
 
                 showGrid={showGrid}
+
+                mode={mode}
+
+                currentRow={currentRow}
+                onCurrentRowChange={onCurrentRowChange}
 
                 camera={camera}
 

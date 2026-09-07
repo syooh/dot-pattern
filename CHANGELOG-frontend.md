@@ -854,3 +854,312 @@ StatusBar
 - Symbol 자동 생성
 - PDF Export
 - Print Layout
+
+
+
+# CHANGELOG
+
+이 프로젝트의 모든 변경 사항을 기록합니다.
+
+---
+
+## v0.5.0 (2026-08-07 ~ 2026-09-04)
+
+### ✨ Added
+
+#### Frontend
+
+- View Mode 추가
+- Edit Mode / View Mode 전환 기능 추가
+- View Mode에서 패턴 읽기 전용 기능 추가
+- View Mode에서 현재 작업 행(Current Row) 표시 기능 추가
+- 현재 행 클릭 이동 기능 추가
+- 이전 행 / 다음 행 이동 기능 추가
+- 현재 작업 행 진행률 표시 기능 추가
+- Canvas 행/열 헤더 추가 및 개선
+- 행/열 번호 1-based 표시 방식 적용
+- 우측 하단 기준 행/열 번호 방향 개선
+- Status Panel에 현재 작업 정보 표시
+- 현재 작업 행 및 진행률 Status Panel 표시
+- View Mode에서 Canvas 행 클릭을 통한 작업 위치 변경 기능 추가
+- View Mode에서 현재 작업 행 테두리 강조 표시 추가
+- Palette Add Color Modal 개선
+- 색상 추가 기능을 Modal 방식으로 변경
+- Color Picker Modal UI 개선
+- HEX / RGB 색상 입력 기능 유지 및 개선
+- Modal 외부 영역 클릭으로 닫기 기능 추가
+- ESC 키를 이용한 Modal 닫기 기능 추가
+- Modal 닫기 버튼 추가
+- LeftPanel 2열 레이아웃 개선
+- PanelCard 공통 UI 컴포넌트 추가
+- Pattern Panel UI 개선
+- Import Image Panel UI 개선
+- Palette Panel UI 개선
+- Status Panel UI 개선
+- PNG Export Grid 기능 개선
+
+#### Canvas
+
+- Canvas Render Mode 구조 추가
+- CanvasRenderer에 Edit / View Mode 처리 추가
+- CurrentRowLayer 추가
+- View Mode 전용 현재 행 강조 렌더링 추가
+- Canvas Mode 변경 시 즉시 렌더링되도록 개선
+- Canvas Event 처리에서 View Mode 분기 추가
+- View Mode에서 Canvas 편집 이벤트 차단
+- View Mode에서 현재 행 선택 이벤트 처리
+- View Mode에서 편집 기능이 실행되지 않도록 이벤트 처리 개선
+- View Mode에서 Grid 및 Zoom 기능 유지
+- Grid 굵은 선 기준을 5칸에서 10칸 단위로 변경
+- PNG Export 시 Grid 렌더링 구조 개선
+
+#### Keyboard
+
+- View Mode에서 편집용 단축키 비활성화
+- View Mode에서 Brush 단축키 비활성화
+- View Mode에서 Eraser 단축키 비활성화
+- View Mode에서 Fill 단축키 비활성화
+- View Mode에서 Delete 단축키 비활성화
+- View Mode에서 Copy / Cut / Paste 단축키 비활성화
+- View Mode에서 Undo / Redo 단축키 비활성화
+- Edit Mode에서 기존 단축키 동작 유지
+
+#### Documentation
+
+- README 문서 정리
+- 프로젝트 Architecture 문서 정리
+- ERD 문서 정리
+- Flowchart 문서 정리
+- Requirements 문서 작성
+- Development 문서 작성
+- CHANGELOG 문서 정리
+- 프로젝트 개발 과정 문서화
+- 현재 프로젝트 구조 및 기능 문서화
+- Django 연동을 고려한 향후 시스템 구조 문서화
+
+---
+
+### ♻ Changed
+
+#### Frontend
+
+- PatternEditor 상태 관리 구조 개선
+- PatternEditor에 Edit / View Mode 상태 추가
+- PatternEditor에 Current Row 상태 추가
+- PatternEditor와 Workspace 간 상태 전달 구조 개선
+- Workspace Props 구조 개선
+- CanvasViewport Props 구조 개선
+- CanvasContainer Props 구조 개선
+- PatternCanvas Props 구조 개선
+- StatusBar Props 구조 개선
+- Toolbar Props 구조 개선
+- Canvas 관련 컴포넌트 간 Mode 전달 구조 개선
+- Canvas 관련 컴포넌트 간 Current Row 전달 구조 개선
+- Toolbar의 편집 기능 활성화 상태 개선
+- View Mode에서 편집 관련 Toolbar 기능 비활성화
+- View Mode에서 Undo / Redo 비활성화
+- View Mode에서 Rotate / Flip 비활성화
+- View Mode에서 편집 Tool 비활성화
+- View Mode에서 Grid / Zoom 기능 사용 가능하도록 개선
+
+#### Canvas
+
+- CanvasRenderer 렌더링 순서 개선
+- CanvasRenderState에 Mode 정보 추가
+- CanvasRenderState에 Current Row 정보 추가
+- Canvas 이벤트 처리 구조 개선
+- Canvas 렌더링과 편집 로직 분리 강화
+- Current Row 렌더링을 View Mode에서만 실행하도록 변경
+- Mode 변경 시 Canvas가 즉시 다시 렌더링되도록 수정
+- Canvas Grid 렌더링 기준 개선
+- PNG Export의 Grid 렌더링 로직을 픽셀 렌더링과 분리
+- PNG Export 시 불필요한 Grid 반복 렌더링 제거
+- PNG Export의 Grid 렌더링 성능 개선
+
+#### UI
+
+- Panel UI 디자인 통일
+- PanelCard를 이용한 공통 Panel 디자인 적용
+- Panel 제목 / 구분선 / 여백 구조 통일
+- Palette UI 크기 및 배치 개선
+- Color Picker 크기 조정
+- Add Color Modal 중앙 정렬 방식 개선
+- LeftPanel 레이아웃 개선
+- StatusBar 정보 표시 구조 개선
+- Toolbar Mode 버튼 추가 및 배치 개선
+
+---
+
+### 🐛 Fixed
+
+#### Canvas
+
+- View Mode에서도 Canvas 편집 이벤트가 실행될 수 있던 문제 수정
+- View Mode에서 키보드 단축키로 편집 기능이 실행될 수 있던 문제 수정
+- Mode 변경 후 Current Row 렌더링이 즉시 반영되지 않던 문제 수정
+- Current Row 진행률 계산 시 `NaN%`가 표시되던 문제 수정
+- Current Row와 Canvas Row 좌표 변환 문제 수정
+- Canvas Row 선택 시 실제 작업 행과 표시 행이 일치하지 않던 문제 수정
+- Current Row가 View Mode 진입 시 초기화되지 않던 문제 수정
+- View Mode에서 첫 번째 행이 기본 선택되도록 수정
+
+#### UI
+
+- Palette Color Picker 크기 문제 수정
+- Add Color Panel의 위치 및 표시 방식 개선
+- LeftPanel 내부 Panel 배치 문제 수정
+- Toolbar의 Mode 상태 표시 문제 수정
+
+#### Export
+
+- PNG Export에서 Grid가 각 픽셀마다 반복해서 그려지던 문제 수정
+- PNG Export 시 Grid가 중복 렌더링되던 문제 수정
+- PNG Export Grid 순서 및 렌더링 구조 수정
+- PNG Export에서 10칸 단위 굵은 Grid가 정상적으로 표시되도록 수정
+
+---
+
+### 🧹 Refactored
+
+#### Canvas
+
+- CanvasRenderer 레이어 구조 정리
+- CurrentRowLayer 분리
+- CanvasRenderState 타입 확장
+- Canvas Event 처리 로직 정리
+- Edit / View Mode별 Canvas 동작 분리
+- Canvas 렌더링 책임과 이벤트 처리 책임 분리 강화
+
+#### Component
+
+- PanelCard 공통 컴포넌트 추가 및 Panel UI 통합
+- Palette 관련 컴포넌트 구조 정리
+- AddColorPanel을 AddColorModal로 변경
+- `showPanel` 상태를 `showModal`로 변경
+- Workspace → CanvasViewport → CanvasContainer → PatternCanvas Props 전달 구조 정리
+
+#### Documentation
+
+- 기존 프로젝트 문서와 현재 구현 상태 정리
+- 실제 프로젝트 구조와 문서 내용 일치하도록 수정
+- FastAPI 기반 현재 Backend 구조와 향후 Django 구조 구분
+- 향후 Django + DRF + MySQL + JWT 구조를 고려하여 문서 업데이트
+
+---
+
+### 📌 Current Status
+
+#### Editor
+
+- Brush
+- Eraser
+- Fill
+- Select
+- Move
+- Undo / Redo
+- Rotate
+- Flip
+- Zoom
+- Grid
+- Pattern 생성
+- Image Import
+- JSON 저장
+- JSON 불러오기
+- PNG 저장
+- Palette 관리
+- Color 추가 / 삭제
+- Edit Mode
+- View Mode
+- Current Row 표시
+- Current Row 이동
+- Progress 표시
+
+#### Backend
+
+- FastAPI `/generate` API
+- 이미지 업로드
+- K-Means 기반 색상 양자화
+- 도트 패턴 생성
+- PatternData JSON 생성
+- 이미지 비율 자동 계산
+- Width / Height 예외 처리
+- JSON Export 구조
+
+#### Documentation
+
+- README
+- CHANGELOG
+- Architecture
+- ERD
+- Flowchart
+- Requirements
+- Development Log
+
+---
+
+### 🚧 On Hold
+
+#### Stitch Pattern
+
+- 뜨개질 기호 변환 기능 검토
+- 방안뜨기 변환
+- 짧은뜨기 변환
+- 긴뜨기 변환
+- 한길긴뜨기 변환
+- StitchLayer 렌더링
+- 두 개의 세로 Pixel을 하나의 Stitch로 시각적 표현하는 방식 검토
+- 원본 PatternData를 유지하면서 Stitch만 별도로 표시하는 구조 검토
+- 서로 다른 색상의 Pixel을 하나의 Stitch로 병합할 때 색상이 사라지는 문제 검토
+
+> Stitch Pattern 기능은 현재 Editor 안정화 이후 다시 진행할 예정.
+
+---
+
+### 🔜 Next
+
+#### Backend
+
+- Django 프로젝트 구성
+- Django REST Framework 연동
+- MySQL 연동
+- Pattern Model 설계
+- Pattern CRUD API 구현
+- 사용자별 Pattern 관리
+- JWT 로그인 / 인증 구현
+- Pattern 소유권 및 권한 처리
+- 공개 / 비공개 Pattern 관리
+
+#### Frontend
+
+- Django REST API 연동
+- 로그인 / 회원가입 UI
+- Pattern 목록 화면
+- 사용자별 Pattern 관리
+- Pattern 저장 / 불러오기
+- View / Edit 권한에 따른 접근 제어
+
+#### Testing
+
+- Pattern 생성 테스트
+- Image Import 테스트
+- Palette 테스트
+- Brush / Eraser / Fill 테스트
+- Selection 테스트
+- Copy / Cut / Paste 테스트
+- Move / Rotate / Flip 테스트
+- Undo / Redo 테스트
+- Zoom / Grid 테스트
+- Edit / View Mode 테스트
+- Current Row 테스트
+- PNG Export 테스트
+- JSON Export / Import 테스트
+- Backend API 테스트
+
+#### Deployment
+
+- Backend 배포 환경 구성
+- Frontend 배포 환경 구성
+- MySQL 운영 환경 구성
+- 환경 변수 관리
+- CORS 설정
+- API 주소 환경별 분리

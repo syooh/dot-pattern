@@ -3,6 +3,7 @@
 //
 // 역할
 // 1. Palette와 Workspace를 좌우 배치한다.
+// 2. LeftPanel과 Workspace의 높이를 동일하게 유지한다.
 // ======================================================
 
 interface Props {
@@ -31,19 +32,23 @@ export default function EditorLayout({
 
                 gap: 24,
 
-                alignItems: "flex-start",
+                alignItems: "stretch",
 
-                marginTop: 20
+                marginTop: 20,
+
+                width: "100%"
 
             }}
 
         >
 
+            {/* Left Panel */}
+
             <aside
 
                 style={{
 
-                    width: 260,
+                    width: 360,
 
                     flexShrink: 0,
 
@@ -59,12 +64,23 @@ export default function EditorLayout({
 
             </aside>
 
+
+            {/* Workspace */}
+
             <main
+
                 style={{
+
                     flex: 1,
+
                     minWidth: 0,
-                    width: "100%"
+
+                    minHeight: 0,
+
+                    display: "flex"
+
                 }}
+
             >
 
                 {workspace}

@@ -1,12 +1,12 @@
 // ======================================================
 // CanvasViewport
-// Version : v1.0
-// Last Update : 2026-07-15
+// Version : v1.1
+// Last Update : 2026-09-02
 //
 // 역할
 // 1. Canvas 작업 영역(Viewport)
 // 2. Scroll 관리
-// 3. Zoom 기능이 추가될 영역
+// 3. Workspace 내부에서 Canvas를 왼쪽 기준으로 배치
 // ======================================================
 
 import type { PatternData } from "../../types/Pattern";
@@ -22,6 +22,11 @@ interface Props {
     pattern: PatternData;
 
     showGrid: boolean;
+
+    mode: "edit" | "view";
+
+    currentRow: number;
+    onCurrentRowChange: (row: number) => void;
 
     camera: CameraState;
 
@@ -97,6 +102,11 @@ export default function CanvasViewport({
 
     showGrid,
 
+    mode,
+
+    currentRow,
+    onCurrentRowChange,
+
     camera,
 
     hoverCell,
@@ -128,13 +138,19 @@ export default function CanvasViewport({
         <div
             style={{
 
-                marginTop: 25,
-
                 width: "100%",
 
-                display: "flex",
+                flex: 1,
 
-                justifyContent: "center"
+                minWidth: 0,
+
+                minHeight: 0,
+
+                overflowX: "auto",
+
+                overflowY: "auto",
+
+                boxSizing: "border-box"
 
             }}
         >
@@ -142,7 +158,9 @@ export default function CanvasViewport({
             <div
                 style={{
 
-                    width: "100%",
+                    width: "max-content",
+
+                    minWidth: "100%",
 
                     padding: 20,
 
@@ -152,13 +170,13 @@ export default function CanvasViewport({
 
                     borderRadius: 10,
 
+                    boxSizing: "border-box",
+
                     display: "flex",
 
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
 
-                    alignItems: "flex-start",
-
-                    boxSizing: "border-box"
+                    alignItems: "flex-start"
 
                 }}
             >
@@ -168,6 +186,11 @@ export default function CanvasViewport({
                     pattern={pattern}
 
                     showGrid={showGrid}
+
+                    mode={mode}
+
+                    currentRow={currentRow}
+                    onCurrentRowChange={onCurrentRowChange}
 
                     camera={camera}
 

@@ -1,13 +1,11 @@
 // ======================================================
 // CanvasHeaderTop
-// Version : v0.9
-// Last Update : 2026-07-14
 //
 // 역할
 // 1. Canvas의 상단 번호를 출력한다.
 // ======================================================
 
-import { CELL_SIZE, HEADER_SIZE, GRID_INTERVAL } from "./CanvasConstants";
+import { HEADER_SIZE, GRID_INTERVAL } from "./CanvasConstants";
 import { CanvasTheme } from "./CanvasTheme";
 import { getCellSize } from "./CanvasUtils";
 import type { CameraState } from "./camera/CameraState";
@@ -47,7 +45,11 @@ export default function CanvasHeaderTop({
 
                 display: "flex",
 
+                width: width * cellSize,
+
                 height: HEADER_SIZE,
+
+                flexShrink: 0,
 
             }}
         >
@@ -67,6 +69,10 @@ export default function CanvasHeaderTop({
                         style={{
 
                             width: cellSize,
+
+                            minWidth: cellSize,
+
+                            flexShrink: 0,
 
                             height: HEADER_SIZE,
 
@@ -112,7 +118,7 @@ export default function CanvasHeaderTop({
 
                     >
 
-                        {index}
+                        {width - index}
 
                     </div>
 

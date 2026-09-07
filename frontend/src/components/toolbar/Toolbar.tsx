@@ -13,9 +13,7 @@ import ToolbarButton from "./ToolbarButton";
 import ToolbarGroup from "./ToolbarGroup";
 import ToolbarDivider from "./ToolbarDivider";
 
-import type {
-    ToolType
-} from "../../types/Pattern";
+import type { ToolType } from "../../types/Pattern";
 
 interface Props {
 
@@ -34,6 +32,12 @@ interface Props {
     onRedo?: () => void;
 
     selectedTool: ToolType;
+
+    mode: "edit" | "view";
+
+    onModeChange: (
+        mode: "edit" | "view"
+    ) => void;
 
     zoom: number;
 
@@ -80,6 +84,10 @@ export default function Toolbar({
     canRedo,
 
     selectedTool,
+
+    mode,
+
+    onModeChange,
 
     onToolChange,
 
@@ -128,6 +136,44 @@ export default function Toolbar({
             }}
 
         >
+
+            {/* ========================= */}
+            {/* Mode */}
+            {/* ========================= */}
+
+            <ToolbarGroup>
+
+                <ToolbarButton
+
+                    icon="✏️"
+
+                    label="Edit"
+
+                    selected={mode === "edit"}
+
+                    onClick={() =>
+                        onModeChange("edit")
+                    }
+
+                />
+
+                <ToolbarButton
+
+                    icon="💻​"
+
+                    label="View"
+
+                    selected={mode === "view"}
+
+                    onClick={() =>
+                        onModeChange("view")
+                    }
+
+                />
+
+            </ToolbarGroup>
+
+            <ToolbarDivider />
 
             {/* ========================= */}
             {/* File */}
@@ -193,7 +239,13 @@ export default function Toolbar({
 
                     onClick={onUndo}
 
-                    disabled={!canUndo}
+                    disabled={
+
+                        mode === "view" ||
+
+                        !canUndo
+
+                    }
 
                 />
 
@@ -205,7 +257,13 @@ export default function Toolbar({
 
                     onClick={onRedo}
 
-                    disabled={!canRedo}
+                    disabled={
+
+                        mode === "view" ||
+
+                        !canRedo
+
+                    }
 
                 />
 
@@ -225,6 +283,8 @@ export default function Toolbar({
 
                     onClick={onRotate}
 
+                    disabled={mode === "view"}
+
                 />
 
                 <ToolbarButton
@@ -237,6 +297,8 @@ export default function Toolbar({
 
                     onClick={onFlipHorizontal}
 
+                    disabled={mode === "view"}
+
                 />
 
                 <ToolbarButton
@@ -248,6 +310,8 @@ export default function Toolbar({
                     selected={false}
 
                     onClick={onFlipVertical}
+
+                    disabled={mode === "view"}
 
                 />
 
@@ -271,6 +335,8 @@ export default function Toolbar({
 
                     onClick={() => onToolChange("brush")}
 
+                    disabled={mode === "view"}
+
                 />
 
                 <ToolbarButton
@@ -282,6 +348,8 @@ export default function Toolbar({
                     selected={selectedTool === "eraser"}
 
                     onClick={() => onToolChange("eraser")}
+
+                    disabled={mode === "view"}
 
                 />
 
@@ -295,6 +363,8 @@ export default function Toolbar({
 
                     onClick={() => onToolChange("fill")}
 
+                    disabled={mode === "view"}
+
                 />
 
                 <ToolbarButton
@@ -307,6 +377,8 @@ export default function Toolbar({
 
                     onClick={() => onToolChange("select")}
 
+                    disabled={mode === "view"}
+
                 />
 
                 <ToolbarButton
@@ -318,6 +390,8 @@ export default function Toolbar({
                     selected={selectedTool === "move"}
 
                     onClick={() => onToolChange("move")}
+
+                    disabled={mode === "view"}
 
                 />
 

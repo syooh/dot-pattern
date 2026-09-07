@@ -17,7 +17,6 @@ import { useKeyboardShortcuts } from "../components/canvas/hooks/useKeyBoardShor
 import { generatePattern } from "../api/patternApi";
 import { exportPatternAsPNG } from "../utils/exportPng";
 
-import NewPatternDialog from "../components/dialog/NewPatternDialog";
 import PatternPanel from "../components/panel/PatternPanel";
 import Toolbar from "../components/toolbar/Toolbar";
 import Workspace from "../components/workspace/Workspace";
@@ -28,6 +27,9 @@ import usePattern from "../hooks/usePattern";
 import LeftPanel from "../components/layout/LeftPanel";
 import useCamera from "../hooks/useCamera";
 import ImportImagePanel from "../components/panel/ImportImagePanel";
+import ServerPatternPanel from "../components/panel/ServerPatternPanel";
+import AuthBar from "../components/auth/AuthBar";
+
 
 
 export default function PatternEditor() {
@@ -90,9 +92,34 @@ export default function PatternEditor() {
 
     } = usePattern();
 
-    const [selection, setSelection] =
+    const [selection, setSelection] = useState<Selection | null>(null);
 
-        useState<Selection | null>(null);
+    const [mode, setMode] = useState<"edit" | "view">("edit");
+
+    const [currentRow, setCurrentRow] = useState<number>(1);
+
+    // ==================================================
+    // 서버에 저장된 현재 Pattern의 ID
+    //
+    // null:
+    // 아직 서버에 저장되지 않은 도안
+    //
+    // 숫자:
+    // Django에 저장된 Pattern
+    // ==================================================
+
+    const [savedPatternId, setSavedPatternId] =
+        useState<number | null>(null);
+
+    useEffect(() => {
+
+        if (mode === "view") {
+
+            setCurrentRow(1);
+
+        }
+
+    }, [mode]);
 
     const [pastePreview, setPastePreview] =
 
@@ -136,6 +163,11 @@ export default function PatternEditor() {
 
     ) {
 
+        // View Mode에서는 패턴을 수정하지 않는다.
+        if (mode === "view") {
+            return;
+        }
+
         if (
 
             isPasteMode &&
@@ -176,6 +208,10 @@ export default function PatternEditor() {
 
         onEscape: () => {
 
+            if (mode === "view") {
+                return;
+            }
+
             // ==========================
             // Paste Mode 취소
             // ==========================
@@ -198,9 +234,20 @@ export default function PatternEditor() {
 
         },
 
-        onDelete: handleDeleteSelection,
+        onDelete: () => {
+
+            if (mode === "view") {
+                return;
+            }
+
+            handleDeleteSelection();
+        },
 
         onCopy: () => {
+
+            if (mode === "view") {
+                return;
+            }
 
             if (!selection) {
 
@@ -213,6 +260,10 @@ export default function PatternEditor() {
         },
 
         onCut: () => {
+
+            if (!selection) {
+                return;
+            }
 
             if (!selection) {
 
@@ -228,6 +279,10 @@ export default function PatternEditor() {
 
         onPaste: () => {
 
+            if (!selection) {
+                return;
+            }
+
             if (!clipboard) {
 
                 return;
@@ -240,9 +295,23 @@ export default function PatternEditor() {
 
         },
 
-        onUndo: undo,
+        onUndo: () => {
 
-        onRedo: redo
+            if (mode === "view") {
+                return;
+            }
+
+            undo();
+        },
+
+        onRedo: () => {
+
+            if (mode === "view") {
+                return;
+            }
+
+            redo();
+        }
 
     });
 
@@ -288,7 +357,13 @@ export default function PatternEditor() {
 
         if (!ok) return;
 
+
         clearPattern();
+
+
+        // 새로운 도안이므로
+        // 기존 서버 Pattern과 연결을 끊는다.
+        setSavedPatternId(null);
 
     }
 
@@ -314,6 +389,14 @@ export default function PatternEditor() {
                 target.tagName === "INPUT" ||
                 target.tagName === "TEXTAREA"
             ) {
+                return;
+            }
+            
+            // ==========================
+            // View Mode에서는
+            // 편집 도구 단축키를 막는다.
+            // ==========================
+            if (mode === "view") {
                 return;
             }
 
@@ -365,7 +448,7 @@ export default function PatternEditor() {
 
         };
 
-    }, [setSelectedTool]);
+    }, [mode, setSelectedTool]);
 
     function handleSavePattern() {
 
@@ -460,6 +543,8 @@ export default function PatternEditor() {
                         );
 
                     loadPattern(json);
+
+                    setSavedPatternId(null);
 
                 }
 
@@ -589,6 +674,10 @@ export default function PatternEditor() {
 
             setPattern(newPattern);
 
+            // 이미지에서 새로 생성한 도안이므로
+            // 기존 서버 Pattern과 연결하지 않는다.
+            setSavedPatternId(null);
+
         }
 
         catch (err) {
@@ -627,6 +716,8 @@ export default function PatternEditor() {
             }}
         >
 
+            <AuthBar />
+
             <h1>
 
                 🧶 도안 편집기
@@ -662,6 +753,10 @@ export default function PatternEditor() {
                         <Toolbar
 
                             onNew={handleNewPattern}
+
+                            mode={mode}
+                            
+                            onModeChange={setMode}
 
                             onSave={handleSavePattern}
 
@@ -714,9 +809,22 @@ export default function PatternEditor() {
                                 <LeftPanel
 
                                     pattern={
+
                                         <PatternPanel
-                                            onCreate={createPattern}
+                                            onCreate={(width, height) => {
+
+                                                createPattern(
+                                                    width,
+                                                    height
+                                                );
+
+                                                // 새로운 도안이므로
+                                                // 기존 서버 Pattern 연결을 제거한다.
+                                                setSavedPatternId(null);
+
+                                            }}
                                         />
+
                                     }
 
                                     imageImport={
@@ -757,6 +865,24 @@ export default function PatternEditor() {
 
                                     }
 
+                                    serverPattern={
+
+                                        <ServerPatternPanel
+
+                                            pattern={pattern}
+
+                                            onLoadPattern={loadPattern}
+
+                                            savedPatternId={savedPatternId}
+
+                                            onSavedPatternIdChange={
+                                                setSavedPatternId
+                                            }
+
+                                        />
+
+                                    }
+
                                     statusBar={
 
                                         <StatusBar
@@ -775,6 +901,25 @@ export default function PatternEditor() {
 
                                             hoverCell={hoverCell}
 
+                                            currentRow={currentRow}
+
+                                            mode={mode}
+
+                                            onPreviousRow={() => {
+                                                setCurrentRow(prev =>
+                                                    Math.max(1, prev - 1)
+                                                );
+                                            }}
+
+                                            onNextRow={() => {
+                                                setCurrentRow(prev =>
+                                                    Math.min(
+                                                        pattern.height,
+                                                        prev + 1
+                                                    )
+                                                );
+                                            }}
+
                                         />
 
                                     }
@@ -790,6 +935,12 @@ export default function PatternEditor() {
                                     pattern={pattern}
 
                                     showGrid={showGrid}
+
+                                    mode={mode}
+
+                                    currentRow={currentRow}
+
+                                    onCurrentRowChange={setCurrentRow}
 
                                     hoverCell={hoverCell}
 
