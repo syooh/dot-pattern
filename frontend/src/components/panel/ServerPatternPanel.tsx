@@ -16,6 +16,7 @@ import PanelCard from "../common/PanelCard";
 
 import {
     createPattern as createPatternApi,
+    updatePattern as updatePatternApi,
     deletePattern as deletePatternApi,
     getPatterns,
     type SavedPattern,
@@ -210,23 +211,37 @@ export default function ServerPatternPanel({
 
             // 현재 PatternData 전체를
             // Django JSONField에 저장한다.
-            const savedPattern =
+            // 현재 PatternData 전체를
+            // Django JSONField에 저장한다.
+            //
+            // savedPatternId가 없으면 새 Pattern을 생성하고,
+            // savedPatternId가 있으면 기존 Pattern을 수정한다.
+            const patternData = {
+                title: title.trim(),
+                width: pattern.width,
+                height: pattern.height,
+                is_public: isPublic,
+                pattern_data: pattern,
+            };
 
-                await createPatternApi(
+            let savedPattern: SavedPattern;
+
+            if (savedPatternId === null) {
+                // 아직 서버에 저장되지 않은 도안
+                // → 새로운 Pattern 생성
+                savedPattern = await createPatternApi(
                     accessToken,
-                    {
-                        title: title.trim(),
-
-                        width: pattern.width,
-
-                        height: pattern.height,
-
-                        is_public: isPublic,
-
-                        pattern_data: pattern,
-
-                    }
+                    patternData
                 );
+            } else {
+                // 이미 서버에 저장된 도안
+                // → 기존 Pattern 수정
+                savedPattern = await updatePatternApi(
+                    accessToken,
+                    savedPatternId,
+                    patternData
+                );
+            }
 
 
             // 방금 저장한 Pattern ID를 기억한다.

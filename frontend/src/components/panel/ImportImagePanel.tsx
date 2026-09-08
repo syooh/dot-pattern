@@ -112,19 +112,27 @@ export default function ImportImagePanel({
                 </button>
 
                 <div
-
                     className="import-file-name"
-
                     style={{
-
                         fontSize: 12,
-
                         color: "#666",
+                        textAlign: "center",
 
-                        textAlign: "center"
+                        // 긴 파일명이 패널의 너비를 늘리지 않도록 한다.
+                        width: "100%",
+                        minWidth: 0,
 
+                        // 파일명을 최대 2줄까지 표시한다.
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+
+                        // 2줄을 넘어가는 파일명은 숨긴다.
+                        overflow: "hidden",
+
+                        // 긴 단어/파일명도 영역 안에서 줄바꿈한다.
+                        overflowWrap: "anywhere"
                     }}
-
                 >
 
                     {file

@@ -40,6 +40,8 @@ export default function PatternEditor() {
 
         setPattern,
 
+        replacePattern,
+
         createPattern,
 
         selectedColor,
@@ -661,18 +663,15 @@ export default function PatternEditor() {
         try {
 
             const newPattern = await generatePattern(
-
                 file,
-
                 width,
-
                 height,
-
                 colors
-
             );
 
-            setPattern(newPattern);
+            // 새로운 Pattern으로 교체한다.
+            // selectedColor도 새로운 Palette에 맞춰진다.
+            replacePattern(newPattern);
 
             // 이미지에서 새로 생성한 도안이므로
             // 기존 서버 Pattern과 연결하지 않는다.
@@ -890,7 +889,9 @@ export default function PatternEditor() {
                                             tool={selectedTool}
 
                                             selectedColorHex={
-                                                pattern.palette[selectedColor].hex
+                                                pattern.palette[selectedColor]?.hex ??
+                                                pattern.palette[0]?.hex ??
+                                                "#000000"
                                             }
 
                                             patternWidth={pattern.width}

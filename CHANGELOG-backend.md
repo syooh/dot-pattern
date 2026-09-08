@@ -1,4 +1,4 @@
-## [Unreleased] - 2026-09-06
+## 2026-09-06
 
 ### ✨ Added
 
@@ -51,7 +51,7 @@
 
 ---
 
-## [Unreleased] - 2026-09-07
+## 2026-09-07
 
 ### ✨ Added
 
@@ -127,3 +127,79 @@
 * My Patterns UI 개선
 * 환경변수 기반 DB / Secret 설정
 * 전체 사용자 시나리오 테스트
+
+
+
+# CHANGELOG
+
+이 프로젝트의 모든 변경 사항을 기록합니다.
+
+---
+
+## 2026-09-08
+
+### 🐛 Fixed
+
+#### Pattern 저장 및 수정
+
+- 동일한 Pattern을 반복 저장할 때 새로운 Pattern이 중복 생성되는 문제 수정
+- 저장된 Pattern이 없는 경우 `POST` 요청으로 새로운 Pattern 생성
+- 이미 저장된 Pattern이 있는 경우 `PATCH` 요청으로 기존 Pattern 수정
+- Pattern 수정 시 기존 서버 Pattern ID를 유지하도록 수정
+- 서버에서 Pattern을 불러온 후 다시 저장할 때 기존 Pattern을 수정하도록 개선
+
+#### Pattern 교체 시 색상 상태 오류
+
+- 새로운 Pattern으로 교체할 때 기존 `selectedColor`가 새로운 Palette에 존재하지 않아 발생하던 Runtime Error 수정
+- New Pattern 생성 시 선택된 색상 상태 동기화
+- JSON Pattern Import 시 선택된 색상 상태 동기화
+- Image Import 시 선택된 색상 상태 동기화
+- 서버 Pattern Load 시 선택된 색상 상태 동기화
+- `replacePattern()`을 추가하여 Pattern 교체 시 선택된 색상을 안전하게 처리
+
+#### StatusBar 오류 방지
+
+- 존재하지 않는 Palette 색상을 참조하면서 발생하던
+  `Cannot read properties of undefined (reading 'hex')`
+  오류 수정
+- 선택된 색상이 존재하지 않을 경우 첫 번째 Palette 색상 또는 기본 색상을 사용하도록 방어 로직 추가
+
+### 🎨 Improved
+
+#### Image Import UI
+
+- 긴 이미지 파일명으로 인해 Image Import 패널의 너비가 늘어나던 문제 개선
+- 파일명이 패널의 고정된 영역 안에서 표시되도록 수정
+- 긴 파일명은 자동으로 줄바꿈되도록 개선
+- 파일명은 최대 2줄까지 표시
+- 2줄을 초과하는 파일명은 영역 밖으로 넘치지 않도록 처리
+
+### 🔧 Pattern Server Integration
+
+- React와 Django Pattern API 연동 상태 점검
+- Pattern 생성 → 조회 → 수정 → 삭제 전체 흐름 확인
+- 서버 Pattern 저장 후 목록에 정상적으로 표시되는지 확인
+- 저장된 Pattern을 다시 불러올 수 있는지 확인
+- Pattern 수정 후 동일한 Pattern ID가 유지되는지 확인
+- Pattern 삭제 기능 정상 동작 확인
+
+### 🧪 Test
+
+- 회원가입 정상 동작 확인
+- 로그인 정상 동작 확인
+- 로그아웃 정상 동작 확인
+- 로그인 상태에서 Pattern 저장 확인
+- 저장된 Pattern 불러오기 확인
+- Pattern 수정 후 재저장 확인
+- Pattern 삭제 확인
+- 로그아웃 후 New Pattern 생성 확인
+- Image Import 기능 확인
+- JSON Pattern Import 기능 확인
+- Pattern 교체 후 Canvas 및 StatusBar 정상 표시 확인
+- 긴 이미지 파일명 UI 표시 확인
+
+### 📝 Notes
+
+- 현재 `is_public` 값은 Pattern에 저장되지만 다른 사용자가 공개 Pattern을 조회할 수 있는 API는 아직 구현하지 않음
+- 추후 공개 Pattern 목록 및 Gallery 기능 구현 예정
+- 공개 Pattern API 구현 시 `is_public=True`인 Pattern만 별도로 조회하도록 구성할 예정

@@ -118,17 +118,14 @@ export default function usePattern() {
 
     function clearPattern() {
 
-        setPattern(
-
-            createEmptyPattern(
-
-                pattern.width,
-
-                pattern.height
-
-            )
-
+        const newPattern = createEmptyPattern(
+            pattern.width,
+            pattern.height
         );
+
+        // 기존 Pattern을 초기화하면서
+        // selectedColor도 새로운 Palette에 맞춘다.
+        replacePattern(newPattern);
 
         setHistory([]);
         setFuture([]);
@@ -152,6 +149,31 @@ export default function usePattern() {
      */
     const [selectedColor, setSelectedColor] =
         useState(1);
+
+    /**
+     * 새로운 Pattern으로 교체한다.
+     *
+     * Pattern이 변경될 때 현재 선택된 색상이
+     * 새로운 Palette에도 존재하는지 확인한다.
+     *
+     * 만약 기존 selectedColor가 새로운 Palette에 없다면
+     * Palette의 첫 번째 색상을 자동으로 선택한다.
+     */
+    const replacePattern = (newPattern: PatternData) => {
+        setPattern(newPattern);
+
+        // 새로운 Pattern의 Palette에
+        // 현재 선택된 색상이 존재하는지 확인한다.
+        const colorExists = newPattern.palette.some(
+            color => color.id === selectedColor
+        );
+
+        // 기존 선택 색상이 없다면
+        // 새로운 Palette의 첫 번째 색상을 선택한다.
+        if (!colorExists && newPattern.palette.length > 0) {
+            setSelectedColor(newPattern.palette[0].id);
+        }
+    };
 
     // 현재 선택된 Tool
 
@@ -207,35 +229,30 @@ export default function usePattern() {
      * Undo / Redo 기록도 초기화한다.
      */
     const createPattern = (
-
         width: number,
-
         height: number
-
     ) => {
 
         const newPattern =
-
             createEmptyPattern(
-
                 width,
-
                 height
-
             );
 
-        setPattern(newPattern);
+        // 새로운 Pattern으로 교체하면서
+        // selectedColor도 새로운 Palette에 맞춘다.
+        replacePattern(newPattern);
 
         // 새로운 도안이므로 기록 초기화
         setHistory([]);
-
         setFuture([]);
-
     };
 
     function loadPattern(newPattern: PatternData) {
 
-        setPattern(newPattern);
+        // 불러온 Pattern의 Palette에 맞춰
+        // selectedColor를 안전하게 변경한다.
+        replacePattern(newPattern);
 
     }
 
@@ -734,6 +751,9 @@ export default function usePattern() {
         setPattern,
 
         setSelectedColor,
+
+        // Pattern 전체 교체
+        replacePattern,
 
         // --------------------------
         // 기능
