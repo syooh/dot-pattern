@@ -10,6 +10,8 @@
 // ├──────────────┼──────────────┤
 // │ Image Import │ My Patterns  │
 // ├──────────────┴──────────────┤
+// │       Public Patterns       │
+// ├─────────────────────────────┤
 // │            Status           │
 // └─────────────────────────────┘
 //
@@ -18,10 +20,22 @@
 // ======================================================
 
 interface Props {
+    // Pattern 패널
     pattern: React.ReactNode;
+
+    // Image Import 패널
     imageImport: React.ReactNode;
+
+    // Palette 패널
     palette: React.ReactNode;
+
+    // 로그인한 사용자의 My Patterns 패널
     serverPattern: React.ReactNode;
+
+    // 로그인하지 않아도 볼 수 있는 Public Patterns 패널
+    publicPattern: React.ReactNode;
+
+    // Status Bar
     statusBar: React.ReactNode;
 }
 
@@ -30,6 +44,7 @@ export default function LeftPanel({
     imageImport,
     palette,
     serverPattern,
+    publicPattern,
     statusBar,
 }: Props) {
     return (
@@ -80,7 +95,7 @@ export default function LeftPanel({
                     display: "grid",
                 }}
             >
-                {serverPattern}
+                {imageImport}
             </div>
 
             {/* ==========================================
@@ -91,16 +106,32 @@ export default function LeftPanel({
                     display: "grid",
                 }}
             >
-                {imageImport}         
+                {serverPattern}
             </div>
 
             {/* ==========================================
-                3행 : Status
+                3행 : Public Patterns
                 두 열을 모두 사용한다.
             ========================================== */}
+            <div
+                style={{
+                    display: "grid",
+                }}
+            >
+                {publicPattern}
+            </div>
 
+            {/* ==========================================
+                4행 : Status
+                두 열을 모두 사용한다.
+            ========================================== */}
+            <div
+                style={{
+                    display: "grid",
+                }}
+            >
                 {statusBar}
-
+            </div>
         </div>
     );
 }

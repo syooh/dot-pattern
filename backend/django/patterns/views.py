@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import Pattern
 from .serializers import PatternSerializer
@@ -71,3 +71,34 @@ class PatternDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Pattern.objects.filter(
             owner=self.request.user
         )
+
+class PublicPatternListView(generics.ListAPIView):
+    """
+    공개된 Pattern 목록 조회 API
+
+    로그인하지 않은 사용자도 접근할 수 있다.
+    단, is_public=True인 Pattern만 조회한다.
+    """
+
+    serializer_class = PatternSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        # 공개된 Pattern만 조회한다.
+        return Pattern.objects.filter(is_public=True)
+
+
+class PublicPatternDetailView(generics.RetrieveAPIView):
+    """
+    공개된 Pattern 상세 조회 API
+
+    로그인하지 않은 사용자도 접근할 수 있다.
+    단, is_public=True인 Pattern만 조회할 수 있다.
+    """
+
+    serializer_class = PatternSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        # 공개된 Pattern만 접근할 수 있도록 제한한다.
+        return Pattern.objects.filter(is_public=True)

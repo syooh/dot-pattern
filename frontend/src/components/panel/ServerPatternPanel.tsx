@@ -46,6 +46,9 @@ interface Props {
         id: number | null
     ) => void;
 
+    // 서버 저장이 성공했을 때 부모에게 알리는 함수
+    onSaveSuccess: () => void;
+
 }
 
 
@@ -58,6 +61,8 @@ export default function ServerPatternPanel({
     savedPatternId,
 
     onSavedPatternIdChange,
+
+    onSaveSuccess,
 
 }: Props) {
 
@@ -249,15 +254,17 @@ export default function ServerPatternPanel({
                 savedPattern.id
             );
 
-
-            // 목록 새로고침
+            // My Patterns 목록 새로고침
             await loadPatternList();
 
-
+            // 새로 저장한 Pattern 선택
             setSelectedPatternId(
                 savedPattern.id
             );
 
+            // 부모에게 서버 저장 성공을 알린다.
+            // → PublicPatternPanel도 목록을 새로 조회한다.
+            onSaveSuccess();
 
             setMessage(
                 "도안이 서버에 저장되었습니다."
@@ -486,7 +493,9 @@ export default function ServerPatternPanel({
                         textAlign: "center",
                     }}
                 >
-                    서버에 도안을 저장하려면
+                    서버에 도안을
+                    <br/>
+                    저장하려면
                     <br />
                     로그인이 필요합니다.
                 </div>

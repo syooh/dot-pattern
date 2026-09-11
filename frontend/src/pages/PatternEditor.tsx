@@ -28,7 +28,9 @@ import LeftPanel from "../components/layout/LeftPanel";
 import useCamera from "../hooks/useCamera";
 import ImportImagePanel from "../components/panel/ImportImagePanel";
 import ServerPatternPanel from "../components/panel/ServerPatternPanel";
+import PublicPatternPanel from "../components/panel/PublicPatternPanel";
 import AuthBar from "../components/auth/AuthBar";
+
 
 
 
@@ -112,6 +114,10 @@ export default function PatternEditor() {
 
     const [savedPatternId, setSavedPatternId] =
         useState<number | null>(null);
+
+    // Public Pattern 목록 새로고침을 위한 상태
+    const [publicPatternRefreshKey, setPublicPatternRefreshKey] =
+        useState(0);
 
     useEffect(() => {
 
@@ -878,8 +884,35 @@ export default function PatternEditor() {
                                                 setSavedPatternId
                                             }
 
+                                            onSaveSuccess={() => {
+                                                setPublicPatternRefreshKey(
+                                                    prev => prev + 1
+                                                );
+                                            }}
+
                                         />
 
+                                    }
+
+                                    publicPattern={
+                                        <PublicPatternPanel
+                                            onLoadPattern={(publicPattern) => {
+                                                /**
+                                                 * Public Pattern은 다른 사용자의 서버 Pattern이므로
+                                                 * 현재 사용자의 저장 Pattern과 연결하지 않는다.
+                                                 *
+                                                 * replacePattern()을 사용하면
+                                                 * 새로운 Palette에 맞게 selectedColor도 동기화된다.
+                                                 */
+                                                replacePattern(publicPattern);
+
+                                                // Public Pattern을 불러오면
+                                                // 현재 저장된 Pattern과의 연결을 끊는다.
+                                                setSavedPatternId(null);
+                                            }}
+                                            // 서버 저장 성공 시 Public 목록을 새로 조회한다.
+                                            refreshKey={publicPatternRefreshKey}
+                                        />
                                     }
 
                                     statusBar={

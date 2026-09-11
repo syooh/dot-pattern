@@ -240,6 +240,58 @@ export async function getPattern(
 }
 
 /**
+ * 공개된 Pattern 목록 조회
+ *
+ * GET /api/patterns/public/
+ *
+ * 로그인하지 않은 사용자도 사용할 수 있다.
+ * Django에서 is_public=True인 Pattern만 반환한다.
+ */
+export async function getPublicPatterns(): Promise<SavedPattern[]> {
+    const response = await fetch(
+        `${DJANGO_API_URL}/patterns/public/`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Public Pattern 목록을 가져오는데 실패했습니다.",
+        );
+    }
+
+    return response.json();
+}
+
+/**
+ * 공개된 특정 Pattern 상세 조회
+ *
+ * GET /api/patterns/public/{id}/
+ *
+ * 로그인하지 않은 사용자도 사용할 수 있다.
+ * 단, Django에서 공개된 Pattern만 조회할 수 있다.
+ */
+export async function getPublicPattern(
+    patternId: number,
+): Promise<SavedPattern> {
+    const response = await fetch(
+        `${DJANGO_API_URL}/patterns/public/${patternId}/`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Public Pattern을 가져오는데 실패했습니다.",
+        );
+    }
+
+    return response.json();
+}
+
+/**
  * 새로운 Pattern 저장
  *
  * POST /api/patterns/

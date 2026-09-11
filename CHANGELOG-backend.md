@@ -203,3 +203,49 @@
 - 현재 `is_public` 값은 Pattern에 저장되지만 다른 사용자가 공개 Pattern을 조회할 수 있는 API는 아직 구현하지 않음
 - 추후 공개 Pattern 목록 및 Gallery 기능 구현 예정
 - 공개 Pattern API 구현 시 `is_public=True`인 Pattern만 별도로 조회하도록 구성할 예정
+
+
+
+# CHANGELOG
+
+이 프로젝트의 모든 변경 사항을 기록합니다.
+
+---
+
+## 2026-09-10
+
+### ✨ Added
+
+#### Backend
+
+* Pattern API 자동 테스트 보강
+* Pattern 데이터 유효성 검증 테스트 추가
+* 사용자별 Pattern 접근 권한 테스트 추가
+* Public Pattern 접근 테스트 추가
+* Pattern API 테스트 총 18개 구성
+
+#### Documentation
+
+* `API.md` 추가
+* 인증 API 문서 작성
+* Pattern CRUD API 문서 작성
+* Public Pattern API 문서 작성
+* Pattern 데이터 검증 규칙 문서화
+* API 권한 및 HTTP 상태 코드 문서화
+* 프론트엔드 API 연동 구조 문서화
+
+### 🧪 Tests
+
+* Django Pattern API 테스트 **18개 전체 통과**
+* Pattern 생성 / 조회 / 수정 / 삭제 검증
+* 사용자별 접근 권한 검증
+* Public / Private Pattern 접근 검증
+* 잘못된 Pattern 데이터 검증
+
+### 📝 Planned
+
+* Backend 전용 `Architecture_Backend.md` 작성
+* `Architecture.md` 업데이트
+* `ERD.md` 업데이트
+* `FlowChart.md` 업데이트
+* `README.md` 업데이트
